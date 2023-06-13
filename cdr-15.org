@@ -213,6 +213,8 @@
      - ~add-package-local-nickname~ and ~remove-package-local-nickname~ should
        always return ~T~.
      - ~add-package-local-nickname~ and ~remove-package-local-nickname~ should
+       return one value: ~operation-successful-p~.
+     - ~add-package-local-nickname~ and ~remove-package-local-nickname~ should
        return two values: ~target-package-object~ and ~operation-successful-p~.
 ***** Arguments and Values
       ~old-nickname~ must be a /string designator/.
