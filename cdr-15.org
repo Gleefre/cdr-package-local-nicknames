@@ -41,6 +41,10 @@
 
      *PROPOSAL*
      It should be allowed, but a warning might be signaled.
+  5. *PROPOSAL*
+
+     Add ~:local-nicknames~ option to ~make-package~ similar to ~defpackage~.
+     See [[#make-package][make-package]].
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
