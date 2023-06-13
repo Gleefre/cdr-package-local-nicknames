@@ -183,49 +183,49 @@
       before calling ~make-package~.
 -----
 **** add-package-local-nickname
-     : (add-package-local-nickname nickname package &optional target-package)
-     :   => target-package-object
-     ~target-package~ defaults to the /current package/.
+     : (add-package-local-nickname nickname actual-package &optional designated-package)
+     :   => designated-package-object
+     ~designated-package~ defaults to the /current package/.
 
-     Adds a /package-local nickname/ ~nickname~ for the ~package~ in the
-     ~target-package~.
+     Adds a /package-local nickname/ ~nickname~ for the ~actual-package~ in the
+     ~designated-package~.
 
-     Returns the package designated by ~target-package~.
+     Returns the package designated by ~designated-package~.
 
      If a /nickname/ is already defined, checks that it is defined for the
-     package designated by ~package~.
+     package designated by ~actual-package~.
 ***** Arguments and Values
       ~nickname~ must be a /string designator/.
 
-      ~package~ and ~target-package~ must be /package designators/.
+      ~actual-package~ and ~designated-package~ must be /package designators/.
 
-      ~target-package-object~ is of type /package/.
+      ~designated-package-object~ is of type /package/.
 ***** Exceptional situations
       :PROPERTIES:
       :CUSTOM_ID: exceptional-situations-2
       :END:
 
-      If a package designated by ~package~ or a package designated by
-      ~target-package~ does not exists, an error of type /package-error/ must be
-      signaled.
+      If a package designated by ~actual-package~ or a package designated by
+      ~designated-package~ does not exists, an error of type /package-error/
+      must be signaled.
 
       If ~nickname~ is one of the names ~#:CL~, ~#:COMMON-LISP~ or ~#:KEYWORD~,
       an error of type /package-error/ must be signaled.
 
       If ~nickname~ is a /local nickname/ for a package different from
-      ~package~, an error of type /package-error/ must be signaled.
+      ~actual-package~, an error of type /package-error/ must be signaled.
 ***** Implementation dependent
       *PROPOSAL* (See [[#issues][issues#4]].)
 
-      If ~nickname~ shadows the ~target-package~'s /package name/ or one of its
-      /global nicknames/, a style warning might signaled.
+      If ~nickname~ shadows the ~designated-package~'s /package name/ or one of
+      its /global nicknames/, a style warning might signaled.
 -----
 **** remove-package-local-nickname
-     : (remove-package-local-nickname old-nickname &optional target-package)
+     : (remove-package-local-nickname old-nickname &optional designated-package)
      :   => nickname-removed-p
-     ~target-package~ defaults to the /current package/.
+     ~designated-package~ defaults to the /current package/.
 
-     If ~target-package~ has ~old-nickname~ as a /local nickname/, it is
+     If ~designated-package~ has ~old-nickname~ as a /local nickname/, it is
      removed.
 
      Returns /true/ if the ~old-nickname~ existed (and was removed), and ~NIL~
@@ -233,11 +233,11 @@
 ***** Arguments and Values
       ~old-nickname~ must be a /string designator/.
 
-      ~target-package~ must be a /package designator/.
+      ~designated-package~ must be a /package designator/.
 
       ~nickname-removed-p~ is a /generalized boolean/.
 ***** Exceptional situations
-      If a package designated by ~target-package~ does not exists, an error of
+      If a package designated by ~designated-package~ does not exists, an error of
       type /package-error/ must be signaled.
 -----
 **** package-local-nicknames
