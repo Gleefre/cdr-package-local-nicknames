@@ -8,6 +8,39 @@
 
 [THIS IS A DRAFT]
 
+* ISSUES
+  :PROPERTIES:
+  :CUSTOM_ID: issues
+  :END:
+  1. Inconsistency between return values of ~add-package-local-nickname~ and
+     ~remove-package-local-nickname~. First always returns /designated package/,
+     second one returns /true/ if a nickname was removed (but it is not
+     specified what exactly is returned). (Somewhat similar functions from the
+     standard - ~use-package~ and ~unuse-package~ always return ~T~ - their api
+     is consistent.)
+
+     *PROPOSAL*
+     - ~add-package-local-nickname~ should return /designated package/ if a new
+       nickname was added and ~NIL~ otherwise (if it already existed).
+     - ~remove-package-local-nickname~ should return /designated package/ if
+       nickname was removed and ~NIL~ otherwise.
+  2. See [[#print-read-consistency][PRINT-READ consistency]].
+  3. It is not clear whether /local nicknames/ should affect ~make-package~ or
+     ~defpackage~.
+
+     *PROPOSAL*
+
+     They should not.
+  4. It is not clear whether it is valid to have a /local nickname/ in a package
+     shadowing its own name or nickname.
+
+     Now: SBCL signals an error, but that doesn't make much sense, especially if
+     a /local nickname/ shadows the /global nickname/ of a package and not its
+     name. And it is possible to achieve a /local nickname/ shadowing a /global
+     nickname/ or the /package name/ by renaming the package.
+
+     *PROPOSAL*
+     It should be allowed, but a warning might be signaled.
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
@@ -105,7 +138,7 @@
      :CUSTOM_ID: make-package
      :END:
 
-     *PROPOSAL*
+     (*PROPOSAL* for new API.)
 
      To avoid confusion, /local nicknames/ of the /current package/ must be
      ignored during evaluation of ~make-package~. In other words ~make-package~
@@ -182,15 +215,10 @@
       If ~nickname~ is a /local nickname/ for a package different from
       ~package~, an error of type /package-error/ must be signaled.
 ***** Implementation dependent
-      *PROPOSAL*
+      *PROPOSAL* (See [[#issues][issues#4]].)
 
       If ~nickname~ shadows the ~target-package~'s /package name/ or one of its
       /global nicknames/, a style warning might signaled.
-
-      [Now: SBCL signals an error, but that doesn't make much sense, especially
-      if a /local nickname/ shadows the /global nickname/ of a package and not
-      its name. And it is possible to achieve a /local nickname/ shadowing a
-      /global nickname/ or the /package name/ by renaming the package.]
 -----
 **** remove-package-local-nickname
      : (remove-package-local-nickname old-nickname &optional target-package)
@@ -202,16 +230,6 @@
 
      Returns /true/ if the ~old-nickname~ existed (and was removed), and ~NIL~
      otherwise.
-
-     *ISSUE*
-
-     Inconsistency between return values of ~add-package-local-nickname~ and
-     ~remove-package-local-nickname~. Somewhat similar functions from the
-     standard - ~use-package~ and ~unuse-package~ always return ~T~.
-
-     *PROPOSAL*
-     - ~add-package-local-nickname~ should return /true/ if a new
-       nickname was added and ~NIL~ otherwise (if it already existed).
 ***** Arguments and Values
       ~old-nickname~ must be a /string designator/.
 
@@ -290,7 +308,7 @@
      nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
      defined.
 ***** Implementation dependent
-      *PROPOSAL*
+      *PROPOSAL* (See [[#issues][issues#4]].)
 
       If a /new-name/ or one of /new-nicknames/ is shadowed by one of the /local
       nicknames/ of the package being redefined, a warning might be signaled.
