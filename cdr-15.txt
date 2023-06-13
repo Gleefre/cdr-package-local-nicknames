@@ -8,11 +8,12 @@
 Table of Contents
 ─────────────────
 
-1. Introduction
+1. ISSUES
+2. Introduction
 .. 1. Rationale
 .. 2. Current state
 .. 3. Goal
-2. Specification
+3. Specification
 .. 1. Description
 ..... 1. Concept
 ..... 2. API
@@ -20,21 +21,60 @@ Table of Contents
 ..... 4. Edge cases
 ..... 5. `*FEATURES*'
 .. 2. Examples
-3. Links
-4. Copying and License
+4. Links
+5. Copying and License
 
 
 [THIS IS A DRAFT]
 
 
-1 Introduction
+1 ISSUES
+════════
+
+  1. Inconsistency between return values of `add-package-local-nickname'
+     and `remove-package-local-nickname'. First always returns
+     /designated package/, second one returns /true/ if a nickname was
+     removed (but it is not specified what exactly is
+     returned). (Somewhat similar functions from the standard -
+     `use-package' and `unuse-package' always return `T' - their api is
+     consistent.)
+
+     *PROPOSAL*
+     • `add-package-local-nickname' should return /designated package/
+       if a new nickname was added and `NIL' otherwise (if it already
+       existed).
+     • `remove-package-local-nickname' should return /designated
+       package/ if nickname was removed and `NIL' otherwise.
+  2. See [PRINT-READ consistency].
+  3. It is not clear whether /local nicknames/ should affect
+     `make-package' or `defpackage'.
+
+     *PROPOSAL*
+
+     They should not.
+  4. It is not clear whether it is valid to have a /local nickname/ in a
+     package shadowing its own name or nickname.
+
+     Now: SBCL signals an error, but that doesn't make much sense,
+     especially if a /local nickname/ shadows the /global nickname/ of a
+     package and not its name. And it is possible to achieve a /local
+     nickname/ shadowing a /global nickname/ or the /package name/ by
+     renaming the package.
+
+     *PROPOSAL* It should be allowed, but a warning might be signaled.
+
+
+[PRINT-READ consistency] See section 3.1.4.1
+
+
+2 Introduction
 ══════════════
 
   This is a specification for package-local nicknames extension in
   Common Lisp.
 
 
-1.1 Rationale
+2.1 Rationale
 ─────────────
 
   Package-local nicknames allow to use short and easy-to-use names
@@ -42,7 +82,7 @@ Table of Contents
   nicknames.
 
 
-1.2 Current state
+2.2 Current state
 ─────────────────
 
   Package-local nicknames are implemented (at least partially) in
@@ -52,7 +92,7 @@ Table of Contents
   to some extent.
 
 
-1.3 Goal
+2.3 Goal
 ────────
 
   The purpose of this document is to standardize the package-local
@@ -65,13 +105,13 @@ Table of Contents
   extension.
 
 
-2 Specification
+3 Specification
 ═══════════════
 
-2.1 Description
+3.1 Description
 ───────────────
 
-2.1.1 Concept
+3.1.1 Concept
 ╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   /Package-local nickname/ (or /local nickname/) has the same effects as
@@ -95,16 +135,16 @@ Table of Contents
   `#:KEYWORD' which should always refer to their packages.
 
 
-[PRINT-READ consistency] See section 2.1.4.1
+[PRINT-READ consistency] See section 3.1.4.1
 
 
-2.1.2 API
+3.1.2 API
 ╌╌╌╌╌╌╌╌╌
 
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.1 defpackage
+◊ 3.1.2.1 defpackage
 
   `defpackage' options are extended to include /local-nicknames-option/:
   ┌────
@@ -123,14 +163,14 @@ Table of Contents
   affected by the `*package*' special variable.
 
 
-  ◊ 2.1.2.1.1 Arguments and Values:
+  ◊ 3.1.2.1.1 Arguments and Values:
 
     `nickname' must be a /string designator/.
 
     `package' must be a /package designator/.
 
 
-  ◊ 2.1.2.1.2 Exceptional situations
+  ◊ 3.1.2.1.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
@@ -144,10 +184,10 @@ Table of Contents
 
 
     [add-package-local-nickname: exceptional situations] See section
-    2.1.2.3.2
+    3.1.2.3.2
 
 
-  ◊ 2.1.2.1.3 Implementation dependent
+  ◊ 3.1.2.1.3 Implementation dependent
 
     The behaviour is unspecified when a package designated by `package'
     does not exists.
@@ -161,12 +201,17 @@ Table of Contents
     variance with the current state of the package that is being
     defined. An implementation might choose to remove all present /local
     nicknames/ at the begining of each redefinition of the package.
+
+    [TODO: What happens when a package is redefined with local nicknames
+    in other packages that it is nicknamed by? It probably can't be
+    strictly defined since redefining package is implementation
+    dependent… But seems like they must be left intact.]
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.2 make-package
+◊ 3.1.2.2 make-package
 
-  *PROPOSAL*
+  (*PROPOSAL* for new API.)
 
   To avoid confusion, /local nicknames/ of the /current package/ must be
   ignored during evaluation of `make-package'. In other words
@@ -187,7 +232,7 @@ Table of Contents
   the new /package/.
 
 
-  ◊ 2.1.2.2.1 Arguments and Values:
+  ◊ 3.1.2.2.1 Arguments and Values:
 
     `local-nicknames' must be a /string designator/.
 
@@ -196,7 +241,7 @@ Table of Contents
     `package' must be a /package designator/.
 
 
-  ◊ 2.1.2.2.2 Exceptional situations
+  ◊ 3.1.2.2.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
@@ -210,10 +255,10 @@ Table of Contents
 
 
     [add-package-local-nickname: exceptional situations] See section
-    2.1.2.3.2
+    3.1.2.3.2
 
 
-  ◊ 2.1.2.2.3 Implementation dependent
+  ◊ 3.1.2.2.3 Implementation dependent
 
     The behaviour is unspecified when a package designated by `package'
     does not exists.
@@ -224,7 +269,7 @@ Table of Contents
     for the package that is being defined.
 
 
-  ◊ 2.1.2.2.4 Notes
+  ◊ 3.1.2.2.4 Notes
 
     It is still possible to specify a package designated by /local
     nickname/ in `:use' and/or `:local-nicknames' parameters by calling
@@ -232,7 +277,7 @@ Table of Contents
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.3 add-package-local-nickname
+◊ 3.1.2.3 add-package-local-nickname
 
   ┌────
   │ (add-package-local-nickname nickname package &optional target-package)
@@ -250,7 +295,7 @@ Table of Contents
   package designated by `package'.
 
 
-  ◊ 2.1.2.3.1 Arguments and Values
+  ◊ 3.1.2.3.1 Arguments and Values
 
     `nickname' must be a /string designator/.
 
@@ -259,7 +304,7 @@ Table of Contents
     `target-package-object' is of type /package/.
 
 
-  ◊ 2.1.2.3.2 Exceptional situations
+  ◊ 3.1.2.3.2 Exceptional situations
 
     If a package designated by `package' or a package designated by
     `target-package' does not exists, an error of type /package-error/
@@ -272,22 +317,19 @@ Table of Contents
     `package', an error of type /package-error/ must be signaled.
 
 
-  ◊ 2.1.2.3.3 Implementation dependent
+  ◊ 3.1.2.3.3 Implementation dependent
 
-    *PROPOSAL*
+    *PROPOSAL* (See [issues#4].)
 
     If `nickname' shadows the `target-package''s /package name/ or one
     of its /global nicknames/, a style warning might signaled.
-
-    [Now: SBCL signals an error, but that doesn't make much sense,
-    especially if a /local nickname/ shadows the /global nickname/ of a
-    package and not its name. And it is possible to achieve a /local
-    nickname/ shadowing a /global nickname/ or the /package name/ by
-    renaming the package.]
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.4 remove-package-local-nickname
+    [issues#4] See section 1
+
+
+◊ 3.1.2.4 remove-package-local-nickname
 
   ┌────
   │ (remove-package-local-nickname old-nickname &optional target-package)
@@ -302,21 +344,8 @@ Table of Contents
   Returns /true/ if the `old-nickname' existed (and was removed), and
   `NIL' otherwise.
 
-  *ISSUE*
 
-  Inconsistency between return values of `add-package-local-nickname'
-  and `remove-package-local-nickname'. Somewhat similar functions from
-  the standard - `use-package' and `unuse-package' always return `T'.
-
-  *PROPOSAL*
-  • `add-package-local-nickname' and `remove-package-local-nickname'
-    should always return `T'.
-  • `add-package-local-nickname' and `remove-package-local-nickname'
-    should return two values: `target-package-object' and
-    `operation-successful-p'.
-
-
-  ◊ 2.1.2.4.1 Arguments and Values
+  ◊ 3.1.2.4.1 Arguments and Values
 
     `old-nickname' must be a /string designator/.
 
@@ -325,14 +354,14 @@ Table of Contents
     `nickname-removed-p' is a /generalized boolean/.
 
 
-  ◊ 2.1.2.4.2 Exceptional situations
+  ◊ 3.1.2.4.2 Exceptional situations
 
     If a package designated by `target-package' does not exists, an
     error of type /package-error/ must be signaled.
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.5 package-local-nicknames
+◊ 3.1.2.5 package-local-nicknames
 
   ┌────
   │ (package-local-nicknames package)
@@ -347,7 +376,7 @@ Table of Contents
   type /package/.
 
 
-  ◊ 2.1.2.5.1 Arguments and Values
+  ◊ 3.1.2.5.1 Arguments and Values
 
     `package' must be a /package designator/.
 
@@ -355,19 +384,19 @@ Table of Contents
     values of type /package/.
 
 
-  ◊ 2.1.2.5.2 Exceptional situations
+  ◊ 3.1.2.5.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
 
 
-  ◊ 2.1.2.5.3 Notes
+  ◊ 3.1.2.5.3 Notes
 
     The returned /alist/ must be safe to be modified by the user.
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.2.6 package-locally-nicknamed-by-list
+◊ 3.1.2.6 package-locally-nicknamed-by-list
 
   ┌────
   │ (package-locally-nicknamed-by-list package)
@@ -378,50 +407,50 @@ Table of Contents
   the package designated by `package'.
 
 
-  ◊ 2.1.2.6.1 Arguments and Values
+  ◊ 3.1.2.6.1 Arguments and Values
 
     `package' must be a /package designator/.
 
     `packages-list' is a /list/ with elements of type /package/.
 
 
-  ◊ 2.1.2.6.2 Exceptional situations
+  ◊ 3.1.2.6.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
 
 
-  ◊ 2.1.2.6.3 Notes
+  ◊ 3.1.2.6.3 Notes
 
     The returned /list/ must be safe to be modified by the user.
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-2.1.3 Affected symbols
+3.1.3 Affected symbols
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.3.1 defpackage
+◊ 3.1.3.1 defpackage
 
   See [defpackage].
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-  [defpackage] See section 2.1.2.1
+  [defpackage] See section 3.1.2.1
 
 
-◊ 2.1.3.2 make-package
+◊ 3.1.3.2 make-package
 
   See [make-package].
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-  [make-package] See section 2.1.2.2
+  [make-package] See section 3.1.2.2
 
 
-◊ 2.1.3.3 find-package
+◊ 3.1.3.3 find-package
 
   When argument to `find-package' is a /local nickname/ that is defined
   in the /current package/, returns the package corresponding to this
@@ -446,16 +475,16 @@ Table of Contents
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.3.4 rename-package
+◊ 3.1.3.4 rename-package
 
   When a package is renamed via `rename-package' it maintains all /local
   nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
   defined.
 
 
-  ◊ 2.1.3.4.1 Implementation dependent
+  ◊ 3.1.3.4.1 Implementation dependent
 
-    *PROPOSAL*
+    *PROPOSAL* (See [issues#4].)
 
     If a /new-name/ or one of /new-nicknames/ is shadowed by one of the
     /local nicknames/ of the package being redefined, a warning might be
@@ -463,7 +492,10 @@ Table of Contents
     ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-◊ 2.1.3.5 delete-package
+    [issues#4] See section 1
+
+
+◊ 3.1.3.5 delete-package
 
   When a package is deleted via `delete-package' all /local nicknames/
   defined in other packages that it was nicknamed by must be removed as
@@ -475,10 +507,10 @@ Table of Contents
   ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-2.1.4 Edge cases
+3.1.4 Edge cases
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-◊ 2.1.4.1 PRINT-READ consistency
+◊ 3.1.4.1 PRINT-READ consistency
 
   Lisp reader uses `find-package' to read a symbol, and is affected by
   /local nicknames/ of the /current package/. So in order to maintain
@@ -558,7 +590,7 @@ Table of Contents
        `print-not-readable' without printing anything.
 
 
-2.1.5 `*FEATURES*'
+3.1.5 `*FEATURES*'
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   If an implementation supports package-local nicknames it should add
@@ -566,13 +598,13 @@ Table of Contents
   `*features*'.
 
 
-2.2 Examples
+3.2 Examples
 ────────────
 
   [TODO]
 
 
-3 Links
+4 Links
 ═══════
 
   3b's [notes] on package-local nicknames.
@@ -591,7 +623,7 @@ Table of Contents
 <https://www.sbcl.org/manual/#Package_002dLocal-Nicknames>
 
 
-4 Copying and License
+5 Copying and License
 ═════════════════════
 
   [TODO]
