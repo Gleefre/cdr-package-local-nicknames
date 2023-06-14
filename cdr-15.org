@@ -28,6 +28,7 @@
      *CURRENTLY*:
      Everywhere not that.
   2. See [[#print-read-consistency][PRINT-READ consistency]].
+
      *CURRENTLY*:
 
      sbcl, ccl, abcl: print symbol with package name when all package's names
