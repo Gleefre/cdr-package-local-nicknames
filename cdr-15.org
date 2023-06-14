@@ -19,19 +19,48 @@
      standard - ~use-package~ and ~unuse-package~ always return ~T~ - their api
      is consistent.)
 
-     *PROPOSAL*
+     *PROPOSAL*:
      - ~add-package-local-nickname~ should return /designated package/ if a new
        nickname was added and ~NIL~ otherwise (if it already existed).
      - ~remove-package-local-nickname~ should return /designated package/ if
        nickname was removed and ~NIL~ otherwise.
+
+     *CURRENTLY*:
+     Everywhere not that.
   2. See [[#print-read-consistency][PRINT-READ consistency]].
-  3. It is not clear whether /local nicknames/ should affect ~make-package~ or
-     ~defpackage~.
+     *CURRENTLY*:
 
-     *PROPOSAL*
+     sbcl, ccl, abcl: print symbol with package name when all package's names
+     and nicknames are shadowed by /current package/'s /local nicknames/.
 
+     ecl, acl: don't print with local nicknames at all.
+  3. It is not clear whether /local nicknames/ of the /current package/ should
+     affect ~make-package~ or ~defpackage~.
+
+     *PROPOSAL*:
+     They should not.  [ or they should? ]
+
+     *CURRENTLY*:
+
+     ccl, acl, abcl: they do.
+
+     sbcl: partly (:use is affected, :local-nicknames are not)
+
+     ecl: they don't.
+
+  4. It is not clear whether /local nicknames/ of the package *being defined*
+     should affect ~make-package~ or ~defpackage~.
+
+     *PROPOSAL*:
      They should not.
-  4. It is not clear whether it is valid to have a /local nickname/ in a package
+
+     *CURRENTLY*:
+
+     sbcl, ccl, acl, abcl: they don't.
+
+     ecl: they do.
+
+  5. It is not clear whether it is valid to have a /local nickname/ in a package
      shadowing its own name or nickname.
 
      Now: SBCL signals an error, but that doesn't make much sense, especially if
@@ -42,17 +71,36 @@
      *PROPOSAL*
 
      It should be allowed, but a warning might be signaled.
-  5. *PROPOSAL*
+
+     *CURRENTLY*:
+
+     sbcl, ccl, abcl: not allowed.
+
+     ecl, acl: allowed.
+  6. *PROPOSAL*
 
      Add ~:local-nicknames~ option to ~make-package~ similar to ~defpackage~.
      See [[#make-package][make-package]].
-  6. It is not clear whether functions ~package-local-nicknames~ and
+
+     *CURRENTLY*:
+
+     ecl: takes keyword parameter, but segfaults on incorrect usage + doesn't
+     have it in docstring. :/
+
+     acl: has it
+
+     abcl, sbcl, ccl: don't have it.
+  7. It is not clear whether functions ~package-local-nicknames~ and
      ~package-locally-nicknamed-by-list~ should be allowed to return
      lists with duplicate entries.
 
      *PROPOSAL*
 
      They should not.
+
+     *CURRENTLY*: I don't know, it requires some heavy testing.
+
+     For sure: ccl returns with duplicates.
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
