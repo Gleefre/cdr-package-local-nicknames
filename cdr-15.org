@@ -19,12 +19,12 @@
    what exactly is returned). (Somewhat similar functions from the standard -
    ~use-package~ and ~unuse-package~ always return ~T~ - their api is
    consistent.)
-*** Proposal:
+*** Proposal
     - ~add-package-local-nickname~ should return /designated package/ if a new
       nickname was added and ~NIL~ otherwise (if it already existed).
     - ~remove-package-local-nickname~ should return /designated package/ if
       nickname was removed and ~NIL~ otherwise.
-*** Currently:
+*** Currently
    sbcl, ccl, ecl, acl, abcl, clasp: ~add-package-local-nickname~ always returns
    /designated package/.
 
@@ -35,7 +35,7 @@
    removed nickname on success and ~NIL~.  [ That seems nice ]
 ** Issue 2
    See [[#print-read-consistency][PRINT-READ consistency]].
-*** Example:
+*** Example
     #+BEGIN_SRC common-lisp
     (defpackage #:a (:use) (:export #:+))
     (defpackage #:b (:local-nicknames (#:a #:cl)))
@@ -54,7 +54,7 @@
     ; => a:+  (clasp, acl, ecl)
     ;; but in #:c package a:+ would refer to b:+
     #+END_SRC
-*** Currently:
+*** Currently
      sbcl, ccl, abcl: print symbol with package name when all package's names
      and nicknames are shadowed by /current package/'s /local nicknames/.
 
@@ -87,9 +87,9 @@
     ; => "B"  (ccl, acl, abcl)
     ; => "A" (sbcl, ecl, clasp)
     #+END_SRC
-*** Proposal:
+*** Proposal
     They should not.  [ or they should? ]
-*** Currently:
+*** Currently
     ccl, acl, abcl: they do.
 
     sbcl: partly (:use is affected, :local-nicknames are not)
@@ -98,7 +98,7 @@
 ** Issue 4
    It is not clear whether /local nicknames/ of the package *being defined*
    should affect ~make-package~ or ~defpackage~.
-*** Example:
+*** Example
     #+BEGIN_SRC common-lisp
     (defpackage #:a (:use) (:export #:x))
     (defpackage #:b (:use) (:export #:x))
@@ -110,15 +110,15 @@
     ; => "A"  (sbcl, ccl, acl, abcl, clasp)
     ;; ecl errors... :/
     #+END_SRC
-*** Proposal:
+*** Proposal
     They should not.
-*** Currently:
+*** Currently
     sbcl, ccl, acl, abcl: they don't.
 
     ecl: they do (or not? not sure).
 
     clasp: they do in some weird way - also depends on order in which PLN are
-   added.
+    added.
 ** Issue 5
    It is not clear whether it is valid to have a /local nickname/ in a package
    shadowing its own name or nickname.
@@ -133,9 +133,9 @@
     ; => error  (sbcl, ccl, abcl)
     ; => ok  (ecl, acl, clasp)
     #+END_SRC
-*** Proposal:
+*** Proposal
     It should be allowed, but a warning might be signaled.
-*** Currently:
+*** Currently
      sbcl, ccl, abcl: not allowed.
 
      ecl, acl, clasp: allowed.
