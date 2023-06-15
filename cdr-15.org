@@ -224,8 +224,7 @@
      Each pair specifies a /local nickname/ ~nickname~ for the corresponding
      ~package~.
 
-     This option may appear more than once and is executed *after* all standard
-     options.
+     This option may appear more than once.
 
      To avoid confusion, /local nicknames/ of the /current package/ must be
      ignored in ~defpackage~. In other words ~defpackage~ must *not* be affected
