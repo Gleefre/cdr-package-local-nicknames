@@ -26,7 +26,15 @@
        nickname was removed and ~NIL~ otherwise.
 
      *CURRENTLY*:
-     Everywhere not that.
+
+     sbcl, ccl, ecl, acl, abcl: ~add-package-local-nickname~ always returns
+     /designated package/.
+
+     sbcl, ccl, ecl, acl: ~remove-package-local-nickname~ returns ~T~ on success
+     and ~NIL~
+
+     abcl: ~remove-package-local-nickname~ returns package nicknamed by the
+     removed nickname on success and ~NIL~.  [ That seems nice ]
   2. See [[#print-read-consistency][PRINT-READ consistency]].
 
      *CURRENTLY*:
@@ -99,9 +107,13 @@
 
      They should not.
 
-     *CURRENTLY*: I don't know, it requires some heavy testing.
+     *CURRENTLY*:
 
-     For sure: ccl returns with duplicates.
+     sbcl, acl, ccl, abcl, ecl: don't return duplicate entries from ~package-local-nicknames~.
+
+     sbcl, acl: don't return duplicate entries from ~package-locally-nicknamed-by-list~.
+
+     ccl, abcl, ecl: return duplicate entries from ~package-locally-nicknamed-by-list~.
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
