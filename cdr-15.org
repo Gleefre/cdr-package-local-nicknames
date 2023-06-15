@@ -27,10 +27,10 @@
 
      *CURRENTLY*:
 
-     sbcl, ccl, ecl, acl, abcl: ~add-package-local-nickname~ always returns
+     sbcl, ccl, ecl, acl, abcl, clasp: ~add-package-local-nickname~ always returns
      /designated package/.
 
-     sbcl, ccl, ecl, acl: ~remove-package-local-nickname~ returns ~T~ on success
+     sbcl, ccl, ecl, acl, clasp: ~remove-package-local-nickname~ returns ~T~ on success
      and ~NIL~
 
      abcl: ~remove-package-local-nickname~ returns package nicknamed by the
@@ -42,7 +42,7 @@
      sbcl, ccl, abcl: print symbol with package name when all package's names
      and nicknames are shadowed by /current package/'s /local nicknames/.
 
-     ecl, acl: don't print with local nicknames at all.
+     ecl, acl, clasp: don't print with local nicknames at all.
   3. It is not clear whether /local nicknames/ of the /current package/ should
      affect ~make-package~ or ~defpackage~.
 
@@ -55,7 +55,7 @@
 
      sbcl: partly (:use is affected, :local-nicknames are not)
 
-     ecl: they don't.
+     ecl, clasp: they don't.
 
   4. It is not clear whether /local nicknames/ of the package *being defined*
      should affect ~make-package~ or ~defpackage~.
@@ -68,6 +68,9 @@
      sbcl, ccl, acl, abcl: they don't.
 
      ecl: they do.
+
+     clasp: they do in some weird way - also depends on order in which PLN are
+     added.
 
   5. It is not clear whether it is valid to have a /local nickname/ in a package
      shadowing its own name or nickname.
@@ -85,7 +88,7 @@
 
      sbcl, ccl, abcl: not allowed.
 
-     ecl, acl: allowed.
+     ecl, acl, clasp: allowed.
   6. *PROPOSAL*
 
      Add ~:local-nicknames~ option to ~make-package~ similar to ~defpackage~.
@@ -98,7 +101,7 @@
 
      acl: has it
 
-     abcl, sbcl, ccl: don't have it.
+     abcl, sbcl, ccl, clasp: don't have it.
   7. It is not clear whether functions ~package-local-nicknames~ and
      ~package-locally-nicknamed-by-list~ should be allowed to return
      lists with duplicate entries.
@@ -109,9 +112,9 @@
 
      *CURRENTLY*:
 
-     sbcl, acl, ccl, abcl, ecl: don't return duplicate entries from ~package-local-nicknames~.
+     sbcl, acl, clasp, ccl, abcl, ecl: don't return duplicate entries from ~package-local-nicknames~.
 
-     sbcl, acl: don't return duplicate entries from ~package-locally-nicknamed-by-list~.
+     sbcl, acl, clasp: don't return duplicate entries from ~package-locally-nicknamed-by-list~.
 
      ccl, abcl, ecl: return duplicate entries from ~package-locally-nicknamed-by-list~.
 * Introduction
