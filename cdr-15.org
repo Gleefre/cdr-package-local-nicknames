@@ -12,33 +12,49 @@
   :PROPERTIES:
   :CUSTOM_ID: issues
   :END:
-  1. Inconsistency between return values of ~add-package-local-nickname~ and
-     ~remove-package-local-nickname~. First always returns /designated package/,
-     second one returns /true/ if a nickname was removed (but it is not
-     specified what exactly is returned). (Somewhat similar functions from the
-     standard - ~use-package~ and ~unuse-package~ always return ~T~ - their api
-     is consistent.)
+** Issue 1.
+   Inconsistency between return values of ~add-package-local-nickname~ and
+   ~remove-package-local-nickname~. First always returns /designated package/,
+   second one returns /true/ if a nickname was removed (but it is not specified
+   what exactly is returned). (Somewhat similar functions from the standard -
+   ~use-package~ and ~unuse-package~ always return ~T~ - their api is
+   consistent.)
+*** Proposal:
+    - ~add-package-local-nickname~ should return /designated package/ if a new
+      nickname was added and ~NIL~ otherwise (if it already existed).
+    - ~remove-package-local-nickname~ should return /designated package/ if
+      nickname was removed and ~NIL~ otherwise.
+*** Currently:
+   sbcl, ccl, ecl, acl, abcl, clasp: ~add-package-local-nickname~ always returns
+   /designated package/.
 
-     *PROPOSAL*:
-     - ~add-package-local-nickname~ should return /designated package/ if a new
-       nickname was added and ~NIL~ otherwise (if it already existed).
-     - ~remove-package-local-nickname~ should return /designated package/ if
-       nickname was removed and ~NIL~ otherwise.
+   sbcl, ccl, ecl, acl, clasp: ~remove-package-local-nickname~ returns ~T~ on
+   success and ~NIL~
 
-     *CURRENTLY*:
-
-     sbcl, ccl, ecl, acl, abcl, clasp: ~add-package-local-nickname~ always returns
-     /designated package/.
-
-     sbcl, ccl, ecl, acl, clasp: ~remove-package-local-nickname~ returns ~T~ on success
-     and ~NIL~
-
-     abcl: ~remove-package-local-nickname~ returns package nicknamed by the
-     removed nickname on success and ~NIL~.  [ That seems nice ]
-  2. See [[#print-read-consistency][PRINT-READ consistency]].
-
-     *CURRENTLY*:
-
+   abcl: ~remove-package-local-nickname~ returns package nicknamed by the
+   removed nickname on success and ~NIL~.  [ That seems nice ]
+** Issue 2
+   See [[#print-read-consistency][PRINT-READ consistency]].
+*** Example:
+    #+BEGIN_SRC common-lisp
+    (defpackage #:a (:use) (:export #:+))
+    (defpackage #:b (:local-nicknames (#:a #:cl)))
+    (let ((*package* (find-package '#:b)))
+      (print 'a:+))
+    ; => a:+ everywhere
+    ;; but in #:b package a:+ would refer to cl:+
+    #+END_SRC
+    #+BEGIN_SRC common-lisp
+    (defpackage #:a (:use) (:export #:+))
+    (defpackage #:b (:use) (:export #:+))
+    (defpackage #:c (:use) (:local-nicknames (#:a #:b) (#:b #:a)))
+    (let ((*package* (find-package '#:c)))
+      (print 'a:+))
+    ; => b:+  (sbcl, ccl, abcl)
+    ; => a:+  (clasp, acl, ecl)
+    ;; but in #:c package a:+ would refer to b:+
+    #+END_SRC
+*** Currently:
      sbcl, ccl, abcl: print symbol with package name when all package's names
      and nicknames are shadowed by /current package/'s /local nicknames/.
 
