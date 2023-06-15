@@ -469,6 +469,8 @@
           : #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
           If ~*print-readably*~ is /true/ must signal an error of type
           ~print-not-readable~ without printing anything.
+        - /Shinmera's idea/. In this case an extended ~#:~ syntax should be used:
+          : #:(package name) and #::(package name)
 *** ~*FEATURES*~
     If an implementation supports package-local nicknames it should add symbols
     ~:package-local-nicknames~ and ~:cdr-15~ (per CDR 14) to ~*features*~.
