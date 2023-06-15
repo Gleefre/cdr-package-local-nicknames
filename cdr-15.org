@@ -148,7 +148,7 @@
    [[#make-package][make-package]].
 *** Currently
     ecl: takes keyword parameter, but segfaults on incorrect usage + doesn't
-    have it in docstring. :/
+    have it in docstring. Also API differs :/
 
     acl: has it
 
