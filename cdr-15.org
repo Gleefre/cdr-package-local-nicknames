@@ -59,19 +59,43 @@
      and nicknames are shadowed by /current package/'s /local nicknames/.
 
      ecl, acl, clasp: don't print with local nicknames at all.
-  3. It is not clear whether /local nicknames/ of the /current package/ should
-     affect ~make-package~ or ~defpackage~.
+** Issue 3
+   It is not clear whether /local nicknames/ of the /current package/ should
+   affect ~make-package~ or ~defpackage~.
+*** Example
+    #+BEGIN_SRC common-lisp
+    (defpackage #:a (:use) (:export #:x))
+    (defpackage #:b (:use) (:export #:x))
+    (defpackage #:c
+      (:use #:cl)
+      (:local-nicknames (#:a #:b) (#:b #:a)))
 
-     *PROPOSAL*:
-     They should not.  [ or they should? ]
+    (in-package #:c)
+    (defpackage #:d
+      (:use #:a)
+      (:export #:x))
+    (print (package-name (symbol-package 'd:x)))
+    ; => "B"  (sbcl, ccl, acl, abcl)
+    ; => "A"  (ecl, clasp)
 
-     *CURRENTLY*:
+    (defpackage #:e
+      (:use)
+      (:local-nicknames (#:x #:a)))
 
-     ccl, acl, abcl: they do.
+    (let ((*package* (find-package '#:e)))
+      (print (package-name (find-package '#:x))))
+    ; => "B"  (ccl, acl, abcl)
+    ; => "A" (sbcl, ecl, clasp)
+    #+END_SRC
+*** Proposal:
+    They should not.  [ or they should? ]
+*** Currently:
+    ccl, acl, abcl: they do.
 
-     sbcl: partly (:use is affected, :local-nicknames are not)
+    sbcl: partly (:use is affected, :local-nicknames are not)
 
-     ecl, clasp: they don't.
+    ecl, clasp: they don't.
+** Issue 4
   4. It is not clear whether /local nicknames/ of the package *being defined*
      should affect ~make-package~ or ~defpackage~.
 
