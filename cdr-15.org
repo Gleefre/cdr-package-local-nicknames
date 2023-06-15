@@ -56,7 +56,6 @@
      sbcl: partly (:use is affected, :local-nicknames are not)
 
      ecl, clasp: they don't.
-
   4. It is not clear whether /local nicknames/ of the package *being defined*
      should affect ~make-package~ or ~defpackage~.
 
@@ -71,7 +70,6 @@
 
      clasp: they do in some weird way - also depends on order in which PLN are
      added.
-
   5. It is not clear whether it is valid to have a /local nickname/ in a package
      shadowing its own name or nickname.
 
