@@ -466,12 +466,8 @@
           Note that ~#:KEYWORD~ name is reserved for the ~#:KEYWORD~ package and
           cannot be used as a /local nickname/ thus this expression will always
           evaluate to the symbol ~foo::bar~.
-        - In this case the symbol must be printed using ~:::~ and ~::::~ syntax
-          to lookup and intern ignoring /local nicknames/ respectively:
-          #+BEGIN_SRC common-lisp
-          foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
-          foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
-          #+END_SRC
+        - /Shinmera's idea/. In this case an extended ~#:~ syntax should be used:
+          : #:(package name) and #::(package name)
         - In this case the symbol must be printed using the ~#`~ syntax for
           reading an expression ignoring /local nicknames/ in the /current
           package/:
@@ -500,8 +496,12 @@
           : #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
           If ~*print-readably*~ is /true/ must signal an error of type
           ~print-not-readable~ without printing anything.
-        - /Shinmera's idea/. In this case an extended ~#:~ syntax should be used:
-          : #:(package name) and #::(package name)
+        - In this case the symbol must be printed using ~:::~ and ~::::~ syntax
+          to lookup and intern ignoring /local nicknames/ respectively:
+          #+BEGIN_SRC common-lisp
+          foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
+          foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
+          #+END_SRC
 *** ~*FEATURES*~
     If an implementation supports package-local nicknames it should add symbols
     ~:package-local-nicknames~ and ~:cdr-15~ (per CDR 14) to ~*features*~.
