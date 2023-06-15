@@ -176,6 +176,7 @@
    How PLN affect ~format~'s ~\~//~ directive? It seems tricky - compilers might
    want optimize it at compile time, but reffered symbol might change on
    rebinding the ~*package*~.
+
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
