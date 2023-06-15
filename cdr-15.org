@@ -88,7 +88,8 @@
     ; => "A" (sbcl, ecl, clasp)
     #+END_SRC
 *** Proposal
-    They should not.  [ or they should? ]
+    They should affect all options like ~:use~, ~:local-nicknames~,
+    ~:shadowing-import-from~ and ~:import-from~.
 *** Currently
     ccl, acl, abcl: they do.
 
@@ -225,10 +226,6 @@
      ~package~.
 
      This option may appear more than once.
-
-     To avoid confusion, /local nicknames/ of the /current package/ must be
-     ignored in ~defpackage~. In other words ~defpackage~ must *not* be affected
-     by the ~*package*~ special variable.
 ***** Arguments and Values:
       ~nickname~ must be a /string designator/.
 
@@ -269,10 +266,6 @@
      :END:
 
      (*PROPOSAL* for new API.)
-
-     To avoid confusion, /local nicknames/ of the /current package/ must be
-     ignored during evaluation of ~make-package~. In other words ~make-package~
-     must *not* be affected by the ~*package*~ special variable.
 
      ~make-package~ lambda list is extended to include an additional key
      parameter: ~local-nicknames~.
