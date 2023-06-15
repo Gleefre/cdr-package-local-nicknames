@@ -670,6 +670,11 @@ Table of Contents
 
        If `*print-readably*' is /true/ must signal an error of type
        `print-not-readable' without printing anything.
+     • /Shinmera's idea/. In this case an extended `#:' syntax should be
+       used:
+       ┌────
+       │ #:(package name) and #::(package name)
+       └────
 
 
 3.1.5 `*FEATURES*'
