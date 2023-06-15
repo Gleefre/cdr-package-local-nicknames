@@ -115,6 +115,9 @@
      sbcl, acl, clasp: don't return duplicate entries from ~package-locally-nicknamed-by-list~.
 
      ccl, abcl, ecl: return duplicate entries from ~package-locally-nicknamed-by-list~.
+  8. /by |3b|/ How PLN affect ~format~'s ~\~//~ directive? It seems tricky -
+     compilers might want optimize it at compile time, but symbol lookup would
+     change on rebinding ~*package*~.
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
