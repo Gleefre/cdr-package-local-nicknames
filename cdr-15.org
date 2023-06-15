@@ -96,34 +96,46 @@
 
     ecl, clasp: they don't.
 ** Issue 4
-  4. It is not clear whether /local nicknames/ of the package *being defined*
-     should affect ~make-package~ or ~defpackage~.
+   It is not clear whether /local nicknames/ of the package *being defined*
+   should affect ~make-package~ or ~defpackage~.
+*** Example:
+    #+BEGIN_SRC common-lisp
+    (defpackage #:a (:use) (:export #:x))
+    (defpackage #:b (:use) (:export #:x))
+    (defpackage #:c
+      (:use #:a)
+      (:local-nicknames (#:a #:b) (#:b #:a)))
 
-     *PROPOSAL*:
-     They should not.
+    (print (package-name (symbol-package 'c::x)))
+    ; => "A"  (sbcl, ccl, acl, abcl, clasp)
+    ;; ecl errors... :/
+    #+END_SRC
+*** Proposal:
+    They should not.
+*** Currently:
+    sbcl, ccl, acl, abcl: they don't.
 
-     *CURRENTLY*:
+    ecl: they do (or not? not sure).
 
-     sbcl, ccl, acl, abcl: they don't.
+    clasp: they do in some weird way - also depends on order in which PLN are
+   added.
+** Issue 5
+   It is not clear whether it is valid to have a /local nickname/ in a package
+   shadowing its own name or nickname.
 
-     ecl: they do.
-
-     clasp: they do in some weird way - also depends on order in which PLN are
-     added.
-  5. It is not clear whether it is valid to have a /local nickname/ in a package
-     shadowing its own name or nickname.
-
-     Now: SBCL signals an error, but that doesn't make much sense, especially if
-     a /local nickname/ shadows the /global nickname/ of a package and not its
-     name. And it is possible to achieve a /local nickname/ shadowing a /global
-     nickname/ or the /package name/ by renaming the package.
-
-     *PROPOSAL*
-
-     It should be allowed, but a warning might be signaled.
-
-     *CURRENTLY*:
-
+   Now: SBCL signals an error, but that doesn't make much sense, especially if a
+   /local nickname/ shadows the /global nickname/ of a package and not its
+   name. And it is possible to achieve a /local nickname/ shadowing a /global
+   nickname/ or the /package name/ by renaming the package.
+*** Example
+    #+BEGIN_SRC common-lisp
+    (defpackage #:a (:use) (:local-nicknames (#:a #:cl)))
+    ; => error  (sbcl, ccl, abcl)
+    ; => ok  (ecl, acl, clasp)
+    #+END_SRC
+*** Proposal:
+    It should be allowed, but a warning might be signaled.
+*** Currently:
      sbcl, ccl, abcl: not allowed.
 
      ecl, acl, clasp: allowed.
