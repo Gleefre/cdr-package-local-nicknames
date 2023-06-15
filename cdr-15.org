@@ -237,18 +237,11 @@
       An error of type ~package-error~ is signaled when a package designated by
       ~package~ does not exists.
 
-      [OR DOES IT?]
-
       Name conflict errors are handled by the underlying calls to
       ~add-package-local-nickname~.
 
       See [[#exceptional-situations-2][add-package-local-nickname: exceptional situations]].
 ***** Implementation dependent
-      The behaviour is unspecified when a package designated by ~package~ does
-      not exists.
-
-      [OR IT IS?]
-
       The behaviour is unspecified when a /local nickname/ is specified for the
       package that is being defined.
 
@@ -288,18 +281,11 @@
       An error of type ~package-error~ is signaled when a package designated by
       ~package~ does not exists.
 
-      [OR DOES IT?]
-
       Name conflict errors are handled by the underlying calls to
       ~add-package-local-nickname~.
 
       See [[#exceptional-situations-2][add-package-local-nickname: exceptional situations]].
 ***** Implementation dependent
-      The behaviour is unspecified when a package designated by ~package~ does
-      not exists.
-
-      [OR IT IS?]
-
       The behaviour is unspecified when a /local nickname/ is specified for the
       package that is being defined.
 -----
