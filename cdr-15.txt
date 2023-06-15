@@ -1,13 +1,12 @@
-                       _________________________
-
+                       ━━━━━━━━━━━━━━━━━━━━━━━━━
                         PACKAGE-LOCAL NICKNAMES
 
                                 Gleefre
-                       _________________________
+                       ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 Table of Contents
-_________________
+─────────────────
 
 1. ISSUES
 2. Introduction
@@ -30,7 +29,7 @@ _________________
 
 
 1 ISSUES
-========
+════════
 
   1. Inconsistency between return values of `add-package-local-nickname'
      and `remove-package-local-nickname'. First always returns
@@ -40,20 +39,60 @@ _________________
      `use-package' and `unuse-package' always return `T' - their api is
      consistent.)
 
-     *PROPOSAL*
-     - `add-package-local-nickname' should return /designated package/
+     *PROPOSAL*:
+     • `add-package-local-nickname' should return /designated package/
        if a new nickname was added and `NIL' otherwise (if it already
        existed).
-     - `remove-package-local-nickname' should return /designated
+     • `remove-package-local-nickname' should return /designated
        package/ if nickname was removed and `NIL' otherwise.
+
+     *CURRENTLY*:
+
+     sbcl, ccl, ecl, acl, abcl, clasp: `add-package-local-nickname'
+     always returns /designated package/.
+
+     sbcl, ccl, ecl, acl, clasp: `remove-package-local-nickname' returns
+     `T' on success and `NIL'
+
+     abcl: `remove-package-local-nickname' returns package nicknamed by
+     the removed nickname on success and `NIL'.  [ That seems nice ]
   2. See [PRINT-READ consistency].
-  3. It is not clear whether /local nicknames/ should affect
-     `make-package' or `defpackage'.
 
-     *PROPOSAL*
+     *CURRENTLY*:
 
-     They should not.
-  4. It is not clear whether it is valid to have a /local nickname/ in a
+     sbcl, ccl, abcl: print symbol with package name when all package's
+     names and nicknames are shadowed by /current package/'s /local
+     nicknames/.
+
+     ecl, acl, clasp: don't print with local nicknames at all.
+  3. It is not clear whether /local nicknames/ of the /current package/
+     should affect `make-package' or `defpackage'.
+
+     *PROPOSAL*: They should not.  [ or they should? ]
+
+     *CURRENTLY*:
+
+     ccl, acl, abcl: they do.
+
+     sbcl: partly (:use is affected, :local-nicknames are not)
+
+     ecl, clasp: they don't.
+
+  4. It is not clear whether /local nicknames/ of the package *being
+     defined* should affect `make-package' or `defpackage'.
+
+     *PROPOSAL*: They should not.
+
+     *CURRENTLY*:
+
+     sbcl, ccl, acl, abcl: they don't.
+
+     ecl: they do.
+
+     clasp: they do in some weird way - also depends on order in which
+     PLN are added.
+
+  5. It is not clear whether it is valid to have a /local nickname/ in a
      package shadowing its own name or nickname.
 
      Now: SBCL signals an error, but that doesn't make much sense,
@@ -62,21 +101,62 @@ _________________
      nickname/ shadowing a /global nickname/ or the /package name/ by
      renaming the package.
 
-     *PROPOSAL* It should be allowed, but a warning might be signaled.
+     *PROPOSAL*
+
+     It should be allowed, but a warning might be signaled.
+
+     *CURRENTLY*:
+
+     sbcl, ccl, abcl: not allowed.
+
+     ecl, acl, clasp: allowed.
+  6. *PROPOSAL*
+
+     Add `:local-nicknames' option to `make-package' similar to
+     `defpackage'.  See [make-package].
+
+     *CURRENTLY*:
+
+     ecl: takes keyword parameter, but segfaults on incorrect usage +
+     doesn't have it in docstring. :/
+
+     acl: has it
+
+     abcl, sbcl, ccl, clasp: don't have it.
+  7. It is not clear whether functions `package-local-nicknames' and
+     `package-locally-nicknamed-by-list' should be allowed to return
+     lists with duplicate entries.
+
+     *PROPOSAL*
+
+     They should not.
+
+     *CURRENTLY*:
+
+     sbcl, acl, clasp, ccl, abcl, ecl: don't return duplicate entries
+     from `package-local-nicknames'.
+
+     sbcl, acl, clasp: don't return duplicate entries from
+     `package-locally-nicknamed-by-list'.
+
+     ccl, abcl, ecl: return duplicate entries from
+     `package-locally-nicknamed-by-list'.
 
 
 [PRINT-READ consistency] See section 3.1.4.1
 
+[make-package] See section 3.1.2.2
+
 
 2 Introduction
-==============
+══════════════
 
   This is a specification for package-local nicknames extension in
   Common Lisp.
 
 
 2.1 Rationale
-~~~~~~~~~~~~~
+─────────────
 
   Package-local nicknames allow to use short and easy-to-use names
   without potentially introducing name conflict as with normal
@@ -84,7 +164,7 @@ _________________
 
 
 2.2 Current state
-~~~~~~~~~~~~~~~~~
+─────────────────
 
   Package-local nicknames are implemented (at least partially) in
   `SBCL', `CCL', `ECL', `Clasp', `ABCL', `Allegro CL',
@@ -94,7 +174,7 @@ _________________
 
 
 2.3 Goal
-~~~~~~~~
+────────
 
   The purpose of this document is to standardize the package-local
   nicknames extension and to address some existing issues (mostly
@@ -107,13 +187,13 @@ _________________
 
 
 3 Specification
-===============
+═══════════════
 
 3.1 Description
-~~~~~~~~~~~~~~~
+───────────────
 
 3.1.1 Concept
--------------
+╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   /Package-local nickname/ (or /local nickname/) has the same effects as
   a normal /package nickname/ (later /global nickname/), except that
@@ -140,17 +220,17 @@ _________________
 
 
 3.1.2 API
----------
+╌╌╌╌╌╌╌╌╌
 
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.2.1 defpackage
+◊ 3.1.2.1 defpackage
 
   `defpackage' options are extended to include /local-nicknames-option/:
-  ,----
-  | local-nicknames-option ::= (:local-nicknames (nickname package)*)
-  `----
+  ┌────
+  │ local-nicknames-option ::= (:local-nicknames (nickname package)*)
+  └────
 
 
   Each pair specifies a /local nickname/ `nickname' for the
@@ -164,14 +244,14 @@ _________________
   affected by the `*package*' special variable.
 
 
-  + 3.1.2.1.1 Arguments and Values:
+  ◊ 3.1.2.1.1 Arguments and Values:
 
     `nickname' must be a /string designator/.
 
     `package' must be a /package designator/.
 
 
-  + 3.1.2.1.2 Exceptional situations
+  ◊ 3.1.2.1.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
@@ -188,7 +268,7 @@ _________________
     3.1.2.3.2
 
 
-  + 3.1.2.1.3 Implementation dependent
+  ◊ 3.1.2.1.3 Implementation dependent
 
     The behaviour is unspecified when a package designated by `package'
     does not exists.
@@ -206,11 +286,11 @@ _________________
     [TODO: What happens when a package is redefined with local nicknames
     in other packages that it is nicknamed by? It probably can't be
     strictly defined since redefining package is implementation
-    dependent... But seems like they must be left intact.]
-    --------------------------------------------------------------------
+    dependent… But seems like they must be left intact.]
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.2.2 make-package
+◊ 3.1.2.2 make-package
 
   (*PROPOSAL* for new API.)
 
@@ -221,9 +301,9 @@ _________________
 
   `make-package' lambda list is extended to include an additional key
   parameter: `local-nicknames'.
-  ,----
-  | local-nicknames ::= ((nickname package)*)
-  `----
+  ┌────
+  │ local-nicknames ::= ((nickname package)*)
+  └────
 
 
   `local-nicknames' defaults to an /empty list/.
@@ -233,7 +313,7 @@ _________________
   the new /package/.
 
 
-  + 3.1.2.2.1 Arguments and Values:
+  ◊ 3.1.2.2.1 Arguments and Values:
 
     `local-nicknames' must be a /string designator/.
 
@@ -242,7 +322,7 @@ _________________
     `package' must be a /package designator/.
 
 
-  + 3.1.2.2.2 Exceptional situations
+  ◊ 3.1.2.2.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
@@ -259,7 +339,7 @@ _________________
     3.1.2.3.2
 
 
-  + 3.1.2.2.3 Implementation dependent
+  ◊ 3.1.2.2.3 Implementation dependent
 
     The behaviour is unspecified when a package designated by `package'
     does not exists.
@@ -270,20 +350,20 @@ _________________
     for the package that is being defined.
 
 
-  + 3.1.2.2.4 Notes
+  ◊ 3.1.2.2.4 Notes
 
     It is still possible to specify a package designated by /local
     nickname/ in `:use' and/or `:local-nicknames' parameters by calling
     `find-package' before calling `make-package'.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.2.3 add-package-local-nickname
+◊ 3.1.2.3 add-package-local-nickname
 
-  ,----
-  | (add-package-local-nickname nickname actual-package &optional designated-package)
-  |   => designated-package-object
-  `----
+  ┌────
+  │ (add-package-local-nickname nickname actual-package &optional designated-package)
+  │   => designated-package-object
+  └────
 
   `designated-package' defaults to the /current package/.
 
@@ -296,7 +376,7 @@ _________________
   package designated by `actual-package'.
 
 
-  + 3.1.2.3.1 Arguments and Values
+  ◊ 3.1.2.3.1 Arguments and Values
 
     `nickname' must be a /string designator/.
 
@@ -306,7 +386,7 @@ _________________
     `designated-package-object' is of type /package/.
 
 
-  + 3.1.2.3.2 Exceptional situations
+  ◊ 3.1.2.3.2 Exceptional situations
 
     If a package designated by `actual-package' or a package designated
     by `designated-package' does not exists, an error of type
@@ -319,24 +399,24 @@ _________________
     `actual-package', an error of type /package-error/ must be signaled.
 
 
-  + 3.1.2.3.3 Implementation dependent
+  ◊ 3.1.2.3.3 Implementation dependent
 
     *PROPOSAL* (See [issues#4].)
 
     If `nickname' shadows the `designated-package''s /package name/ or
     one of its /global nicknames/, a style warning might signaled.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
     [issues#4] See section 1
 
 
-* 3.1.2.4 remove-package-local-nickname
+◊ 3.1.2.4 remove-package-local-nickname
 
-  ,----
-  | (remove-package-local-nickname old-nickname &optional designated-package)
-  |   => nickname-removed-p
-  `----
+  ┌────
+  │ (remove-package-local-nickname old-nickname &optional designated-package)
+  │   => nickname-removed-p
+  └────
 
   `designated-package' defaults to the /current package/.
 
@@ -347,7 +427,7 @@ _________________
   `NIL' otherwise.
 
 
-  + 3.1.2.4.1 Arguments and Values
+  ◊ 3.1.2.4.1 Arguments and Values
 
     `old-nickname' must be a /string designator/.
 
@@ -356,19 +436,19 @@ _________________
     `nickname-removed-p' is a /generalized boolean/.
 
 
-  + 3.1.2.4.2 Exceptional situations
+  ◊ 3.1.2.4.2 Exceptional situations
 
     If a package designated by `designated-package' does not exists, an
     error of type /package-error/ must be signaled.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.2.5 package-local-nicknames
+◊ 3.1.2.5 package-local-nicknames
 
-  ,----
-  | (package-local-nicknames package)
-  |   => local-nicknames-alist
-  `----
+  ┌────
+  │ (package-local-nicknames package)
+  │   => local-nicknames-alist
+  └────
 
   Returns an /alist/ describing local nicknames defined in a package
   designated by `package'.
@@ -378,7 +458,7 @@ _________________
   type /package/.
 
 
-  + 3.1.2.5.1 Arguments and Values
+  ◊ 3.1.2.5.1 Arguments and Values
 
     `package' must be a /package designator/.
 
@@ -386,73 +466,73 @@ _________________
     values of type /package/.
 
 
-  + 3.1.2.5.2 Exceptional situations
+  ◊ 3.1.2.5.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
 
 
-  + 3.1.2.5.3 Notes
+  ◊ 3.1.2.5.3 Notes
 
     The returned /alist/ must be safe to be modified by the user.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.2.6 package-locally-nicknamed-by-list
+◊ 3.1.2.6 package-locally-nicknamed-by-list
 
-  ,----
-  | (package-locally-nicknamed-by-list package)
-  |   => packages-list
-  `----
+  ┌────
+  │ (package-locally-nicknamed-by-list package)
+  │   => packages-list
+  └────
 
   Returns a /list/ of packages that have a /local nickname/ defined for
   the package designated by `package'.
 
 
-  + 3.1.2.6.1 Arguments and Values
+  ◊ 3.1.2.6.1 Arguments and Values
 
     `package' must be a /package designator/.
 
     `packages-list' is a /list/ with elements of type /package/.
 
 
-  + 3.1.2.6.2 Exceptional situations
+  ◊ 3.1.2.6.2 Exceptional situations
 
     An error of type `package-error' is signaled when a package
     designated by `package' does not exists.
 
 
-  + 3.1.2.6.3 Notes
+  ◊ 3.1.2.6.3 Notes
 
     The returned /list/ must be safe to be modified by the user.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
 3.1.3 Affected symbols
-----------------------
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.3.1 defpackage
+◊ 3.1.3.1 defpackage
 
   See [defpackage].
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
   [defpackage] See section 3.1.2.1
 
 
-* 3.1.3.2 make-package
+◊ 3.1.3.2 make-package
 
   See [make-package].
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
   [make-package] See section 3.1.2.2
 
 
-* 3.1.3.3 find-package
+◊ 3.1.3.3 find-package
 
   When argument to `find-package' is a /local nickname/ that is defined
   in the /current package/, returns the package corresponding to this
@@ -474,30 +554,30 @@ _________________
 
   There are two exceptions: `make-package' and `defpackage' must *not*
   be affected by /local nicknames/ of the /current package/.
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
-* 3.1.3.4 rename-package
+◊ 3.1.3.4 rename-package
 
   When a package is renamed via `rename-package' it maintains all /local
   nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
   defined.
 
 
-  + 3.1.3.4.1 Implementation dependent
+  ◊ 3.1.3.4.1 Implementation dependent
 
     *PROPOSAL* (See [issues#4].)
 
     If a /new-name/ or one of /new-nicknames/ is shadowed by one of the
     /local nicknames/ of the package being redefined, a warning might be
     signaled.
-    --------------------------------------------------------------------
+    ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
     [issues#4] See section 1
 
 
-* 3.1.3.5 delete-package
+◊ 3.1.3.5 delete-package
 
   When a package is deleted via `delete-package' all /local nicknames/
   defined in other packages that it was nicknamed by must be removed as
@@ -506,13 +586,13 @@ _________________
 
   This also means that this package must not be available by calls to
   `package-locally-nicknamed-by-list' and `package-local-nicknames'.
-  ----------------------------------------------------------------------
+  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
 
 3.1.4 Edge cases
-----------------
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-* 3.1.4.1 PRINT-READ consistency
+◊ 3.1.4.1 PRINT-READ consistency
 
   Lisp reader uses `find-package' to read a symbol, and is affected by
   /local nicknames/ of the /current package/. So in order to maintain
@@ -538,62 +618,62 @@ _________________
      package/) for the symbol's home package.
 
      *PROPOSALS*
-     - The symbol must be printed using the `#.' syntax:
-       ,----
-       | #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
-       |     (cl:find-symbol "BAR" "FOO"))
-       | ;; or
-       | #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
-       |     (cl:intern "BAR" "FOO"))
-       `----
+     • The symbol must be printed using the `#.' syntax:
+       ┌────
+       │ #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+       │     (cl:find-symbol "BAR" "FOO"))
+       │ ;; or
+       │ #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+       │     (cl:intern "BAR" "FOO"))
+       └────
        Note that `#:KEYWORD' name is reserved for the `#:KEYWORD'
        package and cannot be used as a /local nickname/ thus this
        expression will always evaluate to the symbol `foo::bar'.
-     - In this case the symbol must be printed using `:::' and `::::'
+     • In this case the symbol must be printed using `:::' and `::::'
        syntax to lookup and intern ignoring /local nicknames/
        respectively:
-       ,----
-       | foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
-       | foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
-       `----
-     - In this case the symbol must be printed using the `#`' syntax for
+       ┌────
+       │ foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
+       │ foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
+       └────
+     • In this case the symbol must be printed using the `#`' syntax for
        reading an expression ignoring /local nicknames/ in the /current
        package/:
-       ,----
-       | #`foo:bar  and  #`foo::bar
-       `----
+       ┌────
+       │ #`foo:bar  and  #`foo::bar
+       └────
 
 
        It can be implemented roughly as follows:
-       ,----
-       | (defun |#`-reader| (stream subchar arg)
-       |   (declare (ignore subchar arg))
-       |   (let* ((current-package *package*)
-       |          (local-nicknames (package-local-nicknames current-package)))
-       |     (loop for (nick . package) in local-nicknames
-       |           do (remove-package-local-nickname nick current-package))
-       |     (unwind-protect
-       |          (read stream t nil t)
-       |       (loop for (nick . package) in local-nicknames
-       |             do (add-package-local-nickname nick package current-package)))))
-       | 
-       | (set-dispatch-macro-character #\# #\` #'|#`-reader|)
-       `----
+       ┌────
+       │ (defun |#`-reader| (stream subchar arg)
+       │   (declare (ignore subchar arg))
+       │   (let* ((current-package *package*)
+       │          (local-nicknames (package-local-nicknames current-package)))
+       │     (loop for (nick . package) in local-nicknames
+       │           do (remove-package-local-nickname nick current-package))
+       │     (unwind-protect
+       │          (read stream t nil t)
+       │       (loop for (nick . package) in local-nicknames
+       │             do (add-package-local-nickname nick package current-package)))))
+       │ 
+       │ (set-dispatch-macro-character #\# #\` #'|#`-reader|)
+       └────
        It is implementation dependent whether /local nicknames/ are
        actually removed from the /current package/ or not.
-     - In this case the symbol must be printed unreadably (specifics are
+     • In this case the symbol must be printed unreadably (specifics are
        implementation dependent):
-       ,----
-       | #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
-       | #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
-       `----
+       ┌────
+       │ #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
+       │ #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
+       └────
 
        If `*print-readably*' is /true/ must signal an error of type
        `print-not-readable' without printing anything.
 
 
 3.1.5 `*FEATURES*'
-------------------
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   If an implementation supports package-local nicknames it should add
   symbols `:package-local-nicknames' and `:cdr-15' (per CDR 14) to
@@ -601,13 +681,13 @@ _________________
 
 
 3.2 Examples
-~~~~~~~~~~~~
+────────────
 
   [TODO]
 
 
 4 Links
-=======
+═══════
 
   3b's [notes] on package-local nicknames.
 
@@ -626,6 +706,6 @@ _________________
 
 
 5 Copying and License
-=====================
+═════════════════════
 
   [TODO]
