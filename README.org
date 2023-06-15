@@ -1,0 +1,6 @@
+You can read this draft in many formats.
+
+- *.html*: [[https://gleefre.github.io/cdr-package-local-nicknames/cdr-15.html][here]];
+- *.txt*: [[https://gleefre.github.io/cdr-package-local-nicknames/cdr-15.txt][here]];
+- *.org* (always up to date): [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/cdr-15.org][here]];
+- *.pdf* (have some issues with margins): [[https://gleefre.github.io/cdr-package-local-nicknames/cdr-15.pdf][here]];
