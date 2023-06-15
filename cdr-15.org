@@ -141,6 +141,9 @@
 
     ecl, acl, clasp: allowed.
 ** Proposal 6
+   :PROPERTIES:
+   :CUSTOM_ID: proposal-6
+   :END:
    Add ~:local-nicknames~ option to ~make-package~ similar to ~defpackage~. See
    [[#make-package][make-package]].
 *** Currently
@@ -264,8 +267,7 @@
      :PROPERTIES:
      :CUSTOM_ID: make-package
      :END:
-
-     (*PROPOSAL* for new API.)
+     [[#proposal-6][Proposal#6]]
 
      ~make-package~ lambda list is extended to include an additional key
      parameter: ~local-nicknames~.
@@ -277,7 +279,7 @@
      of form ~(nickname package)~. Specifies /local nicknames/ in the new
      /package/.
 ***** Arguments and Values:
-      ~local-nicknames~ must be a /string designator/.
+      ~local-nicknames~ must be a a /list/ of pairs ~(nickname package)~.
 
       ~nickname~ must be a /string designator/.
 
@@ -300,10 +302,6 @@
 
       The behaviour is unspecified when a /local nickname/ is specified for the
       package that is being defined.
-***** Notes
-      It is still possible to specify a package designated by /local nickname/
-      in ~:use~ and/or ~:local-nicknames~ parameters by calling ~find-package~
-      before calling ~make-package~.
 -----
 **** add-package-local-nickname
      : (add-package-local-nickname nickname actual-package &optional designated-package)
