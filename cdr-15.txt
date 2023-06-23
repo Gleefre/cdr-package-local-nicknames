@@ -34,6 +34,7 @@ Table of Contents
 ..... 2. Proposal
 ..... 3. Currently
 .. 8. Issue 8 /by |3b|/
+..... 1. Example
 2. Introduction
 .. 1. Rationale
 .. 2. Current state
@@ -324,6 +325,46 @@ Table of Contents
   How PLN affect `format''s `\~//' directive? It seems tricky -
   compilers might want optimize it at compile time, but reffered symbol
   might change on rebinding the `*package*'.
+
+
+1.8.1 Example
+╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  ┌────
+  │ ;;;; File test.lisp
+  │ (defpackage #:a (:use) (:export #:ff))
+  │ (defpackage #:b (:use) (:export #:ff))
+  │ 
+  │ (defun a:ff (stream &rest args)
+  │   (declare (ignore args))
+  │   (format stream "A:FF"))
+  │ 
+  │ (defun b:ff (stream &rest args)
+  │   (declare (ignore args))
+  │   (format stream "B:FF"))
+  │ 
+  │ (defpackage #:foo
+  │   (:use #:cl)
+  │   (:local-nicknames (#:nick #:a)))
+  │ 
+  │ (defpackage #:bar
+  │   (:use #:cl)
+  │   (:local-nicknames (#:nick #:b)))
+  │ 
+  │ (in-package #:foo)
+  │ (defun test ()
+  │   (format t "Called ~/nick:ff/ & " nil)
+  │   (let ((*package* (find-package '#:foo)))
+  │     (format t "~/nick:ff/~%" nil)))
+  │ 
+  │ (test)
+  │ ; => "Called A:FF & A:FF"  (sbcl, ccl, acl, abcl, ecl, clasp)
+  │ 
+  │ (let ((*package* (find-package '#:bar)))
+  │   (test))
+  │ ; => "Called A:FF & A:FF"  (sbcl, clasp)
+  │ ; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
+  └────
 
 
 2 Introduction
