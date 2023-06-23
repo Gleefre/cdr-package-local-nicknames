@@ -1,4 +1,7 @@
 * Issue 2 (PRINT-READ consistency)
+  :PROPERTIES:
+  :CUSTOM_ID: print-read-consistency
+  :END:
   Lisp reader uses ~find-package~ to read a symbol, and is affected by /local
   nicknames/ of the /current package/. So in order to maintain *print-read*
   consistency it is required to use a correct /package prefix/ - such prefix
