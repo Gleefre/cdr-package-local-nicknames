@@ -8,14 +8,14 @@ You can read this draft in many formats.
 You can also read about the issues individually.
 
 - *.org*
-  1. [[./issues/1.org][Issue 1]]
-  2. [[./issues/2.org][Issue 2]]
-  3. [[./issues/3.org][Issue 3]]
-  4. [[./issues/4.org][Issue 4]]
-  5. [[./issues/5.org][Issue 5]]
-  6. [[./issues/6.org][Issue 6]]
-  7. [[./issues/7.org][Issue 7]]
-  8. [[./issues/8.org][Issue 8]]
+  1. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/1.org][Issue 1]]
+  2. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/2.org][Issue 2]]
+  3. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/3.org][Issue 3]]
+  4. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/4.org][Issue 4]]
+  5. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/5.org][Issue 5]]
+  6. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/6.org][Issue 6]]
+  7. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/7.org][Issue 7]]
+  8. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/8.org][Issue 8]]
 - *.pdf*
   1. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/1.pdf][Issue 1]]
   2. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/2.pdf][Issue 2]]
