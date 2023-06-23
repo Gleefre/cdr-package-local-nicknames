@@ -1,0 +1,42 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 7
+═════════
+
+  It is not clear whether functions `package-local-nicknames' and
+  `package-locally-nicknamed-by-list' should be allowed to return lists
+  with duplicate entries.
+
+
+1.1 Example
+───────────
+
+  ┌────
+  │ (defpackage #:a (:use) (:local-nicknames (#:b #:cl) (#:c #:cl)))
+  │ (print (mapcar #'package-name (package-locally-nicknamed-by-list '#:cl)))
+  │ ; => ("A")  (sbcl, acl, clasp)
+  │ ; => ("A" "A")  (ccl, ecl, abcl)
+  └────
+
+
+1.2 Proposal
+────────────
+
+  They should not.
+
+
+1.3 Currently
+─────────────
+
+  sbcl, acl, clasp, ccl, abcl, ecl: don't return duplicate entries from
+  `package-local-nicknames'.
+
+  sbcl, acl, clasp: don't return duplicate entries from
+  `package-locally-nicknamed-by-list'.
+
+  ccl, abcl, ecl: return duplicate entries from
+  `package-locally-nicknamed-by-list'.

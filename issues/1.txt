@@ -1,0 +1,37 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 1.
+══════════
+
+  Inconsistency between return values of `add-package-local-nickname'
+  and `remove-package-local-nickname'. First always returns /designated
+  package/, second one returns /true/ if a nickname was removed (but it
+  is not specified what exactly is returned). (Somewhat similar
+  functions from the standard - `use-package' and `unuse-package' always
+  return `T' - their api is consistent.)
+
+
+1.1 Proposal
+────────────
+
+  • `add-package-local-nickname' should return /designated package/ if a
+    new nickname was added and `NIL' otherwise (if it already existed).
+  • `remove-package-local-nickname' should return /designated package/
+    if nickname was removed and `NIL' otherwise.
+
+
+1.2 Currently
+─────────────
+
+  sbcl, ccl, ecl, acl, abcl, clasp: `add-package-local-nickname' always
+  returns /designated package/.
+
+  sbcl, ccl, ecl, acl, clasp: `remove-package-local-nickname' returns
+  `T' on success and `NIL'
+
+  abcl: `remove-package-local-nickname' returns package nicknamed by the
+  removed nickname on success and `NIL'.  [ That seems nice ]
