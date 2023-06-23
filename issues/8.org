@@ -2,39 +2,39 @@
   How PLN affect ~format~'s ~\~//~ directive? It seems tricky - compilers might
   want optimize it at compile time, but reffered symbol might change on
   rebinding the ~*package*~.
-* Example
-  #+BEGIN_SRC common-lisp
-  ;;;; File test.lisp
-  (defpackage #:a (:use) (:export #:ff))
-  (defpackage #:b (:use) (:export #:ff))
+** Example
+   #+BEGIN_SRC common-lisp
+   ;;;; File test.lisp
+   (defpackage #:a (:use) (:export #:ff))
+   (defpackage #:b (:use) (:export #:ff))
 
-  (defun a:ff (stream &rest args)
-    (declare (ignore args))
-    (format stream "A:FF"))
+   (defun a:ff (stream &rest args)
+     (declare (ignore args))
+     (format stream "A:FF"))
 
-  (defun b:ff (stream &rest args)
-    (declare (ignore args))
-    (format stream "B:FF"))
+   (defun b:ff (stream &rest args)
+     (declare (ignore args))
+     (format stream "B:FF"))
 
-  (defpackage #:foo
-    (:use #:cl)
-    (:local-nicknames (#:nick #:a)))
+   (defpackage #:foo
+     (:use #:cl)
+     (:local-nicknames (#:nick #:a)))
 
-  (defpackage #:bar
-    (:use #:cl)
-    (:local-nicknames (#:nick #:b)))
+   (defpackage #:bar
+     (:use #:cl)
+     (:local-nicknames (#:nick #:b)))
 
-  (in-package #:foo)
-  (defun test ()
-    (format t "Called ~/nick:ff/ & " nil)
-    (let ((*package* (find-package '#:foo)))
-      (format t "~/nick:ff/~%" nil)))
+   (in-package #:foo)
+   (defun test ()
+     (format t "Called ~/nick:ff/ & " nil)
+     (let ((*package* (find-package '#:foo)))
+       (format t "~/nick:ff/~%" nil)))
 
-  (test)
-  ; => "Called A:FF & A:FF"  (sbcl, ccl, acl, abcl, ecl, clasp)
+   (test)
+   ; => "Called A:FF & A:FF"  (sbcl, ccl, acl, abcl, ecl, clasp)
 
-  (let ((*package* (find-package '#:bar)))
-    (test))
-  ; => "Called A:FF & A:FF"  (sbcl, clasp)
-  ; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
-  #+END_SRC
+   (let ((*package* (find-package '#:bar)))
+     (test))
+   ; => "Called A:FF & A:FF"  (sbcl, clasp)
+   ; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
+   #+END_SRC
