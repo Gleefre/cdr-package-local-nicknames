@@ -1,4 +1,5 @@
 #+options: toc:nil
+#+latex_header: \usepackage[margin=0.75in]{geometry}
 
 * Issue 1.
   Inconsistency between return values of ~add-package-local-nickname~ and

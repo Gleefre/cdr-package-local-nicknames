@@ -1,4 +1,5 @@
 #+options: toc:nil
+#+latex_header: \usepackage[margin=1in]{geometry}
 
 * Proposal 6
   :PROPERTIES:

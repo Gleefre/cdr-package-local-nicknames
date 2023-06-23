@@ -1,4 +1,4 @@
-% Created 2023-06-23 Fri 19:41
+% Created 2023-06-23 Fri 20:01
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -14,6 +14,7 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
 \author{Grolter Bell}
 \date{\today}
 \title{}
@@ -28,12 +29,12 @@
 
 
 \section{Issue 8 \emph{by |3b|}}
-\label{sec:orgbed07e2}
+\label{sec:org2e877ce}
 How PLN affect \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive? It seems tricky - compilers might
 want optimize it at compile time, but reffered symbol might change on
 rebinding the \texttt{*package*}.
 \subsection{Example}
-\label{sec:org2e67018}
+\label{sec:orge593806}
 \begin{verbatim}
 (defpackage #:a (:use) (:export #:ff))
 (defpackage #:b (:use) (:export #:ff))
