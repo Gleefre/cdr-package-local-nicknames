@@ -1,3 +1,5 @@
+#+options: toc:nil
+
 * Issue 4
   It is not clear whether /local nicknames/ of the package *being defined*
   should affect ~make-package~ or ~defpackage~.

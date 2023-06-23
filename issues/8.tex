@@ -1,4 +1,4 @@
-% Created 2023-06-23 Fri 18:58
+% Created 2023-06-23 Fri 19:00
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -26,15 +26,14 @@
  pdflang={English}}
 \begin{document}
 
-\tableofcontents
 
 \section{Issue 8 \emph{by |3b|}}
-\label{sec:orge47d3bb}
+\label{sec:org964481b}
 How PLN affect \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive? It seems tricky - compilers might
 want optimize it at compile time, but reffered symbol might change on
 rebinding the \texttt{*package*}.
 \subsection{Example}
-\label{sec:org4115326}
+\label{sec:orgb20d9b3}
 \begin{verbatim}
 ;;;; File test.lisp
 (defpackage #:a (:use) (:export #:ff))

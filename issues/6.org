@@ -1,3 +1,5 @@
+#+options: toc:nil
+
 * Proposal 6
   :PROPERTIES:
   :CUSTOM_ID: proposal-6

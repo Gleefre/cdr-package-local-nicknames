@@ -1,4 +1,4 @@
-% Created 2023-06-23 Fri 18:57
+% Created 2023-06-23 Fri 19:01
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -26,10 +26,9 @@
  pdflang={English}}
 \begin{document}
 
-\tableofcontents
 
 \section{Issue 5}
-\label{sec:orgcecdcd8}
+\label{sec:orgefa98ce}
 It is not clear whether it is valid to have a \emph{local nickname} in a package
 shadowing its own name or nickname.
 
@@ -38,17 +37,17 @@ Now: SBCL signals an error, but that doesn't make much sense, especially if a
 name. And it is possible to achieve a \emph{local nickname} shadowing a \emph{global
 nickname} or the \emph{package name} by renaming the package.
 \subsection{Example}
-\label{sec:orgfc54154}
+\label{sec:org4061ab7}
 \begin{verbatim}
 (defpackage #:a (:use) (:local-nicknames (#:a #:cl)))
 ; => error  (sbcl, ccl, abcl)
 ; => ok  (ecl, acl, clasp)
 \end{verbatim}
 \subsection{Proposal}
-\label{sec:org946e8c7}
+\label{sec:org73ebb62}
 It should be allowed, but a warning might be signaled.
 \subsection{Currently}
-\label{sec:orga81111a}
+\label{sec:org819e57b}
 sbcl, ccl, abcl: not allowed.
 
 ecl, acl, clasp: allowed.

@@ -1,4 +1,4 @@
-% Created 2023-06-23 Fri 18:56
+% Created 2023-06-23 Fri 19:02
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -26,10 +26,9 @@
  pdflang={English}}
 \begin{document}
 
-\tableofcontents
 
 \section{Issue 1.}
-\label{sec:org87326ce}
+\label{sec:org2b8ba33}
 Inconsistency between return values of \texttt{add-package-local-nickname} and
 \texttt{remove-package-local-nickname}. First always returns \emph{designated package},
 second one returns \emph{true} if a nickname was removed (but it is not specified
@@ -37,7 +36,7 @@ what exactly is returned). (Somewhat similar functions from the standard -
 \texttt{use-package} and \texttt{unuse-package} always return \texttt{T} - their api is
 consistent.)
 \subsection{Proposal}
-\label{sec:orgd34b98f}
+\label{sec:orgbb521df}
 \begin{itemize}
 \item \texttt{add-package-local-nickname} should return \emph{designated package} if a new
 nickname was added and \texttt{NIL} otherwise (if it already existed).
@@ -45,7 +44,7 @@ nickname was added and \texttt{NIL} otherwise (if it already existed).
 nickname was removed and \texttt{NIL} otherwise.
 \end{itemize}
 \subsection{Currently}
-\label{sec:org8c69050}
+\label{sec:orgbd26cea}
 sbcl, ccl, ecl, acl, abcl, clasp: \texttt{add-package-local-nickname} always returns
 \emph{designated package}.
 

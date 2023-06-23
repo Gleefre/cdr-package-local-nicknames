@@ -1,3 +1,5 @@
+#+options: toc:nil
+
 * Issue 1.
   Inconsistency between return values of ~add-package-local-nickname~ and
   ~remove-package-local-nickname~. First always returns /designated package/,

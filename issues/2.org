@@ -1,3 +1,5 @@
+#+options: toc:nil
+
 * Issue 2 (PRINT-READ consistency)
   :PROPERTIES:
   :CUSTOM_ID: print-read-consistency

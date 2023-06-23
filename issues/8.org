@@ -1,3 +1,5 @@
+#+options: toc:nil
+
 * Issue 8 /by |3b|/
   How PLN affect ~format~'s ~\~//~ directive? It seems tricky - compilers might
   want optimize it at compile time, but reffered symbol might change on
