@@ -39,7 +39,7 @@ Grolter Bell
   │ (in-package #:foo)
   │ (defun test ()
   │   (format t "Called ~/nick:ff/ & " nil)
-  │   (let ((*package* (find-package '#:foo)))
+  │   (let ((*package* (find-package '#:foo)))  ; or #.*package*
   │     (format t "~/nick:ff/~%" nil)))
   │ 
   │ (test)
