@@ -16,7 +16,6 @@ Grolter Bell
 ───────────
 
   ┌────
-  │ ;;;; File test.lisp
   │ (defpackage #:a (:use) (:export #:ff))
   │ (defpackage #:b (:use) (:export #:ff))
   │ 

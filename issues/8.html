@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-06-23 Fri 19:40 -->
+<!-- 2023-06-23 Fri 19:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -243,8 +243,8 @@ for the JavaScript code in this tag.
 <body>
 <div id="content">
 
-<div id="outline-container-org090898d" class="outline-2">
-<h2 id="org090898d"><span class="section-number-2">1</span> Issue 8 <i>by |3b|</i></h2>
+<div id="outline-container-org57b9e9f" class="outline-2">
+<h2 id="org57b9e9f"><span class="section-number-2">1</span> Issue 8 <i>by |3b|</i></h2>
 <div class="outline-text-2" id="text-1">
 <p>
 How PLN affect <code>format</code>'s <code>\~//</code> directive? It seems tricky - compilers might
@@ -252,12 +252,11 @@ want optimize it at compile time, but reffered symbol might change on
 rebinding the <code>*package*</code>.
 </p>
 </div>
-<div id="outline-container-org095bf78" class="outline-3">
-<h3 id="org095bf78"><span class="section-number-3">1.1</span> Example</h3>
+<div id="outline-container-org14d6b03" class="outline-3">
+<h3 id="org14d6b03"><span class="section-number-3">1.1</span> Example</h3>
 <div class="outline-text-3" id="text-1-1">
 <div class="org-src-container">
-<pre class="src src-common-lisp">;;;; File test.lisp
-(defpackage #:a (:use) (:export #:ff))
+<pre class="src src-common-lisp">(defpackage #:a (:use) (:export #:ff))
 (defpackage #:b (:use) (:export #:ff))
 
 (defun a:ff (stream &amp;rest args)
@@ -297,7 +296,7 @@ rebinding the <code>*package*</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2023-06-23 Fri 19:40</p>
+<p class="date">Created: 2023-06-23 Fri 19:41</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
