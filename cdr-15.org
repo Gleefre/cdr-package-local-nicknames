@@ -13,13 +13,21 @@
   :CUSTOM_ID: issues
   :END:
   #+INCLUDE: "./issues/1.org"
+  [[./issues/1.org][Issue 1]]
   #+INCLUDE: "./issues/2.org"
+  [[./issues/2.org][Issue 2]]
   #+INCLUDE: "./issues/3.org"
+  [[./issues/3.org][Issue 3]]
   #+INCLUDE: "./issues/4.org"
+  [[./issues/4.org][Issue 4]]
   #+INCLUDE: "./issues/5.org"
+  [[./issues/5.org][Issue 5]]
   #+INCLUDE: "./issues/6.org"
+  [[./issues/6.org][Issue 6]]
   #+INCLUDE: "./issues/7.org"
+  [[./issues/7.org][Issue 7]]
   #+INCLUDE: "./issues/8.org"
+  [[./issues/8.org][Issue 8]]
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale
