@@ -1,0 +1,26 @@
+* Issue 2
+  See [[#print-read-consistency][PRINT-READ consistency]].
+** Example
+   #+BEGIN_SRC common-lisp
+   (defpackage #:a (:use) (:export #:+))
+   (defpackage #:b (:local-nicknames (#:a #:cl)))
+   (let ((*package* (find-package '#:b)))
+     (print 'a:+))
+   ; => a:+ everywhere
+   ;; but in #:b package a:+ would refer to cl:+
+   #+END_SRC
+   #+BEGIN_SRC common-lisp
+   (defpackage #:a (:use) (:export #:+))
+   (defpackage #:b (:use) (:export #:+))
+   (defpackage #:c (:use) (:local-nicknames (#:a #:b) (#:b #:a)))
+   (let ((*package* (find-package '#:c)))
+     (print 'a:+))
+   ; => b:+  (sbcl, ccl, abcl)
+   ; => a:+  (clasp, acl, ecl)
+   ;; but in #:c package a:+ would refer to b:+
+   #+END_SRC
+** Currently
+   sbcl, ccl, abcl: print symbol with package name when all package's names
+   and nicknames are shadowed by /current package/'s /local nicknames/.
+
+   ecl, acl, clasp: don't print with local nicknames at all.

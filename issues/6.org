@@ -1,0 +1,13 @@
+* Proposal 6
+  :PROPERTIES:
+  :CUSTOM_ID: proposal-6
+  :END:
+  Add ~:local-nicknames~ option to ~make-package~ similar to ~defpackage~. See
+  [[#make-package][make-package]].
+** Currently
+   ecl: takes keyword parameter, but segfaults on incorrect usage + doesn't
+   have it in docstring. Also API differs :/
+
+   acl: has it
+
+   abcl, sbcl, ccl, clasp: don't have it.
