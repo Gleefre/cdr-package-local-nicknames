@@ -5,6 +5,7 @@
 #+description: This is a CDR specification for package-local nicknames.
 #+language: en
 #+created: [2023-06-12 Mon]
+#+latex_header: \usepackage[margin=1in]{geometry}
 
 [THIS IS A DRAFT]
 
