@@ -1,5 +1,26 @@
-* Issue 2
-  See [[#print-read-consistency][PRINT-READ consistency]].
+* Issue 2 (PRINT-READ consistency)
+  Lisp reader uses ~find-package~ to read a symbol, and is affected by /local
+  nicknames/ of the /current package/. So in order to maintain *print-read*
+  consistency it is required to use a correct /package prefix/ - such prefix
+  that calling ~find-package~ on it in the /current package/ will return the
+  symbol's /home package/.
+
+  There are several situations to consider:
+  1. There *is* a /local nickname/ defined in the /current package/ for the
+     symbol's /home package/.
+
+     /In this case such local nickname can be used as the package prefix./
+  2. Symbol's home /package name/ or one of its /global nicknames/ is not
+     shadowed by any /local nickname/ defined in the /current package/.
+
+     /In this case that package name or global nickname can be used as the
+     package prefix./
+  3. Symbol's home /package name/ and all its /global nicknames/ are shadowed by
+     one of the /local nicknames/ of the /current package/ and there *is no*
+     /local nickname/ defined (in the /current package/) for the symbol's home
+     package.
+
+     /It is not clear what should be done in this case (see proposals)./
 ** Example
    #+BEGIN_SRC common-lisp
    (defpackage #:a (:use) (:export #:+))
@@ -24,3 +45,50 @@
    and nicknames are shadowed by /current package/'s /local nicknames/.
 
    ecl, acl, clasp: don't print with local nicknames at all.
+** Proposals
+   - The symbol must be printed using the ~#.~ syntax:
+     #+BEGIN_SRC common-lisp
+     #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+         (cl:find-symbol "BAR" "FOO"))
+     ;; or
+     #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+         (cl:intern "BAR" "FOO"))
+     #+END_SRC
+     Note that ~#:KEYWORD~ name is reserved for the ~#:KEYWORD~ package and
+     cannot be used as a /local nickname/ thus this expression will always
+     evaluate to the symbol ~foo::bar~.
+   - /Shinmera's idea/. In this case an extended ~#:~ syntax should be used:
+     : #:(package name) and #::(package name)
+   - In this case the symbol must be printed using the ~#`~ syntax for reading
+     an expression ignoring /local nicknames/ in the /current package/:
+     : #`foo:bar  and  #`foo::bar
+
+     It can be implemented roughly as follows:
+     #+BEGIN_SRC common-lisp
+     (defun |#`-reader| (stream subchar arg)
+       (declare (ignore subchar arg))
+       (let* ((current-package *package*)
+              (local-nicknames (package-local-nicknames current-package)))
+         (loop for (nick . package) in local-nicknames
+               do (remove-package-local-nickname nick current-package))
+         (unwind-protect
+           (read stream t nil t)
+           (loop for (nick . package) in local-nicknames
+                 do (add-package-local-nickname nick package current-package)))))
+
+     (set-dispatch-macro-character #\# #\` #'|#`-reader|)
+     #+END_SRC
+     It is implementation dependent whether /local nicknames/ are actually
+     removed from the /current package/ or not.
+   - In this case the symbol must be printed unreadably (specifics are
+     implementation dependent):
+     : #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
+     : #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
+     If ~*print-readably*~ is /true/ must signal an error of type
+     ~print-not-readable~ without printing anything.
+   - In this case the symbol must be printed using ~:::~ and ~::::~ syntax
+     to lookup and intern ignoring /local nicknames/ respectively:
+     #+BEGIN_SRC common-lisp
+     foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
+     foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
+     #+END_SRC
