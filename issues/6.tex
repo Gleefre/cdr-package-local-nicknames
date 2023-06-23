@@ -1,0 +1,43 @@
+% Created 2023-06-23 Fri 18:58
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Proposal 6}
+\label{sec:orgb178e9d}
+Add \texttt{:local-nicknames} option to \texttt{make-package} similar to \texttt{defpackage}. See
+make-package.
+\subsection{Currently}
+\label{sec:orgb48de9e}
+ecl: takes keyword parameter, but segfaults on incorrect usage + doesn't
+have it in docstring. Also API differs :/
+
+acl: has it
+
+abcl, sbcl, ccl, clasp: don't have it.
+\end{document}

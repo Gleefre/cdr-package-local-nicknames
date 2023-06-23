@@ -1,0 +1,73 @@
+% Created 2023-06-23 Fri 18:58
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Issue 8 \emph{by |3b|}}
+\label{sec:orge47d3bb}
+How PLN affect \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive? It seems tricky - compilers might
+want optimize it at compile time, but reffered symbol might change on
+rebinding the \texttt{*package*}.
+\subsection{Example}
+\label{sec:org4115326}
+\begin{verbatim}
+;;;; File test.lisp
+(defpackage #:a (:use) (:export #:ff))
+(defpackage #:b (:use) (:export #:ff))
+
+(defun a:ff (stream &rest args)
+  (declare (ignore args))
+  (format stream "A:FF"))
+
+(defun b:ff (stream &rest args)
+  (declare (ignore args))
+  (format stream "B:FF"))
+
+(defpackage #:foo
+  (:use #:cl)
+  (:local-nicknames (#:nick #:a)))
+
+(defpackage #:bar
+  (:use #:cl)
+  (:local-nicknames (#:nick #:b)))
+
+(in-package #:foo)
+(defun test ()
+  (format t "Called ~/nick:ff/ & " nil)
+  (let ((*package* (find-package '#:foo)))
+    (format t "~/nick:ff/~%" nil)))
+
+(test)
+; => "Called A:FF & A:FF"  (sbcl, ccl, acl, abcl, ecl, clasp)
+
+(let ((*package* (find-package '#:bar)))
+  (test))
+; => "Called A:FF & A:FF"  (sbcl, clasp)
+; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
+\end{verbatim}
+\end{document}

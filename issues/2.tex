@@ -1,0 +1,141 @@
+% Created 2023-06-23 Fri 18:56
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Issue 2 (PRINT-READ consistency)}
+\label{sec:orgb3a90e8}
+Lisp reader uses \texttt{find-package} to read a symbol, and is affected by \emph{local
+nicknames} of the \emph{current package}. So in order to maintain \textbf{print-read}
+consistency it is required to use a correct \emph{package prefix} - such prefix
+that calling \texttt{find-package} on it in the \emph{current package} will return the
+symbol's \emph{home package}.
+
+There are several situations to consider:
+\begin{enumerate}
+\item There \textbf{is} a \emph{local nickname} defined in the \emph{current package} for the
+symbol's \emph{home package}.
+
+\emph{In this case such local nickname can be used as the package prefix.}
+\item Symbol's home \emph{package name} or one of its \emph{global nicknames} is not
+shadowed by any \emph{local nickname} defined in the \emph{current package}.
+
+\emph{In this case that package name or global nickname can be used as the
+package prefix.}
+\item Symbol's home \emph{package name} and all its \emph{global nicknames} are shadowed by
+one of the \emph{local nicknames} of the \emph{current package} and there \textbf{is no}
+\emph{local nickname} defined (in the \emph{current package}) for the symbol's home
+package.
+
+\emph{It is not clear what should be done in this case (see proposals).}
+\end{enumerate}
+\subsection{Example}
+\label{sec:org277223f}
+\begin{verbatim}
+(defpackage #:a (:use) (:export #:+))
+(defpackage #:b (:local-nicknames (#:a #:cl)))
+(let ((*package* (find-package '#:b)))
+  (print 'a:+))
+; => a:+ everywhere
+;; but in #:b package a:+ would refer to cl:+
+\end{verbatim}
+\begin{verbatim}
+(defpackage #:a (:use) (:export #:+))
+(defpackage #:b (:use) (:export #:+))
+(defpackage #:c (:use) (:local-nicknames (#:a #:b) (#:b #:a)))
+(let ((*package* (find-package '#:c)))
+  (print 'a:+))
+; => b:+  (sbcl, ccl, abcl)
+; => a:+  (clasp, acl, ecl)
+;; but in #:c package a:+ would refer to b:+
+\end{verbatim}
+\subsection{Currently}
+\label{sec:org209760c}
+sbcl, ccl, abcl: print symbol with package name when all package's names
+and nicknames are shadowed by \emph{current package}'s \emph{local nicknames}.
+
+ecl, acl, clasp: don't print with local nicknames at all.
+\subsection{Proposals}
+\label{sec:org4245d1e}
+\begin{itemize}
+\item The symbol must be printed using the \texttt{\#.} syntax:
+\begin{verbatim}
+#.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+    (cl:find-symbol "BAR" "FOO"))
+;; or
+#.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+    (cl:intern "BAR" "FOO"))
+\end{verbatim}
+Note that \texttt{\#:KEYWORD} name is reserved for the \texttt{\#:KEYWORD} package and
+cannot be used as a \emph{local nickname} thus this expression will always
+evaluate to the symbol \texttt{foo::bar}.
+\item \emph{Shinmera's idea}. In this case an extended \texttt{\#:} syntax should be used:
+\begin{verbatim}
+#:(package name) and #::(package name)
+\end{verbatim}
+\item In this case the symbol must be printed using the \texttt{\#`} syntax for reading
+an expression ignoring \emph{local nicknames} in the \emph{current package}:
+\begin{verbatim}
+#`foo:bar  and  #`foo::bar
+\end{verbatim}
+
+
+It can be implemented roughly as follows:
+\begin{verbatim}
+(defun |#`-reader| (stream subchar arg)
+  (declare (ignore subchar arg))
+  (let* ((current-package *package*)
+         (local-nicknames (package-local-nicknames current-package)))
+    (loop for (nick . package) in local-nicknames
+          do (remove-package-local-nickname nick current-package))
+    (unwind-protect
+      (read stream t nil t)
+      (loop for (nick . package) in local-nicknames
+            do (add-package-local-nickname nick package current-package)))))
+
+(set-dispatch-macro-character #\# #\` #'|#`-reader|)
+\end{verbatim}
+It is implementation dependent whether \emph{local nicknames} are actually
+removed from the \emph{current package} or not.
+\item In this case the symbol must be printed unreadably (specifics are
+implementation dependent):
+\begin{verbatim}
+#<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
+#<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
+\end{verbatim}
+
+If \texttt{*print-readably*} is \emph{true} must signal an error of type
+\texttt{print-not-readable} without printing anything.
+\item In this case the symbol must be printed using \texttt{:::} and \texttt{::::} syntax
+to lookup and intern ignoring \emph{local nicknames} respectively:
+\begin{verbatim}
+foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
+foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
+\end{verbatim}
+\end{itemize}
+\end{document}

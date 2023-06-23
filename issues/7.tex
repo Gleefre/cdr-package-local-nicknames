@@ -1,0 +1,54 @@
+% Created 2023-06-23 Fri 18:58
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Issue 7}
+\label{sec:org0a92379}
+It is not clear whether functions \texttt{package-local-nicknames} and
+\texttt{package-locally-nicknamed-by-list} should be allowed to return lists with
+duplicate entries.
+\subsection{Example}
+\label{sec:orga84396e}
+\begin{verbatim}
+(defpackage #:a (:use) (:local-nicknames (#:b #:cl) (#:c #:cl)))
+(print (mapcar #'package-name (package-locally-nicknamed-by-list '#:cl)))
+; => ("A")  (sbcl, acl, clasp)
+; => ("A" "A")  (ccl, ecl, abcl)
+\end{verbatim}
+\subsection{Proposal}
+\label{sec:orgb1ad553}
+They should not.
+\subsection{Currently}
+\label{sec:org2912a30}
+sbcl, acl, clasp, ccl, abcl, ecl: don't return duplicate entries from \texttt{package-local-nicknames}.
+
+sbcl, acl, clasp: don't return duplicate entries from \texttt{package-locally-nicknamed-by-list}.
+
+ccl, abcl, ecl: return duplicate entries from \texttt{package-locally-nicknamed-by-list}.
+\end{document}

@@ -1,0 +1,72 @@
+% Created 2023-06-23 Fri 18:57
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Issue 3}
+\label{sec:orgf6d3de5}
+It is not clear whether \emph{local nicknames} of the \emph{current package} should
+affect \texttt{make-package} or \texttt{defpackage}.
+\subsection{Example}
+\label{sec:org16848fb}
+\begin{verbatim}
+(defpackage #:a (:use) (:export #:x))
+(defpackage #:b (:use) (:export #:x))
+(defpackage #:c
+  (:use #:cl)
+  (:local-nicknames (#:a #:b) (#:b #:a)))
+
+(in-package #:c)
+(defpackage #:d
+  (:use #:a)
+  (:export #:x))
+(print (package-name (symbol-package 'd:x)))
+; => "B"  (sbcl, ccl, acl, abcl)
+; => "A"  (ecl, clasp)
+
+(defpackage #:e
+  (:use)
+  (:local-nicknames (#:x #:a)))
+
+(let ((*package* (find-package '#:e)))
+  (print (package-name (find-package '#:x))))
+; => "B"  (ccl, acl, abcl)
+; => "A" (sbcl, ecl, clasp)
+\end{verbatim}
+\subsection{Proposal}
+\label{sec:org6e1ed44}
+They should affect all options like \texttt{:use}, \texttt{:local-nicknames},
+\texttt{:shadowing-import-from} and \texttt{:import-from}.
+\subsection{Currently}
+\label{sec:org339d1da}
+ccl, acl, abcl: they do.
+
+sbcl: partly (:use is affected, :local-nicknames are not)
+
+ecl, clasp: they don't.
+\end{document}
