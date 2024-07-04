@@ -1,42 +1,67 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 8 /by |3b|/
-  How PLN affect ~format~'s ~\~//~ directive? It seems tricky - compilers might
-  want optimize it at compile time, but reffered symbol might change on
-  rebinding the ~*package*~.
-** Example
+* Issue 8  (Intercation with FORMAT)
+  /by |3b|/
+** Description
+   It is not clear how /local nicknames/ should affect ~format~'s ~\~//~ directive.
+
+   First, it would be inconvinient if it wouldn't be possible to use /local
+   nicknames/ with the ~\~//~ directive.
+
+   Secondly, it would be unintuitive if the function used would depend on the
+   /current package/ at the *execution* time. This also might break [existing] code,
+   if a local nickname in the /current package/ shadows a package that contains a
+   function used by a control string in another function.
+
+   Finally, if the call to ~format~ is not compiled, it is hard to impossible to find
+   the function using /local nicknames/ of the package that was the /current package/
+   at the *compile* time.
+** Examples
    #+BEGIN_SRC common-lisp
-   (defpackage #:a (:use) (:export #:ff))
-   (defpackage #:b (:use) (:export #:ff))
+     (defpackage #:foo-a (:use) (:export #:ff))
+     (defpackage #:foo-b (:use) (:export #:ff))
 
-   (defun a:ff (stream &rest args)
-     (declare (ignore args))
-     (format stream "A:FF"))
+     (defun foo-a:ff (stream &rest args)
+       (declare (ignore args))
+       (format stream "FOO-A:FF"))
 
-   (defun b:ff (stream &rest args)
-     (declare (ignore args))
-     (format stream "B:FF"))
+     (defun foo-b:ff (stream &rest args)
+       (declare (ignore args))
+       (format stream "FOO-B:FF"))
 
-   (defpackage #:foo
-     (:use #:cl)
-     (:local-nicknames (#:nick #:a)))
+     (defpackage #:bar-a
+       (:use #:cl)
+       (:local-nicknames (#:nick #:foo-a)))
 
-   (defpackage #:bar
-     (:use #:cl)
-     (:local-nicknames (#:nick #:b)))
+     (defpackage #:bar-b
+       (:use #:cl)
+       (:local-nicknames (#:nick #:foo-b)))
 
-   (in-package #:foo)
-   (defun test ()
-     (format t "Called ~/nick:ff/ & " nil)
-     (let ((*package* (find-package '#:foo)))  ; or #.*package*
-       (format t "~/nick:ff/~%" nil)))
+     (in-package #:bar-a)
 
-   (test)
-   ; => "Called A:FF & A:FF"  (sbcl, ccl, acl, abcl, ecl, clasp)
+     (defun test ()
+       (format t "Called ~/nick:ff/ & " nil)
+       (let ((*package* (find-package (quote #:bar-a))))  ; or #.*package*
+         (format t "~/nick:ff/~%" nil)))
 
-   (let ((*package* (find-package '#:bar)))
-     (test))
-   ; => "Called A:FF & A:FF"  (sbcl, clasp)
-   ; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
+     (test)
+     ; => "Called FOO-A:FF & FOO-A:FF"  (sbcl, ccl, ecl, acl, abcl, clasp)
+     ; lispworks errors (NICK package not found)
+     (let ((*package* (find-package (quote #:bar-b))))
+       (test))
+     ; => "Called FOO-A:FF & FOO-A:FF"  (sbcl, clasp)
+     ; => "Called FOO-B:FF & FOO-A:FF"  (ccl, ecl, acl, abcl)
+     ; lispworks errors (NICK package not found)
    #+END_SRC
+** Proposal NO-LOCAL-NICKNAMES
+   ~format~'s ~\~//~ directive must *not* use /local nicknames/ of any package when
+   looking up the specified symbol.
+
+   Rationale: In the spirit of how when the package is not specified, the symbol is
+   not looked up in the /current package/, but instead in the ~#:CL-USER~ package;
+   the /tilde slash/ directive should not depend on the value of ~*package*~ at any
+   time.  Specifying it to use /local nicknames/ of the ~#:CL-USER~ package instead
+   would risk breaking the existing code when adding local nicknames to that package.
+** Links
+   See [[https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm][CLHS 22.3.5.4 Tilde Slash: Call Function]].
