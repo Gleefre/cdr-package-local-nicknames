@@ -74,11 +74,6 @@
     variance with the current state of the package that is being defined. An
     implementation might choose to remove all present /local nicknames/ at
     the begining of each redefinition of the package.
-
-    [TODO: What happens when a package is redefined with local nicknames in
-    other packages that it is nicknamed by? It probably can't be strictly
-    defined since redefining package is implementation dependent... But seems
-    like they must be left intact.]
 ** make-package
    :PROPERTIES:
    :CUSTOM_ID: make-package
