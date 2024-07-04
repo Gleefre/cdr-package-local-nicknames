@@ -4,7 +4,7 @@
 
 #+description: This is a CDR specification for package-local nicknames.
 #+language: en
-#+created: [2023-06-12 Mon]
+#+created: [2024-05-07 Fri]
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 #+toc: headlines
@@ -15,26 +15,26 @@
   :PROPERTIES:
   :CUSTOM_ID: issues
   :END:
+  [[./issues/1.org][Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)]]
+  [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
+  [[./issues/3.org][Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)]]
+  [[./issues/4.org][Issue 4 (Local nicknames of the package being defined)]]
+  [[./issues/5.org][Issue 5 (Local nickname shadowing package's own name)]]
+  [[./issues/6.org][Issue 6 (Additional keyword argument to MAKE-PACKAGE)]]
+  [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
+  [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
+  [[./issues/9.org][Issue 9 (Empty package local name)]]
   #+INCLUDE: "./issues/1.org" :only-contents t
-  [[./issues/1.org][Issue 1]]
   #+INCLUDE: "./issues/2.org" :only-contents t
-  [[./issues/2.org][Issue 2]]
   #+INCLUDE: "./issues/3.org" :only-contents t
-  [[./issues/3.org][Issue 3]]
   #+INCLUDE: "./issues/4.org" :only-contents t
-  [[./issues/4.org][Issue 4]]
   #+INCLUDE: "./issues/5.org" :only-contents t
-  [[./issues/5.org][Issue 5]]
   #+INCLUDE: "./issues/6.org" :only-contents t
-  [[./issues/6.org][Issue 6]]
   #+INCLUDE: "./issues/7.org" :only-contents t
-  [[./issues/7.org][Issue 7]]
   #+INCLUDE: "./issues/8.org" :only-contents t
-  [[./issues/8.org][Issue 8]]
   #+INCLUDE: "./issues/9.org" :only-contents t
-  [[./issues/9.org][Issue 9]]
 * Specification
-  #+INCLUDE: "./spec.org"
+  #+INCLUDE: "./spec.org" :only-contents t
   [[./spec.org][Specification]]
 * Links
   3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
