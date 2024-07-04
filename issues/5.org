@@ -1,23 +1,23 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 5
-  It is not clear whether it is valid to have a /local nickname/ in a package
-  shadowing its own name or nickname.
-
-  Now: SBCL signals an error, but that doesn't make much sense, especially if a
-  /local nickname/ shadows the /global nickname/ of a package and not its
-  name. And it is possible to achieve a /local nickname/ shadowing a /global
-  nickname/ or the /package name/ by renaming the package.
-** Example
+* Issue 5 (Local nickname shadowing package's own name)
+** Description
+   It is not clear whether it is valid to have a /local nickname/ in a package
+   shadowing its own name or nickname.
+** Examples
    #+BEGIN_SRC common-lisp
-   (defpackage #:a (:use) (:local-nicknames (#:a #:cl)))
-   ; => error  (sbcl, ccl, abcl)
-   ; => ok  (ecl, acl, clasp)
+     (defpackage #:foo
+       (:use)
+       (:nicknames #:bar)
+       (:local-nicknames (#:foo #:cl)
+                         (#:bar #:cl)))
+     ; => continuable error  (sbcl, ccl, abcl)
+     ; => error  (lispworks)
+     ; => ok  (ecl, acl, clasp)
    #+END_SRC
-** Proposal
-   It should be allowed, but a warning might be signaled.
-** Currently
-   sbcl, ccl, abcl: not allowed.
-
-   ecl, acl, clasp: allowed.
+** Current behavior
+   sbcl, ccl, abcl and lispwork signal an error.
+** Proposal ALLOW
+   It should be allowed to use package's own name or global nickname, but a
+   style-warning can be signalled.
