@@ -16,6 +16,7 @@ You can also read about the issues individually.
   6. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/6.org][Issue 6]]
   7. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/7.org][Issue 7]]
   8. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/8.org][Issue 8]]
+  9. [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/9.org][Issue 9]]
 - *.pdf*
   1. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/1.pdf][Issue 1]]
   2. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/2.pdf][Issue 2]]
@@ -25,6 +26,7 @@ You can also read about the issues individually.
   6. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/6.pdf][Issue 6]]
   7. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/7.pdf][Issue 7]]
   8. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/8.pdf][Issue 8]]
+  9. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/9.pdf][Issue 9]]
 - *.html*
   1. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/1.html][Issue 1]]
   2. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/2.html][Issue 2]]
@@ -34,6 +36,7 @@ You can also read about the issues individually.
   6. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/6.html][Issue 6]]
   7. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/7.html][Issue 7]]
   8. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/8.html][Issue 8]]
+  9. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/9.html][Issue 9]]
 - *.txt*
   1. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/1.txt][Issue 1]]
   2. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/2.txt][Issue 2]]
@@ -43,3 +46,4 @@ You can also read about the issues individually.
   6. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/6.txt][Issue 6]]
   7. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/7.txt][Issue 7]]
   8. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/8.txt][Issue 8]]
+  9. [[https://gleefre.github.io/cdr-package-local-nicknames/issues/9.txt][Issue 9]]
