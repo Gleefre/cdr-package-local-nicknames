@@ -296,5 +296,7 @@
   phoe's [[https://github.com/phoe/trivial-package-local-nicknames][tests]].
 
   SBCL's [[https://www.sbcl.org/manual/#Package_002dLocal-Nicknames][manual entry]].
+
+  Section 4.3 of the ABCL's manual. ([[https://github.com/armedbear/abcl/blob/master/doc/manual/abcl.tex#L1249][TeX file on github]])
 * Copying and License
   [TODO]
