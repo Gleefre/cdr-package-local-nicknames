@@ -1,7 +1,7 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 9
+* Issue 9 (Empty package local name)
 ** Description
    It is not clear whether it should be allowed to use ~""~ as a local nickname,
    and in the case this is allowed, whether it should affect the ~:xxxx~ syntax.
