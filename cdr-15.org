@@ -7,6 +7,8 @@
 #+created: [2023-06-12 Mon]
 #+latex_header: \usepackage[margin=1in]{geometry}
 
+#+TOC: headlines
+
 [THIS IS A DRAFT]
 
 * ISSUES
@@ -29,6 +31,8 @@
   [[./issues/7.org][Issue 7]]
   #+INCLUDE: "./issues/8.org"
   [[./issues/8.org][Issue 8]]
+  #+INCLUDE: "./issues/9.org"
+  [[./issues/9.org][Issue 9]]
 * Introduction
   This is a specification for package-local nicknames extension in Common Lisp.
 ** Rationale

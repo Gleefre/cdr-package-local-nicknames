@@ -36,6 +36,10 @@ Table of Contents
 ..... 3. Currently
 .. 8. Issue 8 /by |3b|/
 ..... 1. Example
+.. 9. Issue 9
+..... 1. Example
+..... 2. Currently
+..... 3. Proposals
 2. Introduction
 .. 1. Rationale
 .. 2. Current state
@@ -50,12 +54,14 @@ Table of Contents
 4. Links
 5. Copying and License
 
-
 [THIS IS A DRAFT]
 
 
 1 ISSUES
 ════════
+
+
+
 
 1.1 Issue 1.
 ────────────
@@ -86,8 +92,12 @@ Table of Contents
   sbcl, ccl, ecl, acl, clasp: `remove-package-local-nickname' returns
   `T' on success and `NIL'
 
-  abcl: `remove-package-local-nickname' returns package nicknamed by the
-  removed nickname on success and `NIL'.  [ That seems nice ]
+   abcl: `remove-package-local-nickname' returns package nicknamed by
+   the removed nickname on success and `NIL'.  [ That seems nice ]
+   [Issue 1]
+
+
+[Issue 1] <./issues/1.org>
 
 
 1.2 Issue 2 (PRINT-READ consistency)
@@ -211,6 +221,10 @@ Table of Contents
     │ foo:::bar  ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
     │ foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
     └────
+  [Issue 2]
+
+
+[Issue 2] <./issues/2.org>
 
 
 1.3 Issue 3
@@ -263,7 +277,10 @@ Table of Contents
 
   sbcl: partly (:use is affected, :local-nicknames are not)
 
-  ecl, clasp: they don't.
+   ecl, clasp: they don't.  [Issue 3]
+
+
+[Issue 3] <./issues/3.org>
 
 
 1.4 Issue 4
@@ -302,8 +319,11 @@ Table of Contents
 
   ecl: they do (or not? not sure).
 
-  clasp: they do in some weird way - also depends on order in which PLN
-  are added.
+   clasp: they do in some weird way - also depends on order in which PLN
+   are added.  [Issue 4]
+
+
+[Issue 4] <./issues/4.org>
 
 
 1.5 Issue 5
@@ -340,7 +360,10 @@ Table of Contents
 
   sbcl, ccl, abcl: not allowed.
 
-  ecl, acl, clasp: allowed.
+   ecl, acl, clasp: allowed.  [Issue 5]
+
+
+[Issue 5] <./issues/5.org>
 
 
 1.6 Proposal 6
@@ -360,7 +383,10 @@ Table of Contents
 
   acl: has it
 
-  abcl, sbcl, ccl, clasp: don't have it.
+   abcl, sbcl, ccl, clasp: don't have it.  [Issue 6]
+
+
+[Issue 6] <./issues/6.org>
 
 
 1.7 Issue 7
@@ -397,8 +423,11 @@ Table of Contents
   sbcl, acl, clasp: don't return duplicate entries from
   `package-locally-nicknamed-by-list'.
 
-  ccl, abcl, ecl: return duplicate entries from
-  `package-locally-nicknamed-by-list'.
+   ccl, abcl, ecl: return duplicate entries from
+  `package-locally-nicknamed-by-list'.  [Issue 7]
+
+
+[Issue 7] <./issues/7.org>
 
 
 1.8 Issue 8 /by |3b|/
@@ -413,7 +442,6 @@ Table of Contents
 ╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   ┌────
-  │ ;;;; File test.lisp
   │ (defpackage #:a (:use) (:export #:ff))
   │ (defpackage #:b (:use) (:export #:ff))
   │ 
@@ -436,7 +464,7 @@ Table of Contents
   │ (in-package #:foo)
   │ (defun test ()
   │   (format t "Called ~/nick:ff/ & " nil)
-  │   (let ((*package* (find-package '#:foo)))
+  │   (let ((*package* (find-package '#:foo)))  ; or #.*package*
   │     (format t "~/nick:ff/~%" nil)))
   │ 
   │ (test)
@@ -447,6 +475,74 @@ Table of Contents
   │ ; => "Called A:FF & A:FF"  (sbcl, clasp)
   │ ; => "Called B:FF & A:FF"  (ccl, acl, abcl, ecl)
   └────
+  [Issue 8]
+
+
+[Issue 8] <./issues/8.org>
+
+
+1.9 Issue 9
+───────────
+
+  (See also [WSCL issue 63].)
+
+  It is not clear whether it should be allowed to use `""' as a local
+  nickname, and in the case this is allowed, whether it should affect
+  the `:xxxx' syntax.
+
+
+[WSCL issue 63] <https://github.com/s-expressionists/wscl/issues/63>
+
+1.9.1 Example
+╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  ┌────
+  │ (defpackage #:foo
+  │   (:use #:cl)
+  │   (:local-nicknames ("" "CL")))
+  │ 
+  │ (in-package #:foo)
+  │ 
+  │ (print (package-name (symbol-package ':*package*)))
+  │ ; => "KEYWORD"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
+  │ ; => "COMMON-LISP"  (acl)
+  │ 
+  │ (print (package-name (symbol-package '||:*package*)))
+  │ ; => "KEYWORD"  (ecl, clasp, lispworks)
+  │ ; => "COMMON-LISP"  (sbcl, ccl, acl)
+  │ ; abcl errors
+  └────
+
+
+1.9.2 Currently
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  sbcl, ccl: `:xxxx' is read as a keyword; `||:xxxx' is read as a symbol
+  in the package named or nicknamed `""'.
+
+  acl: `:xxxx' and `||:xxxx' are read as a symbol in the package named
+  or nicknamed `""'.  `""' is by default a global nickname for the
+  `#:KEYWORD' package.
+
+  ecl, clasp, lispworks: `||:xxxx' and `:xxxx' are read as a keyword.
+
+  abcl: `:xxxx' is read as a keyword; `||:xxxx' syntax cannot be read
+  (attemts result in an error).
+
+
+1.9.3 Proposals
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  • The `""' local nickname should be explicitely allowed.  `:xxxx'
+    should be always read as a keyword; `||:xxxx' should be read as a
+    symbol in the package named or nicknamed by `""'.
+  • The `""' local nickname should be explicitely allowed.  Both `:xxxx'
+    and `||:xxxx' should be read as a symbol in the package named or
+    nicknamed by `""'.
+  [Issue 9]
+
+
+[Issue 9] <./issues/9.org>
 
 
 2 Introduction
