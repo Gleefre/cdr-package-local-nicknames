@@ -1,7 +1,7 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 7  (Multiple local nicknames)
+* Issue 7 (Multiple local nicknames)
 ** Description
    It is not clear whether ~package-locally-nicknamed-by-list~ should be allowed to return
    lists with duplicate entries (when there are multiple local nicknames in one package).

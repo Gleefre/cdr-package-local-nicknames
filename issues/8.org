@@ -1,7 +1,7 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 8  (Intercation with FORMAT)
+* Issue 8 (Interaction with FORMAT)
   /by |3b|/
 ** Description
    It is not clear how /local nicknames/ should affect ~format~'s ~\~//~ directive.
