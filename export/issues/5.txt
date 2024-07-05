@@ -44,3 +44,16 @@
 
   It should be allowed to use package's own name or global nickname, but
   a style-warning can be signalled.
+
+
+1.4.1 Rationale
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  Such local nicknames are not likely to break anything. Even though
+  they can be a bit confusing, this fact alone doesn't warrant an error
+  being signalled.
+
+  Moreover, on all implementations it is possible to obtain such
+  nicknames, even if on some of them invoking the `continue' restart is
+  going to be needed. This also suggests that cost of adoption is very
+  low.

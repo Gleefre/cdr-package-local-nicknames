@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:31
+% Created 2024-07-05 Fri 21:44
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,13 +28,13 @@
 \maketitle
 
 \section{Issue 5 (Local nickname shadowing package's own name)}
-\label{sec:org04e4145}
+\label{sec:org0a497ad}
 \subsection{Description}
-\label{sec:org2957db6}
+\label{sec:org0206dcb}
 It is not clear whether it is valid to have a \emph{local nickname} in a package
 shadowing its own name or nickname.
 \subsection{Examples}
-\label{sec:org25e6697}
+\label{sec:org27fb4a6}
 \begin{verbatim}
 (defpackage #:foo
   (:use)
@@ -46,10 +46,18 @@ shadowing its own name or nickname.
 ; => ok  (ecl, acl, clasp)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org2c2ccd1}
+\label{sec:org194c82f}
 sbcl, ccl, abcl and lispwork signal an error.
 \subsection{Proposal ALLOW}
-\label{sec:orgd0b7038}
+\label{sec:org47c6420}
 It should be allowed to use package's own name or global nickname, but a
 style-warning can be signalled.
+\subsubsection{Rationale}
+\label{sec:org803e50a}
+Such local nicknames are not likely to break anything. Even though they can be a
+bit confusing, this fact alone doesn't warrant an error being signalled.
+
+Moreover, on all implementations it is possible to obtain such nicknames, even if
+on some of them invoking the \texttt{continue} restart is going to be needed. This also
+suggests that cost of adoption is very low.
 \end{document}
