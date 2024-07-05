@@ -7,13 +7,11 @@
 #+created: [2024-05-07 Fri]
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-#+toc: headlines
-
 [THIS IS A DRAFT]
 
 * Specification
-  #+INCLUDE: "./spec.org" :only-contents t
   [[./spec.org][Specification]]
+  #+INCLUDE: "./spec.org" :lines "6-"
 * ISSUES
   [[./issues/1.org][Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)]]
   [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
@@ -24,15 +22,15 @@
   [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
   [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
   [[./issues/9.org][Issue 9 (Empty package local name)]]
-  #+INCLUDE: "./issues/1.org" :only-contents t
-  #+INCLUDE: "./issues/2.org" :only-contents t
-  #+INCLUDE: "./issues/3.org" :only-contents t
-  #+INCLUDE: "./issues/4.org" :only-contents t
-  #+INCLUDE: "./issues/5.org" :only-contents t
-  #+INCLUDE: "./issues/6.org" :only-contents t
-  #+INCLUDE: "./issues/7.org" :only-contents t
-  #+INCLUDE: "./issues/8.org" :only-contents t
-  #+INCLUDE: "./issues/9.org" :only-contents t
+  #+INCLUDE: "./issues/1.org" :lines "6-"
+  #+INCLUDE: "./issues/2.org" :lines "6-"
+  #+INCLUDE: "./issues/3.org" :lines "6-"
+  #+INCLUDE: "./issues/4.org" :lines "6-"
+  #+INCLUDE: "./issues/5.org" :lines "6-"
+  #+INCLUDE: "./issues/6.org" :lines "6-"
+  #+INCLUDE: "./issues/7.org" :lines "6-"
+  #+INCLUDE: "./issues/8.org" :lines "6-"
+  #+INCLUDE: "./issues/9.org" :lines "6-"
 * Links
   3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
 
