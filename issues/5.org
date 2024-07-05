@@ -1,3 +1,7 @@
+#+title: PLN CDR draft: Issue 5
+#+author: Gleefre
+#+email: varedif.a.s@gmail.com
+
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
