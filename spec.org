@@ -46,7 +46,6 @@
    :PROPERTIES:
    :CUSTOM_ID: defpackage
    :END:
-
    ~defpackage~ options are extended to include /local-nicknames-option/:
    : local-nicknames-option ::= (:local-nicknames (nickname package)*)
 
@@ -65,7 +64,7 @@
     Name conflict errors are handled by the underlying calls to
     ~add-package-local-nickname~.
 
-    See [[#exceptional-situations-2][add-package-local-nickname: exceptional situations]].
+    See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
 *** Implementation dependent
     The behaviour is unspecified when a /local nickname/ is specified for the
     package that is being defined.
@@ -78,8 +77,6 @@
    :PROPERTIES:
    :CUSTOM_ID: make-package
    :END:
-   [[#proposal-6][Issue#6]]
-
    ~make-package~ lambda list is extended to include an additional key
    parameter: ~local-nicknames~.
    : local-nicknames ::= ((nickname package)*)
@@ -89,6 +86,8 @@
    ~local-nicknames~ must be a /list/ each element of which must be a /list/
    of form ~(nickname package)~. Specifies /local nicknames/ in the new
    /package/.
+
+   See also [[#issue-6][Issue 6]].
 *** Arguments and Values:
     ~local-nicknames~ must be a a /list/ of pairs ~(nickname package)~.
 
@@ -102,7 +101,7 @@
     Name conflict errors are handled by the underlying calls to
     ~add-package-local-nickname~.
 
-    See [[#exceptional-situations-2][add-package-local-nickname: exceptional situations]].
+    See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
 *** Implementation dependent
     The behaviour is unspecified when a /local nickname/ is specified for the
     package that is being defined.
@@ -126,7 +125,7 @@
     ~designated-package-object~ is of type /package/.
 *** Exceptional situations
     :PROPERTIES:
-    :CUSTOM_ID: exceptional-situations-2
+    :CUSTOM_ID: exceptional-situations
     :END:
 
     If a package designated by ~actual-package~ or a package designated by
@@ -139,7 +138,7 @@
     If ~nickname~ is a /local nickname/ for a package different from
     ~actual-package~, an error of type /package-error/ must be signaled.
 *** Implementation dependent
-    *PROPOSAL* (See [[#issues][issues#4]].)
+    *PROPOSAL* (See [[#issue-4][Issue 4]].)
 
     If ~nickname~ shadows the ~designated-package~'s /package name/ or one of
     its /global nicknames/, a style warning might signaled.
@@ -224,7 +223,7 @@
    nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
    defined.
 *** Implementation dependent
-    *PROPOSAL* (See [[#issues][Issue 4]].)
+    *PROPOSAL* (See [[#issue-4][Issue 4]].)
 
     If a /new-name/ or one of /new-nicknames/ is shadowed by one of the /local
     nicknames/ of the package being redefined, a warning might be signaled.

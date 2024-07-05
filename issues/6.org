@@ -3,7 +3,7 @@
 
 * Issue 6 (Additional keyword argument to MAKE-PACKAGE)
   :PROPERTIES:
-  :CUSTOM_ID: proposal-6
+  :CUSTOM_ID: issue-6
   :END:
 ** Current behavior
    sbcl, ccl, abcl, clasp, lispworks: no additional key argument.

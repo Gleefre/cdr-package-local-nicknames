@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 4 (Local nicknames of the package being defined)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-4
+  :END:
 ** Description
    It is not clear whether /local nicknames/ of the package *being defined* should
    affect ~make-package~ or ~defpackage~.

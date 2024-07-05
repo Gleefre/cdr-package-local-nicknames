@@ -15,9 +15,6 @@
   #+INCLUDE: "./spec.org" :only-contents t
   [[./spec.org][Specification]]
 * ISSUES
-  :PROPERTIES:
-  :CUSTOM_ID: issues
-  :END:
   [[./issues/1.org][Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)]]
   [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
   [[./issues/3.org][Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)]]
