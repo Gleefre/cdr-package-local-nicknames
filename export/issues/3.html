@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 01:54 -->
+<!-- 2024-07-05 Fri 13:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
-<meta name="author" content="Grolter Bell" />
+<title>PLN CDR draft: Issue 3</title>
+<meta name="author" content="Gleefre" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -196,13 +196,14 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">PLN CDR draft: Issue 3</h1>
 
-<div id="outline-container-org1024484" class="outline-2">
-<h2 id="org1024484"><span class="section-number-2">1.</span> Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-issue-3" class="outline-2">
+<h2 id="issue-3"><span class="section-number-2">1.</span> Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)</h2>
+<div class="outline-text-2" id="text-issue-3">
 </div>
-<div id="outline-container-org84af0ac" class="outline-3">
-<h3 id="org84af0ac"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org7fe8c02" class="outline-3">
+<h3 id="org7fe8c02"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 It is not clear whether <i>local nicknames</i> of the <i>current package</i> should affect
@@ -212,8 +213,8 @@ as well as other functions and macros taking a package designator as an argument
 </p>
 </div>
 </div>
-<div id="outline-container-org91478cc" class="outline-3">
-<h3 id="org91478cc"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org9ae3be9" class="outline-3">
+<h3 id="org9ae3be9"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-a</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:x</span>))
@@ -260,8 +261,8 @@ as well as other functions and macros taking a package designator as an argument
 </div>
 </div>
 </div>
-<div id="outline-container-org59f3885" class="outline-3">
-<h3 id="org59f3885"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-orgc5543a4" class="outline-3">
+<h3 id="orgc5543a4"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, lispworks:
@@ -291,8 +292,8 @@ lispworks: <code>in-package</code> is not affected.
 </p>
 </div>
 </div>
-<div id="outline-container-org919b631" class="outline-3">
-<h3 id="org919b631"><span class="section-number-3">1.4.</span> Proposal ALL-AFFECTED</h3>
+<div id="outline-container-org77ddeec" class="outline-3">
+<h3 id="org77ddeec"><span class="section-number-3">1.4.</span> Proposal ALL-AFFECTED</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 All <code>defpackage</code> clauses (<code>:use</code>, <code>:local-nicknames</code>, <code>:import-from</code>,
@@ -322,9 +323,8 @@ A non-exhaustive list of affected functions and macros:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2024-07-05 Fri 01:54</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="author">Author: Gleefre</p>
+<p class="date">Created: 2024-07-05 Fri 13:31</p>
 </div>
 </body>
 </html>

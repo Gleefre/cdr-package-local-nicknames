@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:55
+% Created 2024-07-05 Fri 13:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,27 +13,28 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 5}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 5},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 5 (Local nickname shadowing package's own name)}
-\label{sec:orgb79e457}
+\label{sec:org04e4145}
 \subsection{Description}
-\label{sec:org7b74f89}
+\label{sec:org2957db6}
 It is not clear whether it is valid to have a \emph{local nickname} in a package
 shadowing its own name or nickname.
 \subsection{Examples}
-\label{sec:org7fa37f7}
+\label{sec:org25e6697}
 \begin{verbatim}
 (defpackage #:foo
   (:use)
@@ -45,10 +46,10 @@ shadowing its own name or nickname.
 ; => ok  (ecl, acl, clasp)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org4888966}
+\label{sec:org2c2ccd1}
 sbcl, ccl, abcl and lispwork signal an error.
 \subsection{Proposal ALLOW}
-\label{sec:orgc5c0ef4}
+\label{sec:orgd0b7038}
 It should be allowed to use package's own name or global nickname, but a
 style-warning can be signalled.
 \end{document}

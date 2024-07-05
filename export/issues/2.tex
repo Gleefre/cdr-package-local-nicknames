@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:54
+% Created 2024-07-05 Fri 13:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,23 +13,24 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 2}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 2},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 2 (PRINT-READ consistency)}
-\label{sec:org087dc95}
+\label{sec:orgb48d8da}
 \subsection{Description}
-\label{sec:org34ade9c}
+\label{sec:org34b97ef}
 Lisp reader uses \texttt{find-package} when reading a symbol, which is affected by the
 \emph{local nicknames} of the \emph{current package}. That means that to maintain \textbf{print-read}
 consistency when printing a symbol, a good \emph{package prefix} must be used - such that
@@ -63,7 +64,7 @@ defined in the \emph{current package} for the symbol's \emph{home package}.
 \emph{It is not clear how the symbol must be printed, see PROPOSALS.}
 \end{enumerate}
 \subsection{Examples}
-\label{sec:org183394b}
+\label{sec:org960d981}
 \begin{verbatim}
 (defpackage #:foo
   (:use)
@@ -97,7 +98,7 @@ defined in the \emph{current package} for the symbol's \emph{home package}.
 ;; In the package #:BAR symbol FOO-A:QUUX refers to FOO-B:QUUX
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:orga0ea0f0}
+\label{sec:org749ba5d}
 sbcl, ccl, abcl, lispworks:
   When exists in the \emph{current package}, a \emph{local nickname} is used as a package
   prefix when printing a symbol.
@@ -105,7 +106,7 @@ sbcl, ccl, abcl, lispworks:
 ecl, acl, clasp:
   \emph{local nickname} is never used as a package prefix when printing a symbol.
 \subsection{Proposal SHARPSIGN-DOT}
-\label{sec:org2ce7997}
+\label{sec:org9cc7112}
 In the case (5) the symbol must be printed using the \texttt{\#.} syntax:
 
 \begin{verbatim}
@@ -123,7 +124,7 @@ evaluate to the symbol \texttt{foo::bar}.
 If \texttt{*read-eval*} is \emph{false} and \texttt{*print-readably*} is \emph{true} an error of type
 \texttt{print-not-readable} must be signalled.
 \subsection{Proposal SHARPSIGN-COLON}
-\label{sec:orgbdff14f}
+\label{sec:orga0d7203}
 In case (5) the symbol should be printed using the \emph{extended \texttt{\#:} syntax}:
 \begin{verbatim}
 #:(package name)
@@ -132,7 +133,7 @@ In case (5) the symbol should be printed using the \emph{extended \texttt{\#:} s
 
 \emph{Shinmera's idea}.
 \subsection{Proposal SHARPSIGN-BACKQUOTE}
-\label{sec:orgd8cd43b}
+\label{sec:org56d2363}
 In case (5) the symbol must be printed using the new \texttt{\#`} syntax for reading an
 expression ignoring \emph{local nicknames} in the \emph{current package}:
 \begin{verbatim}
@@ -158,7 +159,7 @@ It can be implemented roughly as follows:
 It is \emph{implementation-dependent} whether \emph{local nicknames} are actually removed
 from the \emph{current package} or not.
 \subsection{Proposal PRINT-UNREADABLY}
-\label{sec:org417cc9a}
+\label{sec:org04c39f5}
 In the case (5) the symbol must be printed unreadably using the \texttt{\#<} syntax:
 \begin{verbatim}
 #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
@@ -170,13 +171,13 @@ In the case (5) the symbol must be printed unreadably using the \texttt{\#<} syn
 If \texttt{*print-readably*} is \emph{true}, an error of type \texttt{print-not-readable} must be
 signalled.
 \subsection{Proposal THREE-FOUR-PACKAGE-MARKERS}
-\label{sec:org903477d}
+\label{sec:orgd617c2c}
 In the case (5) the symbol must be printed using \texttt{:::} and \texttt{::::} syntax as follows:
 \begin{verbatim}
 foo:::bar   ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
 foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
 \end{verbatim}
 \subsection{Links}
-\label{sec:orgb4058f9}
+\label{sec:org9d63369}
 See \href{https://www.lispworks.com/documentation/HyperSpec/Body/22\_acca.htm}{CLHS 22.1.3.3.1 Package Prefixes for Symbols}.
 \end{document}

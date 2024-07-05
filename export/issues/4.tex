@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:55
+% Created 2024-07-05 Fri 13:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,27 +13,28 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 4}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 4},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 4 (Local nicknames of the package being defined)}
-\label{sec:orgf1aaf06}
+\label{sec:org92c73ca}
 \subsection{Description}
-\label{sec:org32a6e7a}
+\label{sec:orga0e8297}
 It is not clear whether \emph{local nicknames} of the package \textbf{being defined} should
 affect \texttt{make-package} or \texttt{defpackage}.
 \subsection{Examples}
-\label{sec:orgc9a0512}
+\label{sec:org9e33f95}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:x))
 (defpackage #:foo-b (:use) (:export #:x))
@@ -48,14 +49,14 @@ affect \texttt{make-package} or \texttt{defpackage}.
 ; => "FOO-B"  (ecl)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:orgf758265}
+\label{sec:org599af56}
 sbcl, ccl, acl, abcl, lispworks: not affected
 
 ecl: \texttt{:use}, \texttt{:import-from} and \texttt{:shadowing-import-from} are affected.
 
 clasp: \texttt{:local-nicknames} is affected by previous \texttt{:local-nicknames} clauses.
 \subsection{Proposal NO-EFFECT}
-\label{sec:org548713f}
+\label{sec:org9e20861}
 Local nicknames of a package being defined should not affect other defpackage
 clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from}, \texttt{:shadowing-import-from}).
 

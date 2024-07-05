@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 01:54 -->
+<!-- 2024-07-05 Fri 13:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
-<meta name="author" content="Grolter Bell" />
+<title>PLN CDR draft: Issue 2</title>
+<meta name="author" content="Gleefre" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -196,13 +196,14 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">PLN CDR draft: Issue 2</h1>
 
-<div id="outline-container-print-read-consistency" class="outline-2">
-<h2 id="print-read-consistency"><span class="section-number-2">1.</span> Issue 2 (PRINT-READ consistency)</h2>
-<div class="outline-text-2" id="text-print-read-consistency">
+<div id="outline-container-issue-2" class="outline-2">
+<h2 id="issue-2"><span class="section-number-2">1.</span> Issue 2 (PRINT-READ consistency)</h2>
+<div class="outline-text-2" id="text-issue-2">
 </div>
-<div id="outline-container-org65fd691" class="outline-3">
-<h3 id="org65fd691"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org383589b" class="outline-3">
+<h3 id="org383589b"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Lisp reader uses <code>find-package</code> when reading a symbol, which is affected by the
@@ -262,8 +263,8 @@ defined in the <i>current package</i> for the symbol's <i>home package</i>.
 </ol>
 </div>
 </div>
-<div id="outline-container-org058b40f" class="outline-3">
-<h3 id="org058b40f"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org445b399" class="outline-3">
+<h3 id="org445b399"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
@@ -301,8 +302,8 @@ defined in the <i>current package</i> for the symbol's <i>home package</i>.
 </div>
 </div>
 </div>
-<div id="outline-container-org55b64fd" class="outline-3">
-<h3 id="org55b64fd"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org26837f5" class="outline-3">
+<h3 id="org26837f5"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, ccl, abcl, lispworks:
@@ -316,8 +317,8 @@ ecl, acl, clasp:
 </p>
 </div>
 </div>
-<div id="outline-container-orgc7a5c30" class="outline-3">
-<h3 id="orgc7a5c30"><span class="section-number-3">1.4.</span> Proposal SHARPSIGN-DOT</h3>
+<div id="outline-container-orgac2cc8c" class="outline-3">
+<h3 id="orgac2cc8c"><span class="section-number-3">1.4.</span> Proposal SHARPSIGN-DOT</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 In the case (5) the symbol must be printed using the <code>#.</code> syntax:
@@ -344,8 +345,8 @@ If <code>*read-eval*</code> is <i>false</i> and <code>*print-readably*</code> is
 </p>
 </div>
 </div>
-<div id="outline-container-orgf6fdf04" class="outline-3">
-<h3 id="orgf6fdf04"><span class="section-number-3">1.5.</span> Proposal SHARPSIGN-COLON</h3>
+<div id="outline-container-org1a59f40" class="outline-3">
+<h3 id="org1a59f40"><span class="section-number-3">1.5.</span> Proposal SHARPSIGN-COLON</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 In case (5) the symbol should be printed using the <i>extended <code>#:</code> syntax</i>:
@@ -360,8 +361,8 @@ In case (5) the symbol should be printed using the <i>extended <code>#:</code> s
 </p>
 </div>
 </div>
-<div id="outline-container-org6070cd3" class="outline-3">
-<h3 id="org6070cd3"><span class="section-number-3">1.6.</span> Proposal SHARPSIGN-BACKQUOTE</h3>
+<div id="outline-container-org8f009ff" class="outline-3">
+<h3 id="org8f009ff"><span class="section-number-3">1.6.</span> Proposal SHARPSIGN-BACKQUOTE</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 In case (5) the symbol must be printed using the new <code>#`</code> syntax for reading an
@@ -396,8 +397,8 @@ from the <i>current package</i> or not.
 </p>
 </div>
 </div>
-<div id="outline-container-org5ef2ad2" class="outline-3">
-<h3 id="org5ef2ad2"><span class="section-number-3">1.7.</span> Proposal PRINT-UNREADABLY</h3>
+<div id="outline-container-org427bca5" class="outline-3">
+<h3 id="org427bca5"><span class="section-number-3">1.7.</span> Proposal PRINT-UNREADABLY</h3>
 <div class="outline-text-3" id="text-1-7">
 <p>
 In the case (5) the symbol must be printed unreadably using the <code>#&lt;</code> syntax:
@@ -417,8 +418,8 @@ signalled.
 </p>
 </div>
 </div>
-<div id="outline-container-org56c44bd" class="outline-3">
-<h3 id="org56c44bd"><span class="section-number-3">1.8.</span> Proposal THREE-FOUR-PACKAGE-MARKERS</h3>
+<div id="outline-container-org37a4bbd" class="outline-3">
+<h3 id="org37a4bbd"><span class="section-number-3">1.8.</span> Proposal THREE-FOUR-PACKAGE-MARKERS</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 In the case (5) the symbol must be printed using <code>:::</code> and <code>::::</code> syntax as follows:
@@ -430,8 +431,8 @@ foo::::bar  <span style="color: #99968b;">; same as (cl:intern "BAR" "FOO") in #
 </div>
 </div>
 </div>
-<div id="outline-container-org33066a5" class="outline-3">
-<h3 id="org33066a5"><span class="section-number-3">1.9.</span> Links</h3>
+<div id="outline-container-org7163020" class="outline-3">
+<h3 id="org7163020"><span class="section-number-3">1.9.</span> Links</h3>
 <div class="outline-text-3" id="text-1-9">
 <p>
 See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm">CLHS 22.1.3.3.1 Package Prefixes for Symbols</a>.
@@ -441,9 +442,8 @@ See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm"
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2024-07-05 Fri 01:54</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="author">Author: Gleefre</p>
+<p class="date">Created: 2024-07-05 Fri 13:31</p>
 </div>
 </body>
 </html>

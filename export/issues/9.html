@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 01:56 -->
+<!-- 2024-07-05 Fri 13:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
-<meta name="author" content="Grolter Bell" />
+<title>PLN CDR draft: Issue 9</title>
+<meta name="author" content="Gleefre" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -196,13 +196,14 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">PLN CDR draft: Issue 9</h1>
 
-<div id="outline-container-org4fbc5b0" class="outline-2">
-<h2 id="org4fbc5b0"><span class="section-number-2">1.</span> Issue 9 (Empty package local name)</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-issue-9" class="outline-2">
+<h2 id="issue-9"><span class="section-number-2">1.</span> Issue 9 (Empty package local name)</h2>
+<div class="outline-text-2" id="text-issue-9">
 </div>
-<div id="outline-container-org7a6b6d8" class="outline-3">
-<h3 id="org7a6b6d8"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org938fa25" class="outline-3">
+<h3 id="org938fa25"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 It is not clear whether it should be allowed to use <code>""</code> as a local nickname,
@@ -210,8 +211,8 @@ and in the case this is allowed, whether it should affect the <code>:xxxx</code>
 </p>
 </div>
 </div>
-<div id="outline-container-org70b68ac" class="outline-3">
-<h3 id="org70b68ac"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org5125fce" class="outline-3">
+<h3 id="org5125fce"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
@@ -232,8 +233,8 @@ and in the case this is allowed, whether it should affect the <code>:xxxx</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org324b97f" class="outline-3">
-<h3 id="org324b97f"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org942839c" class="outline-3">
+<h3 id="org942839c"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, ccl:
@@ -259,8 +260,8 @@ abcl:
 </p>
 </div>
 </div>
-<div id="outline-container-org5d684ec" class="outline-3">
-<h3 id="org5d684ec"><span class="section-number-3">1.4.</span> Proposal ALLOW-BUT-KEEP-KEYWORDS</h3>
+<div id="outline-container-orgaad115b" class="outline-3">
+<h3 id="orgaad115b"><span class="section-number-3">1.4.</span> Proposal ALLOW-BUT-KEEP-KEYWORDS</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 The <code>""</code> local nickname should be explicitely allowed. <code>:xxxx</code> should be always
@@ -269,8 +270,8 @@ read as a symbol in the package named or nicknamed by <code>""</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org2f5c8ef" class="outline-3">
-<h3 id="org2f5c8ef"><span class="section-number-3">1.5.</span> Proposal ALLOW-FUN</h3>
+<div id="outline-container-org28bfe7b" class="outline-3">
+<h3 id="org28bfe7b"><span class="section-number-3">1.5.</span> Proposal ALLOW-FUN</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 The <code>""</code> local nickname should be explicitely allowed. Both <code>:xxxx</code> and <code>||:xxxx</code>
@@ -278,8 +279,8 @@ should be read as a symbol in the package named or nicknamed by <code>""</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org34755a7" class="outline-3">
-<h3 id="org34755a7"><span class="section-number-3">1.6.</span> Links</h3>
+<div id="outline-container-orgfab48da" class="outline-3">
+<h3 id="orgfab48da"><span class="section-number-3">1.6.</span> Links</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 See <a href="https://github.com/s-expressionists/wscl/issues/63">WSCL issue 63</a>.
@@ -289,9 +290,8 @@ See <a href="https://github.com/s-expressionists/wscl/issues/63">WSCL issue 63</
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2024-07-05 Fri 01:56</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="author">Author: Gleefre</p>
+<p class="date">Created: 2024-07-05 Fri 13:32</p>
 </div>
 </body>
 </html>

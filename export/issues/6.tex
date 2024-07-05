@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:56
+% Created 2024-07-05 Fri 13:32
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,23 +13,24 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 6}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 6},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 6 (Additional keyword argument to MAKE-PACKAGE)}
-\label{sec:org6eda31c}
+\label{sec:orge489ce0}
 \subsection{Current behavior}
-\label{sec:org4be7461}
+\label{sec:orgf63acdd}
 sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
 
 ecl: has an additional keyword argument \texttt{:local-nicknames}, but it is undocumented
@@ -39,7 +40,7 @@ and it segfaults on incorrect usage. The expected value is a list of conses:
 acl: has an additional keyword argument \texttt{:local-nicknames}. The expected value is
 a list of lists: \texttt{((nickname package)*)}.
 \subsection{Proposal EXTRA-KEYWORD-ARGUMENT}
-\label{sec:org828c272}
+\label{sec:org216fea6}
 Add \texttt{:local-nicknames} keyword argument to \texttt{make-package}:
 \begin{verbatim}
 local-nicknames ::= ((nickname package)*)

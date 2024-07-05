@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:54
+% Created 2024-07-05 Fri 13:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,29 +13,30 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 3}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 3},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)}
-\label{sec:org7a208f7}
+\label{sec:orgab81ad7}
 \subsection{Description}
-\label{sec:org7de4384}
+\label{sec:orgac82064}
 It is not clear whether \emph{local nicknames} of the \emph{current package} should affect
 the resolution of package designators provided in \texttt{make-package} and \texttt{defpackage},
 as well as other functions and macros taking a package designator as an argument
 (\texttt{in-package}, \texttt{add-package-local-nickname} and others).
 \subsection{Examples}
-\label{sec:org9af8527}
+\label{sec:org5345990}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:x))
 (defpackage #:foo-b (:use) (:export #:x))
@@ -79,7 +80,7 @@ as well as other functions and macros taking a package designator as an argument
 ; => "FOO-B"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org6811770}
+\label{sec:org6156db5}
 sbcl, lispworks:
   only \texttt{:local-nicknames} clause is \textbf{not} affected by \emph{local nicknames}.
 
@@ -97,7 +98,7 @@ Known exceptions in other functions/macros:
 sbcl: \texttt{add-package-local-nickname} is not affected.
 lispworks: \texttt{in-package} is not affected.
 \subsection{Proposal ALL-AFFECTED}
-\label{sec:orgaa15b29}
+\label{sec:orgac97918}
 All \texttt{defpackage} clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from},
 \texttt{:shadowing-import-from}) as well as all keyword arguments to \texttt{make-package}
 (\texttt{:use} and \texttt{:local-nicknames}) must be affected by the \emph{local nicknames} of the

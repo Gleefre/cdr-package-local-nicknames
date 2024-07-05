@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 01:56 -->
+<!-- 2024-07-05 Fri 13:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
-<meta name="author" content="Grolter Bell" />
+<title>PLN CDR draft: Issue 8</title>
+<meta name="author" content="Gleefre" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -196,16 +196,17 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">PLN CDR draft: Issue 8</h1>
 
-<div id="outline-container-org8c7458c" class="outline-2">
-<h2 id="org8c7458c"><span class="section-number-2">1.</span> Issue 8 (Interaction with FORMAT)</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-issue-8" class="outline-2">
+<h2 id="issue-8"><span class="section-number-2">1.</span> Issue 8 (Interaction with FORMAT)</h2>
+<div class="outline-text-2" id="text-issue-8">
 <p>
 <i>by |3b|</i>
 </p>
 </div>
-<div id="outline-container-orgfcf8f28" class="outline-3">
-<h3 id="orgfcf8f28"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org8e22787" class="outline-3">
+<h3 id="org8e22787"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 It is not clear how <i>local nicknames</i> should affect <code>format</code>'s <code>\~//</code> directive.
@@ -230,8 +231,8 @@ at the <b>compile</b> time.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb98ba79" class="outline-3">
-<h3 id="orgb98ba79"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-orga8e9fb1" class="outline-3">
+<h3 id="orga8e9fb1"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-a</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:ff</span>))
@@ -272,8 +273,8 @@ at the <b>compile</b> time.
 </div>
 </div>
 </div>
-<div id="outline-container-org438f3a3" class="outline-3">
-<h3 id="org438f3a3"><span class="section-number-3">1.3.</span> Proposal NO-LOCAL-NICKNAMES</h3>
+<div id="outline-container-orga21db8f" class="outline-3">
+<h3 id="orga21db8f"><span class="section-number-3">1.3.</span> Proposal NO-LOCAL-NICKNAMES</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 <code>format</code>'s <code>\~//</code> directive must <b>not</b> use <i>local nicknames</i> of any package when
@@ -289,8 +290,8 @@ would risk breaking the existing code when adding local nicknames to that packag
 </p>
 </div>
 </div>
-<div id="outline-container-orgeaf941d" class="outline-3">
-<h3 id="orgeaf941d"><span class="section-number-3">1.4.</span> Links</h3>
+<div id="outline-container-orgdf87901" class="outline-3">
+<h3 id="orgdf87901"><span class="section-number-3">1.4.</span> Links</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm">CLHS 22.3.5.4 Tilde Slash: Call Function</a>.
@@ -300,9 +301,8 @@ See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm">
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2024-07-05 Fri 01:56</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="author">Author: Gleefre</p>
+<p class="date">Created: 2024-07-05 Fri 13:32</p>
 </div>
 </body>
 </html>

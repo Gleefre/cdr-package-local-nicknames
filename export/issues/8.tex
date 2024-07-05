@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 01:56
+% Created 2024-07-05 Fri 13:32
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -13,24 +13,25 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
-\author{Grolter Bell}
+\author{Gleefre}
 \date{\today}
-\title{}
+\title{PLN CDR draft: Issue 8}
 \hypersetup{
- pdfauthor={Grolter Bell},
- pdftitle={},
+ pdfauthor={Gleefre},
+ pdftitle={PLN CDR draft: Issue 8},
  pdfkeywords={},
  pdfsubject={},
  pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
  pdflang={English}}
 \begin{document}
 
+\maketitle
 
 \section{Issue 8 (Interaction with FORMAT)}
-\label{sec:orgddfd0b2}
+\label{sec:orgfb20ba9}
 \emph{by |3b|}
 \subsection{Description}
-\label{sec:org8f249f6}
+\label{sec:orgffdabcc}
 It is not clear how \emph{local nicknames} should affect \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive.
 
 First, it would be inconvinient if it wouldn't be possible to use \emph{local
@@ -45,7 +46,7 @@ Finally, if the call to \texttt{format} is not compiled, it is hard to impossibl
 the function using \emph{local nicknames} of the package that was the \emph{current package}
 at the \textbf{compile} time.
 \subsection{Examples}
-\label{sec:org41d471e}
+\label{sec:org44250f6}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:ff))
 (defpackage #:foo-b (:use) (:export #:ff))
@@ -83,7 +84,7 @@ at the \textbf{compile} time.
 ; lispworks errors (NICK package not found)
 \end{verbatim}
 \subsection{Proposal NO-LOCAL-NICKNAMES}
-\label{sec:org77950ad}
+\label{sec:org24e7cde}
 \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive must \textbf{not} use \emph{local nicknames} of any package when
 looking up the specified symbol.
 
@@ -93,6 +94,6 @@ the \emph{tilde slash} directive should not depend on the value of \texttt{*pack
 time.  Specifying it to use \emph{local nicknames} of the \texttt{\#:CL-USER} package instead
 would risk breaking the existing code when adding local nicknames to that package.
 \subsection{Links}
-\label{sec:orgfbe992b}
+\label{sec:org1a644c2}
 See \href{https://www.lispworks.com/documentation/HyperSpec/Body/22\_ced.htm}{CLHS 22.3.5.4 Tilde Slash: Call Function}.
 \end{document}
