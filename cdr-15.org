@@ -13,15 +13,15 @@
   [[./spec.org][Specification]]
   #+INCLUDE: "./spec.org" :lines "6-"
 * ISSUES
-  [[./issues/1.org][Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)]]
-  [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
-  [[./issues/3.org][Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)]]
-  [[./issues/4.org][Issue 4 (Local nicknames of the package being defined)]]
-  [[./issues/5.org][Issue 5 (Local nickname shadowing package's own name)]]
-  [[./issues/6.org][Issue 6 (Additional keyword argument to MAKE-PACKAGE)]]
-  [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
-  [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
-  [[./issues/9.org][Issue 9 (Empty package local name)]]
+  - [[./issues/1.org][Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)]]
+  - [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
+  - [[./issues/3.org][Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)]]
+  - [[./issues/4.org][Issue 4 (Local nicknames of the package being defined)]]
+  - [[./issues/5.org][Issue 5 (Local nickname shadowing package's own name)]]
+  - [[./issues/6.org][Issue 6 (Additional keyword argument to MAKE-PACKAGE)]]
+  - [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
+  - [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
+  - [[./issues/9.org][Issue 9 (Empty package local name)]]
   #+INCLUDE: "./issues/1.org" :lines "6-"
   #+INCLUDE: "./issues/2.org" :lines "6-"
   #+INCLUDE: "./issues/3.org" :lines "6-"
