@@ -20,3 +20,8 @@ using ~org-export-dispatch (C-c C-e)~.
 | Issue 8    | [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/8.org][online]] / [[./issues/8.org][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/8.html][online]] / [[./export/issues/8.html][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/8.txt][online]] / [[./export/issues/8.txt][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/8.pdf][online]] / [[./export/issues/8.pdf][local]] |
 | Issue 9    | [[https://github.com/Gleefre/cdr-package-local-nicknames/blob/master/issues/9.org][online]] / [[./issues/9.org][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/9.html][online]] / [[./export/issues/9.html][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/9.txt][online]] / [[./export/issues/9.txt][local]] | [[https://gleefre.github.io/cdr-package-local-nicknames/export/issues/9.pdf][online]] / [[./export/issues/9.pdf][local]] |
 |------------+----------------+----------------+----------------+----------------|
+
+You can leave feedback in various ways, including but not limited to:
+- Github issues in the [[https://github.com/Gleefre/cdr-package-local-nicknames/][draft's repo]];
+- cl-car's [[https://github.com/fstamour/cl-car/discussions/11][discussion on PLNs]];
+- /#cl-car/ IRC channel on libera.chat.
