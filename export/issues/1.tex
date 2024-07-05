@@ -1,0 +1,94 @@
+% Created 2024-07-05 Fri 01:54
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
+ pdflang={English}}
+\begin{document}
+
+
+\section{Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)}
+\label{sec:org56d5e4c}
+\subsection{Description}
+\label{sec:org93c6487}
+Return values of \texttt{add-package-local-nickname} and \texttt{remove-package-local-nickname}
+are inconsistent. The first one always returns \emph{designated package}, while the
+second one returns \emph{true} (generalized boolean) if a nickname was removed.
+
+Moreover, there is no consensus among current implementations as to what the second
+function (\texttt{remove-package-local-nickname}) should return.
+\subsection{Examples}
+\label{sec:orgcbf95f7}
+\begin{verbatim}
+(defpackage #:foo (:use))
+(defpackage #:bar (:use))
+
+(add-package-local-nickname '#:nick '#:bar '#:foo)
+; => #<PACKAGE "FOO">  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+(add-package-local-nickname '#:nick '#:bar '#:foo)
+; => #<PACKAGE "FOO">  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+(remove-package-local-nickname '#:nick '#:foo)
+; => T  (sbcl, ccl, ecl, acl, clasp)
+; => #<PACKAGE "BAR">  (abcl)
+; => NIL  (lispworks)
+(remove-package-local-nickname '#:nick '#:foo)
+; => NIL  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+\end{verbatim}
+\subsection{Current behavior}
+\label{sec:orge957f7c}
+sbcl, ccl, ecl, acl, abcl, clasp, lispworks:
+  \texttt{add-package-local-nickname} always returns \emph{designated package}.
+
+sbcl, ccl, ecl, acl, clasp:
+  \texttt{remove-package-local-nickname} returns \texttt{T} if a nickname was removed,
+  and \texttt{NIL} otherwise.
+
+abcl:
+  \texttt{remove-package-local-nickname} if a nickname was removed, returns \emph{true} (more
+  specifically - the package that was nicknamed by that nickname), and \texttt{NIL}
+  otherwise.
+
+lispworks:
+  \texttt{remove-package-local-nickname} always returns \texttt{NIL}.
+\subsection{Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL}
+\label{sec:orge739e84}
+\begin{itemize}
+\item \texttt{add-package-local-nickname} should return \emph{designated package} if a new nickname
+was added and \texttt{NIL} otherwise, if the nickname already existed.
+\item \texttt{remove-package-local-nickname} should return \emph{designated package} if a nickname
+was removed and \texttt{NIL} otherwise.
+\end{itemize}
+\subsection{Proposal ALWAYS-T}
+\label{sec:orgb839018}
+Similar to \texttt{use-package} and \texttt{unuse-package}:
+\begin{itemize}
+\item \texttt{add-package-local-nickname} should always return \texttt{T}.
+\item \texttt{remove-package-local-nickname} should always return \texttt{T}.
+\end{itemize}
+\subsection{Proposal ELIMINATE-GENERALIZED\textsubscript{BOOLEAN}}
+\label{sec:org57f0660}
+\begin{itemize}
+\item \texttt{add-package-local-nickname} should alwyas return \emph{designated package}.
+\item \texttt{remove-package-local-nickname} should return \texttt{T} if a nickname was removed and
+\texttt{NIL} otherwise.
+\end{itemize}
+\end{document}

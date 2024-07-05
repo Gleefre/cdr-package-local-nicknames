@@ -1,0 +1,42 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 5 (Local nickname shadowing package's own name)
+═══════════════════════════════════════════════════════
+
+1.1 Description
+───────────────
+
+  It is not clear whether it is valid to have a /local nickname/ in a
+  package shadowing its own name or nickname.
+
+
+1.2 Examples
+────────────
+
+  ┌────
+  │ (defpackage #:foo
+  │   (:use)
+  │   (:nicknames #:bar)
+  │   (:local-nicknames (#:foo #:cl)
+  │                     (#:bar #:cl)))
+  │ ; => continuable error  (sbcl, ccl, abcl)
+  │ ; => error  (lispworks)
+  │ ; => ok  (ecl, acl, clasp)
+  └────
+
+
+1.3 Current behavior
+────────────────────
+
+  sbcl, ccl, abcl and lispwork signal an error.
+
+
+1.4 Proposal ALLOW
+──────────────────
+
+  It should be allowed to use package's own name or global nickname, but
+  a style-warning can be signalled.

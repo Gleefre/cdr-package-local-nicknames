@@ -1,0 +1,54 @@
+% Created 2024-07-05 Fri 01:56
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
+ pdflang={English}}
+\begin{document}
+
+
+\section{Issue 6 (Additional keyword argument to MAKE-PACKAGE)}
+\label{sec:org6eda31c}
+\subsection{Current behavior}
+\label{sec:org4be7461}
+sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+
+ecl: has an additional keyword argument \texttt{:local-nicknames}, but it is undocumented
+and it segfaults on incorrect usage. The expected value is a list of conses:
+\texttt{((nickname . package)*)}.
+
+acl: has an additional keyword argument \texttt{:local-nicknames}. The expected value is
+a list of lists: \texttt{((nickname package)*)}.
+\subsection{Proposal EXTRA-KEYWORD-ARGUMENT}
+\label{sec:org828c272}
+Add \texttt{:local-nicknames} keyword argument to \texttt{make-package}:
+\begin{verbatim}
+local-nicknames ::= ((nickname package)*)
+\end{verbatim}
+
+\texttt{nickname} must be a \emph{string designator}.
+\texttt{package} must be a \emph{package designator}.
+
+\texttt{local-nicknames} defaults to an \emph{empty list}.
+
+See make-package.
+\end{document}

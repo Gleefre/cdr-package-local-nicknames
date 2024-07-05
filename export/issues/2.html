@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-07-05 Fri 01:54 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Grolter Bell" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+
+<div id="outline-container-print-read-consistency" class="outline-2">
+<h2 id="print-read-consistency"><span class="section-number-2">1.</span> Issue 2 (PRINT-READ consistency)</h2>
+<div class="outline-text-2" id="text-print-read-consistency">
+</div>
+<div id="outline-container-org65fd691" class="outline-3">
+<h3 id="org65fd691"><span class="section-number-3">1.1.</span> Description</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Lisp reader uses <code>find-package</code> when reading a symbol, which is affected by the
+<i>local nicknames</i> of the <i>current package</i>. That means that to maintain <b>print-read</b>
+consistency when printing a symbol, a good <i>package prefix</i> must be used - such that
+calling <code>find-package</code> on it in the <i>current package</i> returns the symbol's <i>home
+package</i>.
+</p>
+
+<p>
+There are several situations to consider:
+</p>
+<ol class="org-ol">
+<li><p>
+Symbol is <i>apparently uninterned</i>.
+</p>
+
+<p>
+<i>In this case it must be printed without any package prefix, preceeded by <code>#:</code>.</i>
+</p></li>
+
+<li><p>
+Symbol is accessible in the <i>current package</i>.
+</p>
+
+<p>
+<i>In this case it must be printed without any package prefix.</i>
+</p></li>
+
+<li><p>
+Symbol's <i>home package</i> <i>name</i> or one of its <i>global nicknames</i> is not shadowed
+by any <i>local nickname</i> defined in the <i>current package</i>.
+</p>
+
+<p>
+<i>In this case that name or global nickname can be used as the package prefix.</i>
+</p></li>
+
+<li><p>
+There <b>exists</b> a <i>local nickname</i> defined in the <i>current package</i> for the
+symbol's <i>home package</i>.
+</p>
+
+<p>
+<i>In this case that local nickname can be used as the package prefix.</i>
+</p></li>
+
+<li><p>
+Symbol's <i>home package</i> <i>name</i> and all of its <i>global nicknames</i> are shadowed by
+the <i>local nicknames</i> of the <i>current package</i> and there <b>is no</b> <i>local nickname</i>
+defined in the <i>current package</i> for the symbol's <i>home package</i>.
+</p>
+
+<p>
+<i>It is not clear how the symbol must be printed, see PROPOSALS.</i>
+</p></li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org058b40f" class="outline-3">
+<h3 id="org058b40f"><span class="section-number-3">1.2.</span> Examples</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
+  (<span style="color: #e5786d;">:use</span>)
+  (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:+</span>))
+
+(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:bar</span>
+  (<span style="color: #e5786d;">:use</span> <span style="color: #e5786d;">#:cl</span>)
+  (<span style="color: #e5786d;">:local-nicknames</span> (<span style="color: #e5786d;">#:foo</span> <span style="color: #e5786d;">#:cl</span>)))
+
+(<span style="color: #8ac6f2; font-weight: bold;">let</span> ((*package* (find-package '<span style="color: #e5786d;">#:bar</span>)))
+  (print 'foo:+))
+<span style="color: #99968b;">; </span><span style="color: #99968b;">&gt;&gt; FOO:+  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)</span>
+
+<span style="color: #99968b;">;; </span><span style="color: #99968b;">In the package #:BAR symbol FOO:+ refers to CL:+</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-a</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:quux</span>))
+(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-b</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:quux</span>))
+
+(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:bar</span>
+  (<span style="color: #e5786d;">:use</span>)
+  (<span style="color: #e5786d;">:local-nicknames</span> (<span style="color: #e5786d;">#:foo-a</span> <span style="color: #e5786d;">#:foo-b</span>)
+                    (<span style="color: #e5786d;">#:foo-b</span> <span style="color: #e5786d;">#:foo-a</span>)))
+
+(<span style="color: #8ac6f2; font-weight: bold;">let</span> ((*package* (find-package '<span style="color: #e5786d;">#:bar</span>)))
+  (print 'foo-a:quux))
+<span style="color: #99968b;">; </span><span style="color: #99968b;">&gt;&gt; FOO-B:QUUX  (sbcl, ccl, abcl, lispworks)</span>
+<span style="color: #99968b;">; </span><span style="color: #99968b;">&gt;&gt; FOO-A:QUUX  (ecl, acl, clasp)</span>
+
+<span style="color: #99968b;">;; </span><span style="color: #99968b;">In the package #:BAR symbol FOO-A:QUUX refers to FOO-B:QUUX</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org55b64fd" class="outline-3">
+<h3 id="org55b64fd"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+sbcl, ccl, abcl, lispworks:
+  When exists in the <i>current package</i>, a <i>local nickname</i> is used as a package
+  prefix when printing a symbol.
+</p>
+
+<p>
+ecl, acl, clasp:
+  <i>local nickname</i> is never used as a package prefix when printing a symbol.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc7a5c30" class="outline-3">
+<h3 id="orgc7a5c30"><span class="section-number-3">1.4.</span> Proposal SHARPSIGN-DOT</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+In the case (5) the symbol must be printed using the <code>#.</code> syntax:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-common-lisp">#.(cl:let ((cl:*package* (cl:find-package <span style="color: #95e454;">"KEYWORD"</span>)))
+    (cl:find-symbol <span style="color: #95e454;">"BAR"</span> <span style="color: #95e454;">"FOO"</span>))
+<span style="color: #99968b;">;; </span><span style="color: #99968b;">or</span>
+#.(cl:let ((cl:*package* (cl:find-package <span style="color: #95e454;">"KEYWORD"</span>)))
+    (cl:intern <span style="color: #95e454;">"BAR"</span> <span style="color: #95e454;">"FOO"</span>))
+</pre>
+</div>
+
+<p>
+Note that <code>#:KEYWORD</code> name is reserved for the <code>#:KEYWORD</code> package and
+cannot be used as a <i>local nickname</i> thus this expression will always
+evaluate to the symbol <code>foo::bar</code>.
+</p>
+
+<p>
+If <code>*read-eval*</code> is <i>false</i> and <code>*print-readably*</code> is <i>true</i> an error of type
+<code>print-not-readable</code> must be signalled.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf6fdf04" class="outline-3">
+<h3 id="orgf6fdf04"><span class="section-number-3">1.5.</span> Proposal SHARPSIGN-COLON</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+In case (5) the symbol should be printed using the <i>extended <code>#:</code> syntax</i>:
+</p>
+<pre class="example">
+#:(package name)
+#::(package name)
+</pre>
+
+<p>
+<i>Shinmera's idea</i>.
+</p>
+</div>
+</div>
+<div id="outline-container-org6070cd3" class="outline-3">
+<h3 id="org6070cd3"><span class="section-number-3">1.6.</span> Proposal SHARPSIGN-BACKQUOTE</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+In case (5) the symbol must be printed using the new <code>#`</code> syntax for reading an
+expression ignoring <i>local nicknames</i> in the <i>current package</i>:
+</p>
+<pre class="example">
+#`foo:bar
+#`foo::bar
+</pre>
+
+<p>
+It can be implemented roughly as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defun</span> |#`-reader| (stream subchar arg)
+  (<span style="color: #8ac6f2; font-weight: bold;">declare</span> (ignore subchar arg))
+  (<span style="color: #8ac6f2; font-weight: bold;">let*</span> ((current-package *package*)
+         (local-nicknames (package-local-nicknames current-package)))
+    (<span style="color: #8ac6f2; font-weight: bold;">loop</span> for (nick . package) in local-nicknames
+          do (remove-package-local-nickname nick current-package))
+    (<span style="color: #8ac6f2; font-weight: bold;">unwind-protect</span>
+      (read stream t nil t)
+      (<span style="color: #8ac6f2; font-weight: bold;">loop</span> for (nick . package) in local-nicknames
+            do (add-package-local-nickname nick package current-package)))))
+
+(set-dispatch-macro-character #\# #\` #'|#`-reader|)
+</pre>
+</div>
+<p>
+It is <i>implementation-dependent</i> whether <i>local nicknames</i> are actually removed
+from the <i>current package</i> or not.
+</p>
+</div>
+</div>
+<div id="outline-container-org5ef2ad2" class="outline-3">
+<h3 id="org5ef2ad2"><span class="section-number-3">1.7.</span> Proposal PRINT-UNREADABLY</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+In the case (5) the symbol must be printed unreadably using the <code>#&lt;</code> syntax:
+</p>
+<pre class="example">
+#&lt;SYMBOL IN THE SHADOWED PACKAGE FOO:BAR&gt;
+#&lt;SYMBOL IN THE SHADOWED PACKAGE FOO::BAR&gt;
+</pre>
+
+<p>
+(Specifics are <i>implementation-dependent</i>.)
+</p>
+
+<p>
+If <code>*print-readably*</code> is <i>true</i>, an error of type <code>print-not-readable</code> must be
+signalled.
+</p>
+</div>
+</div>
+<div id="outline-container-org56c44bd" class="outline-3">
+<h3 id="org56c44bd"><span class="section-number-3">1.8.</span> Proposal THREE-FOUR-PACKAGE-MARKERS</h3>
+<div class="outline-text-3" id="text-1-8">
+<p>
+In the case (5) the symbol must be printed using <code>:::</code> and <code>::::</code> syntax as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-common-lisp">foo:::bar   <span style="color: #99968b;">; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package</span>
+foo::::bar  <span style="color: #99968b;">; same as (cl:intern "BAR" "FOO") in #:KEYWORD package</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org33066a5" class="outline-3">
+<h3 id="org33066a5"><span class="section-number-3">1.9.</span> Links</h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm">CLHS 22.1.3.3.1 Package Prefixes for Symbols</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Grolter Bell</p>
+<p class="date">Created: 2024-07-05 Fri 01:54</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

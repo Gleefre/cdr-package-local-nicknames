@@ -1,0 +1,195 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 2 (PRINT-READ consistency)
+══════════════════════════════════
+
+1.1 Description
+───────────────
+
+  Lisp reader uses `find-package' when reading a symbol, which is
+  affected by the /local nicknames/ of the /current package/. That means
+  that to maintain *print-read* consistency when printing a symbol, a
+  good /package prefix/ must be used - such that calling `find-package'
+  on it in the /current package/ returns the symbol's /home package/.
+
+  There are several situations to consider:
+  1. Symbol is /apparently uninterned/.
+
+     /In this case it must be printed without any package prefix,
+     preceeded by `#:'./
+
+  2. Symbol is accessible in the /current package/.
+
+     /In this case it must be printed without any package prefix./
+
+  3. Symbol's /home package/ /name/ or one of its /global nicknames/ is
+     not shadowed by any /local nickname/ defined in the /current
+     package/.
+
+     /In this case that name or global nickname can be used as the
+     package prefix./
+
+  4. There *exists* a /local nickname/ defined in the /current package/
+     for the symbol's /home package/.
+
+     /In this case that local nickname can be used as the package
+     prefix./
+
+  5. Symbol's /home package/ /name/ and all of its /global nicknames/
+     are shadowed by the /local nicknames/ of the /current package/ and
+     there *is no* /local nickname/ defined in the /current package/ for
+     the symbol's /home package/.
+
+     /It is not clear how the symbol must be printed, see PROPOSALS./
+
+
+1.2 Examples
+────────────
+
+  ┌────
+  │ (defpackage #:foo
+  │   (:use)
+  │   (:export #:+))
+  │ 
+  │ (defpackage #:bar
+  │   (:use #:cl)
+  │   (:local-nicknames (#:foo #:cl)))
+  │ 
+  │ (let ((*package* (find-package '#:bar)))
+  │   (print 'foo:+))
+  │ ; >> FOO:+  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+  │ 
+  │ ;; In the package #:BAR symbol FOO:+ refers to CL:+
+  └────
+
+  ┌────
+  │ (defpackage #:foo-a (:use) (:export #:quux))
+  │ (defpackage #:foo-b (:use) (:export #:quux))
+  │ 
+  │ (defpackage #:bar
+  │   (:use)
+  │   (:local-nicknames (#:foo-a #:foo-b)
+  │                     (#:foo-b #:foo-a)))
+  │ 
+  │ (let ((*package* (find-package '#:bar)))
+  │   (print 'foo-a:quux))
+  │ ; >> FOO-B:QUUX  (sbcl, ccl, abcl, lispworks)
+  │ ; >> FOO-A:QUUX  (ecl, acl, clasp)
+  │ 
+  │ ;; In the package #:BAR symbol FOO-A:QUUX refers to FOO-B:QUUX
+  └────
+
+
+1.3 Current behavior
+────────────────────
+
+  sbcl, ccl, abcl, lispworks: When exists in the /current package/, a
+    /local nickname/ is used as a package prefix when printing a symbol.
+
+  ecl, acl, clasp: /local nickname/ is never used as a package prefix
+    when printing a symbol.
+
+
+1.4 Proposal SHARPSIGN-DOT
+──────────────────────────
+
+  In the case (5) the symbol must be printed using the `#.' syntax:
+
+  ┌────
+  │ #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+  │     (cl:find-symbol "BAR" "FOO"))
+  │ ;; or
+  │ #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
+  │     (cl:intern "BAR" "FOO"))
+  └────
+
+  Note that `#:KEYWORD' name is reserved for the `#:KEYWORD' package and
+  cannot be used as a /local nickname/ thus this expression will always
+  evaluate to the symbol `foo::bar'.
+
+  If `*read-eval*' is /false/ and `*print-readably*' is /true/ an error
+  of type `print-not-readable' must be signalled.
+
+
+1.5 Proposal SHARPSIGN-COLON
+────────────────────────────
+
+  In case (5) the symbol should be printed using the /extended `#:'
+  syntax/:
+  ┌────
+  │ #:(package name)
+  │ #::(package name)
+  └────
+
+  /Shinmera's idea/.
+
+
+1.6 Proposal SHARPSIGN-BACKQUOTE
+────────────────────────────────
+
+  In case (5) the symbol must be printed using the new `#`' syntax for
+  reading an expression ignoring /local nicknames/ in the /current
+  package/:
+  ┌────
+  │ #`foo:bar
+  │ #`foo::bar
+  └────
+
+  It can be implemented roughly as follows:
+  ┌────
+  │ (defun |#`-reader| (stream subchar arg)
+  │   (declare (ignore subchar arg))
+  │   (let* ((current-package *package*)
+  │          (local-nicknames (package-local-nicknames current-package)))
+  │     (loop for (nick . package) in local-nicknames
+  │           do (remove-package-local-nickname nick current-package))
+  │     (unwind-protect
+  │       (read stream t nil t)
+  │       (loop for (nick . package) in local-nicknames
+  │             do (add-package-local-nickname nick package current-package)))))
+  │ 
+  │ (set-dispatch-macro-character #\# #\` #'|#`-reader|)
+  └────
+  It is /implementation-dependent/ whether /local nicknames/ are
+  actually removed from the /current package/ or not.
+
+
+1.7 Proposal PRINT-UNREADABLY
+─────────────────────────────
+
+  In the case (5) the symbol must be printed unreadably using the `#<'
+  syntax:
+  ┌────
+  │ #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
+  │ #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
+  └────
+
+  (Specifics are /implementation-dependent/.)
+
+  If `*print-readably*' is /true/, an error of type `print-not-readable'
+  must be signalled.
+
+
+1.8 Proposal THREE-FOUR-PACKAGE-MARKERS
+───────────────────────────────────────
+
+  In the case (5) the symbol must be printed using `:::' and `::::'
+  syntax as follows:
+  ┌────
+  │ foo:::bar   ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
+  │ foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
+  └────
+
+
+1.9 Links
+─────────
+
+  See [CLHS 22.1.3.3.1 Package Prefixes for Symbols].
+
+
+[CLHS 22.1.3.3.1 Package Prefixes for Symbols]
+<https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm>

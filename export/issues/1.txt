@@ -1,0 +1,83 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
+══════════════════════════════════════════════════════════════
+
+1.1 Description
+───────────────
+
+  Return values of `add-package-local-nickname' and
+  `remove-package-local-nickname' are inconsistent. The first one always
+  returns /designated package/, while the second one returns /true/
+  (generalized boolean) if a nickname was removed.
+
+  Moreover, there is no consensus among current implementations as to
+  what the second function (`remove-package-local-nickname') should
+  return.
+
+
+1.2 Examples
+────────────
+
+  ┌────
+  │ (defpackage #:foo (:use))
+  │ (defpackage #:bar (:use))
+  │ 
+  │ (add-package-local-nickname '#:nick '#:bar '#:foo)
+  │ ; => #<PACKAGE "FOO">  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+  │ (add-package-local-nickname '#:nick '#:bar '#:foo)
+  │ ; => #<PACKAGE "FOO">  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+  │ (remove-package-local-nickname '#:nick '#:foo)
+  │ ; => T  (sbcl, ccl, ecl, acl, clasp)
+  │ ; => #<PACKAGE "BAR">  (abcl)
+  │ ; => NIL  (lispworks)
+  │ (remove-package-local-nickname '#:nick '#:foo)
+  │ ; => NIL  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+  └────
+
+
+1.3 Current behavior
+────────────────────
+
+  sbcl, ccl, ecl, acl, abcl, clasp, lispworks:
+    `add-package-local-nickname' always returns /designated package/.
+
+  sbcl, ccl, ecl, acl, clasp: `remove-package-local-nickname' returns
+    `T' if a nickname was removed, and `NIL' otherwise.
+
+  abcl: `remove-package-local-nickname' if a nickname was removed,
+    returns /true/ (more specifically - the package that was nicknamed
+    by that nickname), and `NIL' otherwise.
+
+  lispworks: `remove-package-local-nickname' always returns `NIL'.
+
+
+1.4 Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
+─────────────────────────────────────────────
+
+  • `add-package-local-nickname' should return /designated package/ if a
+    new nickname was added and `NIL' otherwise, if the nickname already
+    existed.
+  • `remove-package-local-nickname' should return /designated package/
+    if a nickname was removed and `NIL' otherwise.
+
+
+1.5 Proposal ALWAYS-T
+─────────────────────
+
+  Similar to `use-package' and `unuse-package':
+  • `add-package-local-nickname' should always return `T'.
+  • `remove-package-local-nickname' should always return `T'.
+
+
+1.6 Proposal ELIMINATE-GENERALIZED_BOOLEAN
+──────────────────────────────────────────
+
+  • `add-package-local-nickname' should alwyas return /designated
+    package/.
+  • `remove-package-local-nickname' should return `T' if a nickname was
+    removed and `NIL' otherwise.

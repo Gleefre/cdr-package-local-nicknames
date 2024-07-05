@@ -1,0 +1,36 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 6 (Additional keyword argument to MAKE-PACKAGE)
+═══════════════════════════════════════════════════════
+
+1.1 Current behavior
+────────────────────
+
+  sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+
+  ecl: has an additional keyword argument `:local-nicknames', but it is
+  undocumented and it segfaults on incorrect usage. The expected value
+  is a list of conses: `((nickname . package)*)'.
+
+  acl: has an additional keyword argument `:local-nicknames'. The
+  expected value is a list of lists: `((nickname package)*)'.
+
+
+1.2 Proposal EXTRA-KEYWORD-ARGUMENT
+───────────────────────────────────
+
+  Add `:local-nicknames' keyword argument to `make-package':
+  ┌────
+  │ local-nicknames ::= ((nickname package)*)
+  └────
+
+  `nickname' must be a /string designator/.  `package' must be a
+  /package designator/.
+
+  `local-nicknames' defaults to an /empty list/.
+
+  See make-package.

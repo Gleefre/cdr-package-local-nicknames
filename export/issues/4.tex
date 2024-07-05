@@ -1,0 +1,64 @@
+% Created 2024-07-05 Fri 01:55
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
+ pdflang={English}}
+\begin{document}
+
+
+\section{Issue 4 (Local nicknames of the package being defined)}
+\label{sec:orgf1aaf06}
+\subsection{Description}
+\label{sec:org32a6e7a}
+It is not clear whether \emph{local nicknames} of the package \textbf{being defined} should
+affect \texttt{make-package} or \texttt{defpackage}.
+\subsection{Examples}
+\label{sec:orgc9a0512}
+\begin{verbatim}
+(defpackage #:foo-a (:use) (:export #:x))
+(defpackage #:foo-b (:use) (:export #:x))
+
+(defpackage #:bar
+  (:local-nicknames (#:foo-a #:foo-b)
+                    (#:foo-b #:foo-a))
+  (:use #:foo-a))
+
+(package-name (symbol-package 'bar::x))
+; => "FOO-A"  (sbcl, ccl, acl, abcl, clasp, lispworks)
+; => "FOO-B"  (ecl)
+\end{verbatim}
+\subsection{Current behavior}
+\label{sec:orgf758265}
+sbcl, ccl, acl, abcl, lispworks: not affected
+
+ecl: \texttt{:use}, \texttt{:import-from} and \texttt{:shadowing-import-from} are affected.
+
+clasp: \texttt{:local-nicknames} is affected by previous \texttt{:local-nicknames} clauses.
+\subsection{Proposal NO-EFFECT}
+\label{sec:org548713f}
+Local nicknames of a package being defined should not affect other defpackage
+clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from}, \texttt{:shadowing-import-from}).
+
+The keyword argument \texttt{:local-nicknames} to \texttt{make-package} should not affect the
+\texttt{:use} keyword argument either.
+\end{document}

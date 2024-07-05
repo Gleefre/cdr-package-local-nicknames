@@ -1,0 +1,118 @@
+% Created 2024-07-05 Fri 01:54
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\author{Grolter Bell}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Grolter Bell},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.5.5)}, 
+ pdflang={English}}
+\begin{document}
+
+
+\section{Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)}
+\label{sec:org7a208f7}
+\subsection{Description}
+\label{sec:org7de4384}
+It is not clear whether \emph{local nicknames} of the \emph{current package} should affect
+the resolution of package designators provided in \texttt{make-package} and \texttt{defpackage},
+as well as other functions and macros taking a package designator as an argument
+(\texttt{in-package}, \texttt{add-package-local-nickname} and others).
+\subsection{Examples}
+\label{sec:org9af8527}
+\begin{verbatim}
+(defpackage #:foo-a (:use) (:export #:x))
+(defpackage #:foo-b (:use) (:export #:x))
+
+(defpackage #:bar
+  (:use #:cl)
+  (:local-nicknames (#:foo-a #:foo-b)
+                    (#:foo-b #:foo-a)))
+
+(in-package #:bar)
+
+(defpackage #:quux-1
+  (:use #:foo-a))
+(package-name (symbol-package 'quux-1::x))
+; => "FOO-B"  (sbcl, ccl, acl, abcl, lispworks)
+; => "FOO-A"  (ecl, clasp)
+
+(make-package '#:quux-2 :use '(#:foo-a))
+(package-name (symbol-package 'quux-2::x))
+; => "FOO-B"  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
+
+(defpackage #:quux-3
+  (:use)
+  (:local-nicknames (#:foo #:foo-a)))
+(let ((*package* (find-package '#:quux-3)))
+  (package-name (find-package '#:foo)))
+; => "FOO-B"  (ccl, ecl, acl, abcl)
+; => "FOO-A"  (sbcl, clasp, lispworks)
+
+(import (car (find-all-symbols (string '#:add-package-local-nickname))))
+(defpackage #:quux-4
+  (:use))
+(add-package-local-nickname '#:foo '#:foo-a '#:quux-4)
+(let ((*package* (find-package '#:quux-4)))
+  (package-name (find-package '#:foo)))
+; => "FOO-B"  (ccl, ecl, clasp, abcl, lispworks)
+; => "FOO-A"  (sbcl)
+
+(use-package '#:foo-a '#:quux-4)
+(package-name (symbol-package 'quux-4::x))
+; => "FOO-B"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
+\end{verbatim}
+\subsection{Current behavior}
+\label{sec:org6811770}
+sbcl, lispworks:
+  only \texttt{:local-nicknames} clause is \textbf{not} affected by \emph{local nicknames}.
+
+ccl, acl, abcl:
+  all options are affected.
+
+ecl:
+  only the \texttt{:local-nicknames} clause and keyword arguments (\texttt{:use} and
+  \texttt{:local-nicknames}) are affected.
+
+clasp:
+  only keyword argument \texttt{:use} is affected.
+
+Known exceptions in other functions/macros:
+sbcl: \texttt{add-package-local-nickname} is not affected.
+lispworks: \texttt{in-package} is not affected.
+\subsection{Proposal ALL-AFFECTED}
+\label{sec:orgaa15b29}
+All \texttt{defpackage} clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from},
+\texttt{:shadowing-import-from}) as well as all keyword arguments to \texttt{make-package}
+(\texttt{:use} and \texttt{:local-nicknames}) must be affected by the \emph{local nicknames} of the
+\emph{current package}.
+
+All functions and macros taking a package designator as an argument must be
+affected as well.
+
+A non-exhaustive list of affected functions and macros:
+  \texttt{export}, \texttt{find-symbol}, \texttt{import}, \texttt{rename-package}, \texttt{shadow},
+  \texttt{shadowing-import}, \texttt{delete-package}, \texttt{with-package-iterator}, \texttt{unexport},
+  \texttt{unintern}, \texttt{in-package}, \texttt{unuse-package}, \texttt{use-package}, \texttt{do-symbols},
+  \texttt{do-external-symbols}, \texttt{do-all-symbols}, \texttt{intern}, \texttt{package-name},
+  \texttt{package-nicknames}, \texttt{package-shadowing-symbols}, \texttt{package-use-list},
+  \texttt{package-used-by-list}, \texttt{add-package-local-nickname},
+  \texttt{remove-package-local-nickname}, \texttt{package-local-nicknames},
+  \texttt{package-locally-nicknamed-by}.
+\end{document}

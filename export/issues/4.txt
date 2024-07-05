@@ -1,0 +1,54 @@
+Grolter Bell
+
+
+
+
+
+1 Issue 4 (Local nicknames of the package being defined)
+════════════════════════════════════════════════════════
+
+1.1 Description
+───────────────
+
+  It is not clear whether /local nicknames/ of the package *being
+  defined* should affect `make-package' or `defpackage'.
+
+
+1.2 Examples
+────────────
+
+  ┌────
+  │ (defpackage #:foo-a (:use) (:export #:x))
+  │ (defpackage #:foo-b (:use) (:export #:x))
+  │ 
+  │ (defpackage #:bar
+  │   (:local-nicknames (#:foo-a #:foo-b)
+  │                     (#:foo-b #:foo-a))
+  │   (:use #:foo-a))
+  │ 
+  │ (package-name (symbol-package 'bar::x))
+  │ ; => "FOO-A"  (sbcl, ccl, acl, abcl, clasp, lispworks)
+  │ ; => "FOO-B"  (ecl)
+  └────
+
+
+1.3 Current behavior
+────────────────────
+
+  sbcl, ccl, acl, abcl, lispworks: not affected
+
+  ecl: `:use', `:import-from' and `:shadowing-import-from' are affected.
+
+  clasp: `:local-nicknames' is affected by previous `:local-nicknames'
+  clauses.
+
+
+1.4 Proposal NO-EFFECT
+──────────────────────
+
+  Local nicknames of a package being defined should not affect other
+  defpackage clauses (`:use', `:local-nicknames', `:import-from',
+  `:shadowing-import-from').
+
+  The keyword argument `:local-nicknames' to `make-package' should not
+  affect the `:use' keyword argument either.
