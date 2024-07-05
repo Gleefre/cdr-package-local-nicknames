@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 09:32 -->
+<!-- 2024-07-05 Fri 12:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -197,15 +197,15 @@
 <body>
 <div id="content" class="content">
 
-<div id="outline-container-org5c546ce" class="outline-2">
-<h2 id="org5c546ce"><span class="section-number-2">1.</span> Introduction</h2>
+<div id="outline-container-org73ba8af" class="outline-2">
+<h2 id="org73ba8af"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This is a specification for the package-local nicknames extension in Common Lisp.
 </p>
 </div>
-<div id="outline-container-org501a4c7" class="outline-3">
-<h3 id="org501a4c7"><span class="section-number-3">1.1.</span> Rationale</h3>
+<div id="outline-container-org9e46a6f" class="outline-3">
+<h3 id="org9e46a6f"><span class="section-number-3">1.1.</span> Rationale</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Package-local nicknames allow to use short and easy-to-use names for packages
@@ -213,8 +213,8 @@ locally without potentially introducing name conflict as with normal nicknames.
 </p>
 </div>
 </div>
-<div id="outline-container-org81d10f8" class="outline-3">
-<h3 id="org81d10f8"><span class="section-number-3">1.2.</span> Current state</h3>
+<div id="outline-container-org2630208" class="outline-3">
+<h3 id="org2630208"><span class="section-number-3">1.2.</span> Current state</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Package-local nicknames are implemented in some form in <code>SBCL</code>, <code>CCL</code>, <code>ECL</code>,
@@ -229,8 +229,8 @@ multiple edge cases that aren't always implemented correctly.
 </p>
 </div>
 </div>
-<div id="outline-container-org7621393" class="outline-3">
-<h3 id="org7621393"><span class="section-number-3">1.3.</span> Goal</h3>
+<div id="outline-container-orga788214" class="outline-3">
+<h3 id="orga788214"><span class="section-number-3">1.3.</span> Goal</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 The purpose of this document is to standardize the package-local nicknames
@@ -243,46 +243,45 @@ extension and to address some existing issues.
 </div>
 </div>
 </div>
-<div id="outline-container-org967cecc" class="outline-2">
-<h2 id="org967cecc"><span class="section-number-2">2.</span> Description</h2>
+<div id="outline-container-org246a4a6" class="outline-2">
+<h2 id="org246a4a6"><span class="section-number-2">2.</span> Description</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-<i>Package-local nickname</i> (or <i>local nickname</i>) has the same effects as a
-normal <i>package nickname</i> (later <i>global nickname</i>), except that these
-effects only apply when <code>*package*</code> is bound to a package for which the
-nickname has been defined.
+<i>Package-local nickname</i> (or <i>local nickname</i>) has the same effects as a usual
+<i>package nickname</i> (later <i>global nickname</i>), except that these effects only apply
+when <code>*package*</code> is bound to a package for which the nickname has been defined.
 </p>
 
 <p>
-That means that calls to <code>find-package</code> with a <i>local nickname</i> defined in
-the <i>current package</i> should return the package nicknamed by this nickname.
+That means that calls to <code>find-package</code> with a <i>local nickname</i> defined in the
+<i>current package</i> should return the package nicknamed by this nickname.
 </p>
 
 <p>
-This also affects all implied calls to <code>find-package</code>, including those
-performed by the lisp reader.
+This also affects all implied calls to <code>find-package</code>, including those performed by
+the lisp reader.
 </p>
 
 <p>
-In addition, to maintain <b>print-read</b> consistency, the lisp printer is
-affected by <i>local nicknames</i> defined in the <i>current package</i>, for details
-see PRINT-READ consistency.
+In addition, to maintain <b>print-read</b> consistency, the lisp printer is affected by
+<i>local nicknames</i> defined in the <i>current package</i>.
+For details see Issue 2.
 </p>
 
 <p>
-<i>Local nickname</i> is allowed to shadow a <i>package name</i> or a <i>global
-nickname</i>, except for the names <code>#:CL</code>, <code>#:COMMON-LISP</code> and <code>#:KEYWORD</code>
-which should always refer to their packages.
+<i>Local nickname</i> is allowed to shadow a <i>package name</i> or a <i>global nickname</i>,
+except for the names <code>#:CL</code>, <code>#:COMMON-LISP</code> and <code>#:KEYWORD</code> which should always
+refer to their packages.
 </p>
 
 <p>
-The consequences of adding <i>local nicknames</i> to the packages
-<code>#:COMMON-LISP</code> and <code>#:KEYWORD</code> are undefined.
+The consequences of adding <i>local nicknames</i> to the packages <code>#:COMMON-LISP</code> and
+<code>#:KEYWORD</code> are undefined.
 </p>
 </div>
 </div>
-<div id="outline-container-orge8dca28" class="outline-2">
-<h2 id="orge8dca28"><span class="section-number-2">3.</span> API</h2>
+<div id="outline-container-org15b1c98" class="outline-2">
+<h2 id="org15b1c98"><span class="section-number-2">3.</span> API</h2>
 <div class="outline-text-2" id="text-3">
 </div>
 <div id="outline-container-defpackage" class="outline-3">
@@ -297,16 +296,15 @@ local-nicknames-option ::= (:local-nicknames (nickname package)*)
 
 
 <p>
-Each pair specifies a <i>local nickname</i> <code>nickname</code> for the corresponding
-<code>package</code>.
+Each pair specifies a <i>local nickname</i> <code>nickname</code> for the corresponding <code>package</code>.
 </p>
 
 <p>
 This option may appear more than once.
 </p>
 </div>
-<div id="outline-container-org15fd3d1" class="outline-4">
-<h4 id="org15fd3d1"><span class="section-number-4">3.1.1.</span> Arguments and Values:</h4>
+<div id="outline-container-org24bddb8" class="outline-4">
+<h4 id="org24bddb8"><span class="section-number-4">3.1.1.</span> Arguments and Values:</h4>
 <div class="outline-text-4" id="text-3-1-1">
 <p>
 <code>nickname</code> must be a <i>string designator</i>.
@@ -317,8 +315,8 @@ This option may appear more than once.
 </p>
 </div>
 </div>
-<div id="outline-container-org3f7f661" class="outline-4">
-<h4 id="org3f7f661"><span class="section-number-4">3.1.2.</span> Exceptional situations</h4>
+<div id="outline-container-org6c34b64" class="outline-4">
+<h4 id="org6c34b64"><span class="section-number-4">3.1.2.</span> Exceptional situations</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <p>
 An error of type <code>package-error</code> is signaled when a package designated by
@@ -335,19 +333,19 @@ See <a href="#exceptional-situations">add-package-local-nickname: exceptional si
 </p>
 </div>
 </div>
-<div id="outline-container-orgf035023" class="outline-4">
-<h4 id="orgf035023"><span class="section-number-4">3.1.3.</span> Implementation dependent</h4>
+<div id="outline-container-orgb414857" class="outline-4">
+<h4 id="orgb414857"><span class="section-number-4">3.1.3.</span> Implementation dependent</h4>
 <div class="outline-text-4" id="text-3-1-3">
 <p>
-The behaviour is unspecified when a <i>local nickname</i> is specified for the
-package that is being defined.
+The behaviour is unspecified when a <i>local nickname</i> is specified for the package
+that is being defined. (See Issue 4.)
 </p>
 
 <p>
-The behaviour is unspecified when supplied <i>local nicknames</i> are at
-variance with the current state of the package that is being defined. An
-implementation might choose to remove all present <i>local nicknames</i> at
-the begining of each redefinition of the package.
+The behaviour is unspecified when supplied <i>local nicknames</i> are at variance with
+the current state of the package that is being defined. An implementation might
+choose to remove all present <i>local nicknames</i> at the begining of each
+redefinition of the package.
 </p>
 </div>
 </div>
@@ -356,8 +354,12 @@ the begining of each redefinition of the package.
 <h3 id="make-package"><span class="section-number-3">3.2.</span> make-package</h3>
 <div class="outline-text-3" id="text-make-package">
 <p>
-<code>make-package</code> lambda list is extended to include an additional key
-parameter: <code>local-nicknames</code>.
+(<b>PROPOSAL</b>: see Issue 6.)
+</p>
+
+<p>
+<code>make-package</code> lambda list is extended to include an additional keyword argument
+<code>:local-nicknames</code>:
 </p>
 <pre class="example">
 local-nicknames ::= ((nickname package)*)
@@ -369,17 +371,12 @@ local-nicknames ::= ((nickname package)*)
 </p>
 
 <p>
-<code>local-nicknames</code> must be a <i>list</i> each element of which must be a <i>list</i>
-of form <code>(nickname package)</code>. Specifies <i>local nicknames</i> in the new
-<i>package</i>.
-</p>
-
-<p>
-See also Issue 6.
+<code>local-nicknames</code> must be a <i>list</i> each element of which must be a <i>list</i> of form
+<code>(nickname package)</code>. Specifies <i>local nicknames</i> in the new <i>package</i>.
 </p>
 </div>
-<div id="outline-container-orgfc90195" class="outline-4">
-<h4 id="orgfc90195"><span class="section-number-4">3.2.1.</span> Arguments and Values:</h4>
+<div id="outline-container-org40a2084" class="outline-4">
+<h4 id="org40a2084"><span class="section-number-4">3.2.1.</span> Arguments and Values:</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 <code>local-nicknames</code> must be a a <i>list</i> of pairs <code>(nickname package)</code>.
@@ -394,8 +391,8 @@ See also Issue 6.
 </p>
 </div>
 </div>
-<div id="outline-container-org70ae096" class="outline-4">
-<h4 id="org70ae096"><span class="section-number-4">3.2.2.</span> Exceptional situations</h4>
+<div id="outline-container-org7e67c43" class="outline-4">
+<h4 id="org7e67c43"><span class="section-number-4">3.2.2.</span> Exceptional situations</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <p>
 An error of type <code>package-error</code> is signaled when a package designated by
@@ -412,18 +409,18 @@ See <a href="#exceptional-situations">add-package-local-nickname: exceptional si
 </p>
 </div>
 </div>
-<div id="outline-container-org93ed836" class="outline-4">
-<h4 id="org93ed836"><span class="section-number-4">3.2.3.</span> Implementation dependent</h4>
+<div id="outline-container-orgee626e1" class="outline-4">
+<h4 id="orgee626e1"><span class="section-number-4">3.2.3.</span> Implementation dependent</h4>
 <div class="outline-text-4" id="text-3-2-3">
 <p>
-The behaviour is unspecified when a <i>local nickname</i> is specified for the
-package that is being defined.
+The behaviour is unspecified when a <i>local nickname</i> is specified for the package
+that is being defined. (See Issue 4.)
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgde713c0" class="outline-3">
-<h3 id="orgde713c0"><span class="section-number-3">3.3.</span> add-package-local-nickname</h3>
+<div id="outline-container-org1808047" class="outline-3">
+<h3 id="org1808047"><span class="section-number-3">3.3.</span> add-package-local-nickname</h3>
 <div class="outline-text-3" id="text-3-3">
 <pre class="example">
 (add-package-local-nickname nickname actual-package &amp;optional designated-package)
@@ -440,16 +437,16 @@ Adds a <i>package-local nickname</i> <code>nickname</code> for the <code>actual-
 </p>
 
 <p>
-Returns the package designated by <code>designated-package</code>.
+Returns the package designated by <code>designated-package</code>. (But also see Issue 1.)
 </p>
 
 <p>
-If a <i>nickname</i> is already defined, checks that it is defined for the
-package designated by <code>actual-package</code>.
+If a <i>nickname</i> is already defined, checks that it is defined for the package
+designated by <code>actual-package</code>.
 </p>
 </div>
-<div id="outline-container-org6fb4078" class="outline-4">
-<h4 id="org6fb4078"><span class="section-number-4">3.3.1.</span> Arguments and Values</h4>
+<div id="outline-container-org972f553" class="outline-4">
+<h4 id="org972f553"><span class="section-number-4">3.3.1.</span> Arguments and Values</h4>
 <div class="outline-text-4" id="text-3-3-1">
 <p>
 <code>nickname</code> must be a <i>string designator</i>.
@@ -484,22 +481,27 @@ If <code>nickname</code> is a <i>local nickname</i> for a package different from
 </p>
 </div>
 </div>
-<div id="outline-container-orgaf84fae" class="outline-4">
-<h4 id="orgaf84fae"><span class="section-number-4">3.3.3.</span> Implementation dependent</h4>
+<div id="outline-container-org3c0461d" class="outline-4">
+<h4 id="org3c0461d"><span class="section-number-4">3.3.3.</span> Implementation dependent</h4>
 <div class="outline-text-4" id="text-3-3-3">
 <p>
-<b>PROPOSAL</b> (See Issue 4.)
+The consequences are undefined when <code>designated-package</code> designates one of the
+packages <code>#:COMMON-LISP</code> or <code>#:KEYWORD</code>.
 </p>
 
 <p>
-If <code>nickname</code> shadows the <code>designated-package</code>'s <i>package name</i> or one of
-its <i>global nicknames</i>, a style warning might signaled.
+(<b>PROPOSAL</b>: see Issue 5.)
+</p>
+
+<p>
+If <code>nickname</code> shadows the <code>designated-package</code>'s <i>package name</i> or one of its
+<i>global nicknames</i>, a style warning might signaled.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org84b213f" class="outline-3">
-<h3 id="org84b213f"><span class="section-number-3">3.4.</span> remove-package-local-nickname</h3>
+<div id="outline-container-org79da3aa" class="outline-3">
+<h3 id="org79da3aa"><span class="section-number-3">3.4.</span> remove-package-local-nickname</h3>
 <div class="outline-text-3" id="text-3-4">
 <pre class="example">
 (remove-package-local-nickname old-nickname &amp;optional designated-package)
@@ -511,17 +513,16 @@ its <i>global nicknames</i>, a style warning might signaled.
 </p>
 
 <p>
-If <code>designated-package</code> has <code>old-nickname</code> as a <i>local nickname</i>, it is
-removed.
+If <code>designated-package</code> has <code>old-nickname</code> as a <i>local nickname</i>, it is removed.
 </p>
 
 <p>
-Returns <i>true</i> if the <code>old-nickname</code> existed (and was removed), and <code>NIL</code>
-otherwise.
+Returns <i>true</i> if the <code>old-nickname</code> existed and was removed, and <code>NIL</code>
+otherwise. (But also see Issue 1.)
 </p>
 </div>
-<div id="outline-container-orgaccc5ea" class="outline-4">
-<h4 id="orgaccc5ea"><span class="section-number-4">3.4.1.</span> Arguments and Values</h4>
+<div id="outline-container-org792ac10" class="outline-4">
+<h4 id="org792ac10"><span class="section-number-4">3.4.1.</span> Arguments and Values</h4>
 <div class="outline-text-4" id="text-3-4-1">
 <p>
 <code>old-nickname</code> must be a <i>string designator</i>.
@@ -536,50 +537,53 @@ otherwise.
 </p>
 </div>
 </div>
-<div id="outline-container-org02a8a05" class="outline-4">
-<h4 id="org02a8a05"><span class="section-number-4">3.4.2.</span> Exceptional situations</h4>
+<div id="outline-container-org1aab2dc" class="outline-4">
+<h4 id="org1aab2dc"><span class="section-number-4">3.4.2.</span> Exceptional situations</h4>
 <div class="outline-text-4" id="text-3-4-2">
 <p>
-If a package designated by <code>designated-package</code> does not exists, an error of
-type <i>package-error</i> must be signaled.
+If a package designated by <code>designated-package</code> does not exists, an error of type
+<i>package-error</i> must be signaled.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org1235b83" class="outline-3">
-<h3 id="org1235b83"><span class="section-number-3">3.5.</span> package-local-nicknames</h3>
+<div id="outline-container-org3094c95" class="outline-3">
+<h3 id="org3094c95"><span class="section-number-3">3.5.</span> package-local-nicknames</h3>
 <div class="outline-text-3" id="text-3-5">
 <pre class="example">
 (package-local-nicknames package)
   =&gt; local-nicknames-alist
+local-nicknames-alist ::= ((nickname . package)*)
 </pre>
 
 <p>
-Returns an <i>alist</i> describing local nicknames defined in a package
-designated by <code>package</code>.
-</p>
-
-<p>
-Each cons cell in <code>local-nicknames-alist</code> is of the form <code>(nickname . package)</code>
-where <code>nickname</code> is of type <i>string</i> and <code>package</code> is of type
-<i>package</i>.
+Returns an <i>alist</i> describing <i>local nicknames</i> defined in the package designated
+by <code>package</code>.
 </p>
 </div>
-<div id="outline-container-orgd44d50d" class="outline-4">
-<h4 id="orgd44d50d"><span class="section-number-4">3.5.1.</span> Arguments and Values</h4>
+<div id="outline-container-orged21bb3" class="outline-4">
+<h4 id="orged21bb3"><span class="section-number-4">3.5.1.</span> Arguments and Values</h4>
 <div class="outline-text-4" id="text-3-5-1">
 <p>
 <code>package</code> must be a <i>package designator</i>.
 </p>
 
 <p>
-<code>local-nicknames-alist</code> is an <i>alist</i> with keys of type <i>string</i> and
-values of type <i>package</i>.
+<code>local-nicknames-alist</code> is an <i>alist</i> with keys of type <i>string</i> and values of
+type <i>package</i>.
+</p>
+
+<p>
+<code>nickname</code> must be a <i>string</i>.
+</p>
+
+<p>
+<code>package</code> must be a <i>package</i>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgcc8f228" class="outline-4">
-<h4 id="orgcc8f228"><span class="section-number-4">3.5.2.</span> Exceptional situations</h4>
+<div id="outline-container-org9fa0d28" class="outline-4">
+<h4 id="org9fa0d28"><span class="section-number-4">3.5.2.</span> Exceptional situations</h4>
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 An error of type <code>package-error</code> is signaled when a package designated by
@@ -587,8 +591,8 @@ An error of type <code>package-error</code> is signaled when a package designate
 </p>
 </div>
 </div>
-<div id="outline-container-orga84ea3a" class="outline-4">
-<h4 id="orga84ea3a"><span class="section-number-4">3.5.3.</span> Notes</h4>
+<div id="outline-container-orgd07cfb8" class="outline-4">
+<h4 id="orgd07cfb8"><span class="section-number-4">3.5.3.</span> Notes</h4>
 <div class="outline-text-4" id="text-3-5-3">
 <p>
 The returned <i>alist</i> must be safe to be modified by the user.
@@ -596,8 +600,8 @@ The returned <i>alist</i> must be safe to be modified by the user.
 </div>
 </div>
 </div>
-<div id="outline-container-org5df2a7b" class="outline-3">
-<h3 id="org5df2a7b"><span class="section-number-3">3.6.</span> package-locally-nicknamed-by-list</h3>
+<div id="outline-container-orgd776e66" class="outline-3">
+<h3 id="orgd776e66"><span class="section-number-3">3.6.</span> package-locally-nicknamed-by-list</h3>
 <div class="outline-text-3" id="text-3-6">
 <pre class="example">
 (package-locally-nicknamed-by-list package)
@@ -605,12 +609,12 @@ The returned <i>alist</i> must be safe to be modified by the user.
 </pre>
 
 <p>
-Returns a <i>list</i> of packages that have a <i>local nickname</i> defined for the
-package designated by <code>package</code>.
+Returns a <i>list</i> of packages that have a <i>local nickname</i> defined for the package
+designated by <code>package</code>.
 </p>
 </div>
-<div id="outline-container-org072b36d" class="outline-4">
-<h4 id="org072b36d"><span class="section-number-4">3.6.1.</span> Arguments and Values</h4>
+<div id="outline-container-orgb978a83" class="outline-4">
+<h4 id="orgb978a83"><span class="section-number-4">3.6.1.</span> Arguments and Values</h4>
 <div class="outline-text-4" id="text-3-6-1">
 <p>
 <code>package</code> must be a <i>package designator</i>.
@@ -621,8 +625,8 @@ package designated by <code>package</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org4c78d32" class="outline-4">
-<h4 id="org4c78d32"><span class="section-number-4">3.6.2.</span> Exceptional situations</h4>
+<div id="outline-container-orgba58b4e" class="outline-4">
+<h4 id="orgba58b4e"><span class="section-number-4">3.6.2.</span> Exceptional situations</h4>
 <div class="outline-text-4" id="text-3-6-2">
 <p>
 An error of type <code>package-error</code> is signaled when a package designated by
@@ -630,8 +634,8 @@ An error of type <code>package-error</code> is signaled when a package designate
 </p>
 </div>
 </div>
-<div id="outline-container-org6cd606a" class="outline-4">
-<h4 id="org6cd606a"><span class="section-number-4">3.6.3.</span> Notes</h4>
+<div id="outline-container-org637ee9e" class="outline-4">
+<h4 id="org637ee9e"><span class="section-number-4">3.6.3.</span> Notes</h4>
 <div class="outline-text-4" id="text-3-6-3">
 <p>
 The returned <i>list</i> must be safe to be modified by the user.
@@ -640,98 +644,107 @@ The returned <i>list</i> must be safe to be modified by the user.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd9cb03c" class="outline-2">
-<h2 id="orgd9cb03c"><span class="section-number-2">4.</span> Affected symbols</h2>
+<div id="outline-container-org16a80ef" class="outline-2">
+<h2 id="org16a80ef"><span class="section-number-2">4.</span> Affected symbols</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgf1d6534" class="outline-3">
-<h3 id="orgf1d6534"><span class="section-number-3">4.1.</span> defpackage</h3>
+<div id="outline-container-org54b6041" class="outline-3">
+<h3 id="org54b6041"><span class="section-number-3">4.1.</span> defpackage</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 See <a href="#defpackage">defpackage</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-org53b988f" class="outline-3">
-<h3 id="org53b988f"><span class="section-number-3">4.2.</span> make-package</h3>
+<div id="outline-container-orge0ec734" class="outline-3">
+<h3 id="orge0ec734"><span class="section-number-3">4.2.</span> make-package</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 See <a href="#make-package">make-package</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-org1a152b0" class="outline-3">
-<h3 id="org1a152b0"><span class="section-number-3">4.3.</span> find-package</h3>
+<div id="outline-container-org5c32cfe" class="outline-3">
+<h3 id="org5c32cfe"><span class="section-number-3">4.3.</span> find-package</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
-When argument to <code>find-package</code> is a <i>local nickname</i> that is defined in
-the <i>current package</i>, it returns the package named by this nickname.
+When argument to <code>find-package</code> is a <i>local nickname</i> that is defined in the
+<i>current package</i>, it returns the package named by this nickname.
 </p>
 
 <p>
-This also affects all implied calls to <code>find-package</code>, including but not
-limited to those performed by the lisp reader as well as those performed
-by <code>export</code>, <code>find-symbol</code>, <code>import</code>, <code>rename-package</code>, <code>shadow</code>,
-<code>shadowing-import</code>, <code>delete-package</code>, <code>with-package-iterator</code>, <code>unexport</code>,
-<code>unintern</code>, <code>in-package</code>, <code>unuse-package</code>, <code>use-package</code>, <code>do-symbols</code>,
-<code>do-external-symbols</code>, <code>do-all-symbols</code>, <code>intern</code>, <code>package-name</code>,
-<code>package-nicknames</code>, <code>package-shadowing-symbols</code>, <code>package-use-list</code>,
-<code>package-used-by-list</code>.
+This also affects all implied calls to <code>find-package</code>, including but not limited
+to those performed by the lisp reader as well as those performed by <code>export</code>,
+<code>find-symbol</code>, <code>import</code>, <code>rename-package</code>, <code>shadow</code>, <code>shadowing-import</code>,
+<code>delete-package</code>, <code>with-package-iterator</code>, <code>unexport</code>, <code>unintern</code>, <code>in-package</code>,
+<code>unuse-package</code>, <code>use-package</code>, <code>do-symbols</code>, <code>do-external-symbols</code>,
+<code>do-all-symbols</code>, <code>intern</code>, <code>package-name</code>, <code>package-nicknames</code>,
+<code>package-shadowing-symbols</code>, <code>package-use-list</code>, <code>package-used-by-list</code>.
 </p>
 
 <p>
 <code>add-package-local-nickname</code>, <code>remove-package-local-nickname</code>,
-<code>package-local-nicknames</code> and <code>package-locally-nicknamed-by</code> are also
-affected.
+<code>package-local-nicknames</code> and <code>package-locally-nicknamed-by</code> are also affected.
 </p>
 
 <p>
-There are two exceptions: <code>make-package</code> and <code>defpackage</code> must <b>not</b> be
-affected by <i>local nicknames</i> of the <i>current package</i>.
+(<b>PROPOSAL</b>: see Issue 8.)
+</p>
+
+<p>
+The only exception is the <code>format</code>'s <i>tilde slash</i> directive, which should <b>not</b>
+use <i>local nicknames</i> of any package when looking up the symbol specified.
 </p>
 </div>
 </div>
-<div id="outline-container-org6d143d4" class="outline-3">
-<h3 id="org6d143d4"><span class="section-number-3">4.4.</span> rename-package</h3>
+<div id="outline-container-org7a57717" class="outline-3">
+<h3 id="org7a57717"><span class="section-number-3">4.4.</span> rename-package</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
-When a package is renamed via <code>rename-package</code> it maintains all <i>local
-nicknames</i> it is nicknamed by, as well as all <i>local nicknames</i> it has
-defined.
+When a package is renamed with <code>rename-package</code> it maintains all <i>local nicknames</i>
+it is nicknamed by, as well as all <i>local nicknames</i> it has defined.
 </p>
 </div>
-<div id="outline-container-orgbdf1da6" class="outline-4">
-<h4 id="orgbdf1da6"><span class="section-number-4">4.4.1.</span> Implementation dependent</h4>
+<div id="outline-container-org41da172" class="outline-4">
+<h4 id="org41da172"><span class="section-number-4">4.4.1.</span> Implementation dependent</h4>
 <div class="outline-text-4" id="text-4-4-1">
 <p>
-<b>PROPOSAL</b> (See Issue 4.)
+(<b>PROPOSAL</b>: see Issue 5.)
 </p>
 
 <p>
-If a <i>new-name</i> or one of <i>new-nicknames</i> is shadowed by one of the <i>local
+If the <i>new-name</i> or one of the <i>new-nicknames</i> is shadowed by one of the <i>local
 nicknames</i> of the package being redefined, a warning might be signaled.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org9380b88" class="outline-3">
-<h3 id="org9380b88"><span class="section-number-3">4.5.</span> delete-package</h3>
+<div id="outline-container-orgb0836b6" class="outline-3">
+<h3 id="orgb0836b6"><span class="section-number-3">4.5.</span> delete-package</h3>
 <div class="outline-text-3" id="text-4-5">
 <p>
-When a package is deleted via <code>delete-package</code> all <i>local nicknames</i>
-defined in other packages that it was nicknamed by must be removed, as well
-as all <i>local nicknames</i> defined in the package that is being deleted.
+When a package is deleted with <code>delete-package</code> all <i>local nicknames</i> defined in
+other packages that it was nicknamed by must be removed, as well as all <i>local
+nicknames</i> defined in the package that is being deleted.
 </p>
 
 <p>
-This also means that a deleted package must not be available by calls to
+This also means that a deleted package must not be available via calls to
 <code>package-locally-nicknamed-by-list</code> and <code>package-local-nicknames</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org0971f35" class="outline-3">
-<h3 id="org0971f35"><span class="section-number-3">4.6.</span> \*features\*</h3>
+<div id="outline-container-orgcfb0aa4" class="outline-3">
+<h3 id="orgcfb0aa4"><span class="section-number-3">4.6.</span> format</h3>
 <div class="outline-text-3" id="text-4-6">
+<p>
+See Issue 8.
+</p>
+</div>
+</div>
+<div id="outline-container-org217f84e" class="outline-3">
+<h3 id="org217f84e"><span class="section-number-3">4.7.</span> \*features\*</h3>
+<div class="outline-text-3" id="text-4-7">
 <p>
 If an implementation supports package-local nicknames it should add symbols
 <code>:package-local-nicknames</code> and <code>:cdr-15</code> (per CDR 14) to <code>*features*</code>.
@@ -739,8 +752,8 @@ If an implementation supports package-local nicknames it should add symbols
 </div>
 </div>
 </div>
-<div id="outline-container-org2ecf6fc" class="outline-2">
-<h2 id="org2ecf6fc"><span class="section-number-2">5.</span> Examples</h2>
+<div id="outline-container-org2b8c857" class="outline-2">
+<h2 id="org2b8c857"><span class="section-number-2">5.</span> Examples</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 [TODO]
@@ -750,7 +763,7 @@ If an implementation supports package-local nicknames it should add symbols
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Grolter Bell</p>
-<p class="date">Created: 2024-07-05 Fri 09:32</p>
+<p class="date">Created: 2024-07-05 Fri 12:57</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

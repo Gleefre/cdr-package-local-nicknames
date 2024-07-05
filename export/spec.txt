@@ -46,7 +46,7 @@ Grolter Bell
 ═════════════
 
   /Package-local nickname/ (or /local nickname/) has the same effects as
-  a normal /package nickname/ (later /global nickname/), except that
+  a usual /package nickname/ (later /global nickname/), except that
   these effects only apply when `*package*' is bound to a package for
   which the nickname has been defined.
 
@@ -58,8 +58,8 @@ Grolter Bell
   performed by the lisp reader.
 
   In addition, to maintain *print-read* consistency, the lisp printer is
-  affected by /local nicknames/ defined in the /current package/, for
-  details see PRINT-READ consistency.
+  affected by /local nicknames/ defined in the /current package/.  For
+  details see Issue 2.
 
   /Local nickname/ is allowed to shadow a /package name/ or a /global
   nickname/, except for the names `#:CL', `#:COMMON-LISP' and
@@ -114,7 +114,7 @@ Grolter Bell
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   The behaviour is unspecified when a /local nickname/ is specified for
-  the package that is being defined.
+  the package that is being defined. (See Issue 4.)
 
   The behaviour is unspecified when supplied /local nicknames/ are at
   variance with the current state of the package that is being
@@ -125,8 +125,10 @@ Grolter Bell
 3.2 make-package
 ────────────────
 
-  `make-package' lambda list is extended to include an additional key
-  parameter: `local-nicknames'.
+  (*PROPOSAL*: see Issue 6.)
+
+  `make-package' lambda list is extended to include an additional
+  keyword argument `:local-nicknames':
   ┌────
   │ local-nicknames ::= ((nickname package)*)
   └────
@@ -137,8 +139,6 @@ Grolter Bell
   `local-nicknames' must be a /list/ each element of which must be a
   /list/ of form `(nickname package)'. Specifies /local nicknames/ in
   the new /package/.
-
-  See also Issue 6.
 
 
 3.2.1 Arguments and Values:
@@ -170,7 +170,7 @@ Grolter Bell
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   The behaviour is unspecified when a /local nickname/ is specified for
-  the package that is being defined.
+  the package that is being defined. (See Issue 4.)
 
 
 3.3 add-package-local-nickname
@@ -186,7 +186,8 @@ Grolter Bell
   Adds a /package-local nickname/ `nickname' for the `actual-package' in
   the `designated-package'.
 
-  Returns the package designated by `designated-package'.
+  Returns the package designated by `designated-package'. (But also see
+  Issue 1.)
 
   If a /nickname/ is already defined, checks that it is defined for the
   package designated by `actual-package'.
@@ -220,7 +221,10 @@ Grolter Bell
 3.3.3 Implementation dependent
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  *PROPOSAL* (See Issue 4.)
+  The consequences are undefined when `designated-package' designates
+  one of the packages `#:COMMON-LISP' or `#:KEYWORD'.
+
+  (*PROPOSAL*: see Issue 5.)
 
   If `nickname' shadows the `designated-package''s /package name/ or one
   of its /global nicknames/, a style warning might signaled.
@@ -239,8 +243,8 @@ Grolter Bell
   If `designated-package' has `old-nickname' as a /local nickname/, it
   is removed.
 
-  Returns /true/ if the `old-nickname' existed (and was removed), and
-  `NIL' otherwise.
+  Returns /true/ if the `old-nickname' existed and was removed, and
+  `NIL' otherwise. (But also see Issue 1.)
 
 
 3.4.1 Arguments and Values
@@ -266,14 +270,11 @@ Grolter Bell
   ┌────
   │ (package-local-nicknames package)
   │   => local-nicknames-alist
+  │ local-nicknames-alist ::= ((nickname . package)*)
   └────
 
-  Returns an /alist/ describing local nicknames defined in a package
+  Returns an /alist/ describing /local nicknames/ defined in the package
   designated by `package'.
-
-  Each cons cell in `local-nicknames-alist' is of the form `(nickname
-  . package)' where `nickname' is of type /string/ and `package' is of
-  type /package/.
 
 
 3.5.1 Arguments and Values
@@ -283,6 +284,10 @@ Grolter Bell
 
   `local-nicknames-alist' is an /alist/ with keys of type /string/ and
   values of type /package/.
+
+  `nickname' must be a /string/.
+
+  `package' must be a /package/.
 
 
 3.5.2 Exceptional situations
@@ -373,41 +378,50 @@ Grolter Bell
   `package-local-nicknames' and `package-locally-nicknamed-by' are also
   affected.
 
-  There are two exceptions: `make-package' and `defpackage' must *not*
-  be affected by /local nicknames/ of the /current package/.
+  (*PROPOSAL*: see Issue 8.)
+
+  The only exception is the `format''s /tilde slash/ directive, which
+  should *not* use /local nicknames/ of any package when looking up the
+  symbol specified.
 
 
 4.4 rename-package
 ──────────────────
 
-  When a package is renamed via `rename-package' it maintains all /local
-  nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
-  defined.
+  When a package is renamed with `rename-package' it maintains all
+  /local nicknames/ it is nicknamed by, as well as all /local nicknames/
+  it has defined.
 
 
 4.4.1 Implementation dependent
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  *PROPOSAL* (See Issue 4.)
+  (*PROPOSAL*: see Issue 5.)
 
-  If a /new-name/ or one of /new-nicknames/ is shadowed by one of the
-  /local nicknames/ of the package being redefined, a warning might be
-  signaled.
+  If the /new-name/ or one of the /new-nicknames/ is shadowed by one of
+  the /local nicknames/ of the package being redefined, a warning might
+  be signaled.
 
 
 4.5 delete-package
 ──────────────────
 
-  When a package is deleted via `delete-package' all /local nicknames/
+  When a package is deleted with `delete-package' all /local nicknames/
   defined in other packages that it was nicknamed by must be removed, as
   well as all /local nicknames/ defined in the package that is being
   deleted.
 
-  This also means that a deleted package must not be available by calls
+  This also means that a deleted package must not be available via calls
   to `package-locally-nicknamed-by-list' and `package-local-nicknames'.
 
 
-4.6 \*features\*
+4.6 format
+──────────
+
+  See Issue 8.
+
+
+4.7 \*features\*
 ────────────────
 
   If an implementation supports package-local nicknames it should add
