@@ -11,6 +11,9 @@
 
 [THIS IS A DRAFT]
 
+* Specification
+  #+INCLUDE: "./spec.org" :only-contents t
+  [[./spec.org][Specification]]
 * ISSUES
   :PROPERTIES:
   :CUSTOM_ID: issues
@@ -33,9 +36,6 @@
   #+INCLUDE: "./issues/7.org" :only-contents t
   #+INCLUDE: "./issues/8.org" :only-contents t
   #+INCLUDE: "./issues/9.org" :only-contents t
-* Specification
-  #+INCLUDE: "./spec.org" :only-contents t
-  [[./spec.org][Specification]]
 * Links
   3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
 
