@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:29
+% Created 2024-07-05 Fri 19:54
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,9 +28,9 @@
 \maketitle
 
 \section{Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)}
-\label{sec:org93e2b52}
+\label{sec:orgc9d8283}
 \subsection{Description}
-\label{sec:orgfaf5731}
+\label{sec:org6c6268c}
 Return values of \texttt{add-package-local-nickname} and \texttt{remove-package-local-nickname}
 are inconsistent. The first one always returns \emph{designated package}, while the
 second one returns \emph{true} (generalized boolean) if a nickname was removed.
@@ -38,7 +38,7 @@ second one returns \emph{true} (generalized boolean) if a nickname was removed.
 Moreover, there is no consensus among current implementations as to what the second
 function (\texttt{remove-package-local-nickname}) should return.
 \subsection{Examples}
-\label{sec:org02b218f}
+\label{sec:org571c3c8}
 \begin{verbatim}
 (defpackage #:foo (:use))
 (defpackage #:bar (:use))
@@ -55,7 +55,7 @@ function (\texttt{remove-package-local-nickname}) should return.
 ; => NIL  (sbcl, ccl, ecl, acl, abcl, clasp, lispworks)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org57f017e}
+\label{sec:org0710ab0}
 sbcl, ccl, ecl, acl, abcl, clasp, lispworks:
   \texttt{add-package-local-nickname} always returns \emph{designated package}.
 
@@ -71,7 +71,7 @@ abcl:
 lispworks:
   \texttt{remove-package-local-nickname} always returns \texttt{NIL}.
 \subsection{Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL}
-\label{sec:org02f8971}
+\label{sec:org335dc3d}
 \begin{itemize}
 \item \texttt{add-package-local-nickname} should return \emph{designated package} if a new nickname
 was added and \texttt{NIL} otherwise, if the nickname already existed.
@@ -79,16 +79,16 @@ was added and \texttt{NIL} otherwise, if the nickname already existed.
 was removed and \texttt{NIL} otherwise.
 \end{itemize}
 \subsection{Proposal ALWAYS-T}
-\label{sec:orgbb649c0}
+\label{sec:orgd55c132}
 Similar to \texttt{use-package} and \texttt{unuse-package}:
 \begin{itemize}
 \item \texttt{add-package-local-nickname} should always return \texttt{T}.
 \item \texttt{remove-package-local-nickname} should always return \texttt{T}.
 \end{itemize}
-\subsection{Proposal ELIMINATE-GENERALIZED\textsubscript{BOOLEAN}}
-\label{sec:org917c0df}
+\subsection{Proposal ELIMINATE-GENERALIZED-BOOLEAN}
+\label{sec:org5cca898}
 \begin{itemize}
-\item \texttt{add-package-local-nickname} should alwyas return \emph{designated package}.
+\item \texttt{add-package-local-nickname} should always return \emph{designated package}.
 \item \texttt{remove-package-local-nickname} should return \texttt{T} if a nickname was removed and
 \texttt{NIL} otherwise.
 \end{itemize}

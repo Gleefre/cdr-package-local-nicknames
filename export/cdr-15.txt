@@ -37,7 +37,7 @@ Table of Contents
 ..... 3. Current behavior
 ..... 4. Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
 ..... 5. Proposal ALWAYS-T
-..... 6. Proposal ELIMINATE-GENERALIZED_BOOLEAN
+..... 6. Proposal ELIMINATE-GENERALIZED-BOOLEAN
 .. 2. Issue 2 (PRINT-READ consistency)
 ..... 1. Description
 ..... 2. Examples
@@ -93,10 +93,8 @@ Table of Contents
 1 Specification
 ═══════════════
 
-  [Specification]
 
 
-[Specification] <./spec.org>
 
 1.1 Introduction
 ────────────────
@@ -543,35 +541,8 @@ Table of Contents
 2 ISSUES
 ════════
 
-  [Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)] [Issue
-  2 (PRINT-READ consistency)] [Issue 3 (Local nicknames effect on
-  DEFPACKAGE, MAKE-PACKAGE and others)] [Issue 4 (Local nicknames of the
-  package being defined)] [Issue 5 (Local nickname shadowing package's
-  own name)] [Issue 6 (Additional keyword argument to MAKE-PACKAGE)]
-  [Issue 7 (Multiple local nicknames)] [Issue 8 (Interaction with
-  FORMAT)] [Issue 9 (Empty package local name)]
 
 
-[Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)]
-<./issues/1.org>
-
-[Issue 2 (PRINT-READ consistency)] <./issues/2.org>
-
-[Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and
-others)] <./issues/3.org>
-
-[Issue 4 (Local nicknames of the package being defined)]
-<./issues/4.org>
-
-[Issue 5 (Local nickname shadowing package's own name)] <./issues/5.org>
-
-[Issue 6 (Additional keyword argument to MAKE-PACKAGE)] <./issues/6.org>
-
-[Issue 7 (Multiple local nicknames)] <./issues/7.org>
-
-[Issue 8 (Interaction with FORMAT)] <./issues/8.org>
-
-[Issue 9 (Empty package local name)] <./issues/9.org>
 
 2.1 Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
 ────────────────────────────────────────────────────────────────
@@ -643,10 +614,10 @@ others)] <./issues/3.org>
   • `remove-package-local-nickname' should always return `T'.
 
 
-2.1.6 Proposal ELIMINATE-GENERALIZED_BOOLEAN
+2.1.6 Proposal ELIMINATE-GENERALIZED-BOOLEAN
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  • `add-package-local-nickname' should alwyas return /designated
+  • `add-package-local-nickname' should always return /designated
     package/.
   • `remove-package-local-nickname' should return `T' if a nickname was
     removed and `NIL' otherwise.

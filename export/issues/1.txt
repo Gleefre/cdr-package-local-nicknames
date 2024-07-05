@@ -78,10 +78,10 @@
   • `remove-package-local-nickname' should always return `T'.
 
 
-1.6 Proposal ELIMINATE-GENERALIZED_BOOLEAN
+1.6 Proposal ELIMINATE-GENERALIZED-BOOLEAN
 ──────────────────────────────────────────
 
-  • `add-package-local-nickname' should alwyas return /designated
+  • `add-package-local-nickname' should always return /designated
     package/.
   • `remove-package-local-nickname' should return `T' if a nickname was
     removed and `NIL' otherwise.
