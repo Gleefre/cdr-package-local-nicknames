@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 5 (Local nickname shadowing package's own name)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-5
+  :END:
 ** Description
    It is not clear whether it is valid to have a /local nickname/ in a package
    shadowing its own name or nickname.

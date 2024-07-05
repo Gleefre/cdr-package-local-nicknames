@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-1
+  :END:
 ** Description
    Return values of ~add-package-local-nickname~ and ~remove-package-local-nickname~
    are inconsistent. The first one always returns /designated package/, while the

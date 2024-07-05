@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 9 (Empty package local name)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-9
+  :END:
 ** Description
    It is not clear whether it should be allowed to use ~""~ as a local nickname,
    and in the case this is allowed, whether it should affect the ~:xxxx~ syntax.

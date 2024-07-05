@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-3
+  :END:
 ** Description
    It is not clear whether /local nicknames/ of the /current package/ should affect
    the resolution of package designators provided in ~make-package~ and ~defpackage~,

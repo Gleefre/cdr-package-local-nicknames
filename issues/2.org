@@ -3,7 +3,7 @@
 
 * Issue 2 (PRINT-READ consistency)
   :PROPERTIES:
-  :CUSTOM_ID: print-read-consistency
+  :CUSTOM_ID: issue-2
   :END:
 ** Description
    Lisp reader uses ~find-package~ when reading a symbol, which is affected by the

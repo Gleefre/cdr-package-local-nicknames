@@ -2,6 +2,9 @@
 #+latex_header: \usepackage[margin=1in]{geometry}
 
 * Issue 8 (Interaction with FORMAT)
+  :PROPERTIES:
+  :CUSTOM_ID: issue-8
+  :END:
   /by |3b|/
 ** Description
    It is not clear how /local nicknames/ should affect ~format~'s ~\~//~ directive.

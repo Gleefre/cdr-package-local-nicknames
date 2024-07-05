@@ -20,27 +20,26 @@
 
    [TODO] This CDR also aims to provide an extensive test suite for this extension.
 * Description
-  /Package-local nickname/ (or /local nickname/) has the same effects as a
-  normal /package nickname/ (later /global nickname/), except that these
-  effects only apply when ~*package*~ is bound to a package for which the
-  nickname has been defined.
+  /Package-local nickname/ (or /local nickname/) has the same effects as a usual
+  /package nickname/ (later /global nickname/), except that these effects only apply
+  when ~*package*~ is bound to a package for which the nickname has been defined.
 
-  That means that calls to ~find-package~ with a /local nickname/ defined in
-  the /current package/ should return the package nicknamed by this nickname.
+  That means that calls to ~find-package~ with a /local nickname/ defined in the
+  /current package/ should return the package nicknamed by this nickname.
 
-  This also affects all implied calls to ~find-package~, including those
-  performed by the lisp reader.
+  This also affects all implied calls to ~find-package~, including those performed by
+  the lisp reader.
 
-  In addition, to maintain *print-read* consistency, the lisp printer is
-  affected by /local nicknames/ defined in the /current package/, for details
-  see [[#print-read-consistency][PRINT-READ consistency]].
+  In addition, to maintain *print-read* consistency, the lisp printer is affected by
+  /local nicknames/ defined in the /current package/.
+  For details see [[#issue-2][Issue 2]].
 
-  /Local nickname/ is allowed to shadow a /package name/ or a /global
-  nickname/, except for the names ~#:CL~, ~#:COMMON-LISP~ and ~#:KEYWORD~
-  which should always refer to their packages.
+  /Local nickname/ is allowed to shadow a /package name/ or a /global nickname/,
+  except for the names ~#:CL~, ~#:COMMON-LISP~ and ~#:KEYWORD~ which should always
+  refer to their packages.
 
-  The consequences of adding /local nicknames/ to the packages
-  ~#:COMMON-LISP~ and ~#:KEYWORD~ are undefined.
+  The consequences of adding /local nicknames/ to the packages ~#:COMMON-LISP~ and
+  ~#:KEYWORD~ are undefined.
 * API
 ** defpackage
    :PROPERTIES:
@@ -49,8 +48,7 @@
    ~defpackage~ options are extended to include /local-nicknames-option/:
    : local-nicknames-option ::= (:local-nicknames (nickname package)*)
 
-   Each pair specifies a /local nickname/ ~nickname~ for the corresponding
-   ~package~.
+   Each pair specifies a /local nickname/ ~nickname~ for the corresponding ~package~.
 
    This option may appear more than once.
 *** Arguments and Values:
@@ -66,28 +64,27 @@
 
     See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
 *** Implementation dependent
-    The behaviour is unspecified when a /local nickname/ is specified for the
-    package that is being defined.
+    The behaviour is unspecified when a /local nickname/ is specified for the package
+    that is being defined. (See [[#issue-4][Issue 4]].)
 
-    The behaviour is unspecified when supplied /local nicknames/ are at
-    variance with the current state of the package that is being defined. An
-    implementation might choose to remove all present /local nicknames/ at
-    the begining of each redefinition of the package.
+    The behaviour is unspecified when supplied /local nicknames/ are at variance with
+    the current state of the package that is being defined. An implementation might
+    choose to remove all present /local nicknames/ at the begining of each
+    redefinition of the package.
 ** make-package
    :PROPERTIES:
    :CUSTOM_ID: make-package
    :END:
-   ~make-package~ lambda list is extended to include an additional key
-   parameter: ~local-nicknames~.
+   (*PROPOSAL*: see [[#issue-6][Issue 6]].)
+
+   ~make-package~ lambda list is extended to include an additional keyword argument
+   ~:local-nicknames~:
    : local-nicknames ::= ((nickname package)*)
 
    ~local-nicknames~ defaults to an /empty list/.
 
-   ~local-nicknames~ must be a /list/ each element of which must be a /list/
-   of form ~(nickname package)~. Specifies /local nicknames/ in the new
-   /package/.
-
-   See also [[#issue-6][Issue 6]].
+   ~local-nicknames~ must be a /list/ each element of which must be a /list/ of form
+   ~(nickname package)~. Specifies /local nicknames/ in the new /package/.
 *** Arguments and Values:
     ~local-nicknames~ must be a a /list/ of pairs ~(nickname package)~.
 
@@ -103,8 +100,8 @@
 
     See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
 *** Implementation dependent
-    The behaviour is unspecified when a /local nickname/ is specified for the
-    package that is being defined.
+    The behaviour is unspecified when a /local nickname/ is specified for the package
+    that is being defined. (See [[#issue-4][Issue 4]].)
 ** add-package-local-nickname
    : (add-package-local-nickname nickname actual-package &optional designated-package)
    :   => designated-package-object
@@ -113,10 +110,10 @@
    Adds a /package-local nickname/ ~nickname~ for the ~actual-package~ in the
    ~designated-package~.
 
-   Returns the package designated by ~designated-package~.
+   Returns the package designated by ~designated-package~. (But also see [[#issue-1][Issue 1]].)
 
-   If a /nickname/ is already defined, checks that it is defined for the
-   package designated by ~actual-package~.
+   If a /nickname/ is already defined, checks that it is defined for the package
+   designated by ~actual-package~.
 *** Arguments and Values
     ~nickname~ must be a /string designator/.
 
@@ -127,7 +124,6 @@
     :PROPERTIES:
     :CUSTOM_ID: exceptional-situations
     :END:
-
     If a package designated by ~actual-package~ or a package designated by
     ~designated-package~ does not exists, an error of type /package-error/
     must be signaled.
@@ -138,20 +134,22 @@
     If ~nickname~ is a /local nickname/ for a package different from
     ~actual-package~, an error of type /package-error/ must be signaled.
 *** Implementation dependent
-    *PROPOSAL* (See [[#issue-4][Issue 4]].)
+    The consequences are undefined when ~designated-package~ designates one of the
+    packages ~#:COMMON-LISP~ or ~#:KEYWORD~.
 
-    If ~nickname~ shadows the ~designated-package~'s /package name/ or one of
-    its /global nicknames/, a style warning might signaled.
+    (*PROPOSAL*: see [[#issue-5][Issue 5]].)
+
+    If ~nickname~ shadows the ~designated-package~'s /package name/ or one of its
+    /global nicknames/, a style warning might signaled.
 ** remove-package-local-nickname
    : (remove-package-local-nickname old-nickname &optional designated-package)
    :   => nickname-removed-p
    ~designated-package~ defaults to the /current package/.
 
-   If ~designated-package~ has ~old-nickname~ as a /local nickname/, it is
-   removed.
+   If ~designated-package~ has ~old-nickname~ as a /local nickname/, it is removed.
 
-   Returns /true/ if the ~old-nickname~ existed (and was removed), and ~NIL~
-   otherwise.
+   Returns /true/ if the ~old-nickname~ existed and was removed, and ~NIL~
+   otherwise. (But also see [[#issue-1][Issue 1]].)
 *** Arguments and Values
     ~old-nickname~ must be a /string designator/.
 
@@ -159,22 +157,23 @@
 
     ~nickname-removed-p~ is a /generalized boolean/.
 *** Exceptional situations
-    If a package designated by ~designated-package~ does not exists, an error of
-    type /package-error/ must be signaled.
+    If a package designated by ~designated-package~ does not exists, an error of type
+    /package-error/ must be signaled.
 ** package-local-nicknames
    : (package-local-nicknames package)
    :   => local-nicknames-alist
-   Returns an /alist/ describing local nicknames defined in a package
-   designated by ~package~.
-
-   Each cons cell in ~local-nicknames-alist~ is of the form ~(nickname . package)~
-   where ~nickname~ is of type /string/ and ~package~ is of type
-   /package/.
+   : local-nicknames-alist ::= ((nickname . package)*)
+   Returns an /alist/ describing /local nicknames/ defined in the package designated
+   by ~package~.
 *** Arguments and Values
     ~package~ must be a /package designator/.
 
-    ~local-nicknames-alist~ is an /alist/ with keys of type /string/ and
-    values of type /package/.
+    ~local-nicknames-alist~ is an /alist/ with keys of type /string/ and values of
+    type /package/.
+
+    ~nickname~ must be a /string/.
+
+    ~package~ must be a /package/.
 *** Exceptional situations
     An error of type ~package-error~ is signaled when a package designated by
     ~package~ does not exists.
@@ -183,8 +182,8 @@
 ** package-locally-nicknamed-by-list
    : (package-locally-nicknamed-by-list package)
    :   => packages-list
-   Returns a /list/ of packages that have a /local nickname/ defined for the
-   package designated by ~package~.
+   Returns a /list/ of packages that have a /local nickname/ defined for the package
+   designated by ~package~.
 *** Arguments and Values
     ~package~ must be a /package designator/.
 
@@ -200,40 +199,41 @@
 ** make-package
    See [[#make-package][make-package]].
 ** find-package
-   When argument to ~find-package~ is a /local nickname/ that is defined in
-   the /current package/, it returns the package named by this nickname.
+   When argument to ~find-package~ is a /local nickname/ that is defined in the
+   /current package/, it returns the package named by this nickname.
 
-   This also affects all implied calls to ~find-package~, including but not
-   limited to those performed by the lisp reader as well as those performed
-   by ~export~, ~find-symbol~, ~import~, ~rename-package~, ~shadow~,
-   ~shadowing-import~, ~delete-package~, ~with-package-iterator~, ~unexport~,
-   ~unintern~, ~in-package~, ~unuse-package~, ~use-package~, ~do-symbols~,
-   ~do-external-symbols~, ~do-all-symbols~, ~intern~, ~package-name~,
-   ~package-nicknames~, ~package-shadowing-symbols~, ~package-use-list~,
-   ~package-used-by-list~.
+   This also affects all implied calls to ~find-package~, including but not limited
+   to those performed by the lisp reader as well as those performed by ~export~,
+   ~find-symbol~, ~import~, ~rename-package~, ~shadow~, ~shadowing-import~,
+   ~delete-package~, ~with-package-iterator~, ~unexport~, ~unintern~, ~in-package~,
+   ~unuse-package~, ~use-package~, ~do-symbols~, ~do-external-symbols~,
+   ~do-all-symbols~, ~intern~, ~package-name~, ~package-nicknames~,
+   ~package-shadowing-symbols~, ~package-use-list~, ~package-used-by-list~.
 
    ~add-package-local-nickname~, ~remove-package-local-nickname~,
-   ~package-local-nicknames~ and ~package-locally-nicknamed-by~ are also
-   affected.
+   ~package-local-nicknames~ and ~package-locally-nicknamed-by~ are also affected.
 
-   There are two exceptions: ~make-package~ and ~defpackage~ must *not* be
-   affected by /local nicknames/ of the /current package/.
+   (*PROPOSAL*: see [[#issue-8][Issue 8]].)
+
+   The only exception is the ~format~'s /tilde slash/ directive, which should *not*
+   use /local nicknames/ of any package when looking up the symbol specified.
 ** rename-package
-   When a package is renamed via ~rename-package~ it maintains all /local
-   nicknames/ it is nicknamed by, as well as all /local nicknames/ it has
-   defined.
+   When a package is renamed with ~rename-package~ it maintains all /local nicknames/
+   it is nicknamed by, as well as all /local nicknames/ it has defined.
 *** Implementation dependent
-    *PROPOSAL* (See [[#issue-4][Issue 4]].)
+    (*PROPOSAL*: see [[#issue-5][Issue 5]].)
 
-    If a /new-name/ or one of /new-nicknames/ is shadowed by one of the /local
+    If the /new-name/ or one of the /new-nicknames/ is shadowed by one of the /local
     nicknames/ of the package being redefined, a warning might be signaled.
 ** delete-package
-   When a package is deleted via ~delete-package~ all /local nicknames/
-   defined in other packages that it was nicknamed by must be removed, as well
-   as all /local nicknames/ defined in the package that is being deleted.
+   When a package is deleted with ~delete-package~ all /local nicknames/ defined in
+   other packages that it was nicknamed by must be removed, as well as all /local
+   nicknames/ defined in the package that is being deleted.
 
-   This also means that a deleted package must not be available by calls to
+   This also means that a deleted package must not be available via calls to
    ~package-locally-nicknamed-by-list~ and ~package-local-nicknames~.
+** format
+   See [[#issue-8][Issue 8]].
 ** \*features\*
     If an implementation supports package-local nicknames it should add symbols
     ~:package-local-nicknames~ and ~:cdr-15~ (per CDR 14) to ~*features*~.
