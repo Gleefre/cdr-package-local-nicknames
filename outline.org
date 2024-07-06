@@ -1,0 +1,32 @@
+#+title: PLN CDR draft: outline
+#+author: Gleefre
+#+email: varedif.a.s@gmail.com
+
+#+options: toc:nil
+#+language: en
+#+latex_header: \usepackage[margin=1in]{geometry}
+
+[THIS IS A DRAFT]
+
+* Specification
+  [[./spec.org][Specification]]
+* ISSUES
+  - [[./issues/1.org][Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)]]
+  - [[./issues/2.org][Issue 2 (PRINT-READ consistency)]]
+  - [[./issues/3.org][Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)]]
+  - [[./issues/4.org][Issue 4 (Local nicknames of the package being defined)]]
+  - [[./issues/5.org][Issue 5 (Local nickname shadowing package's own name)]]
+  - [[./issues/6.org][Issue 6 (Additional keyword argument to MAKE-PACKAGE)]]
+  - [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
+  - [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
+  - [[./issues/9.org][Issue 9 (Empty package local name)]]
+* Links
+  3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
+
+  phoe's [[https://github.com/phoe/trivial-package-local-nicknames][tests]].
+
+  SBCL's [[https://www.sbcl.org/manual/#Package_002dLocal-Nicknames][manual entry]].
+
+  Section 4.3 of the ABCL's manual. ([[https://github.com/armedbear/abcl/blob/master/doc/manual/abcl.tex#L1249][TeX file on github]])
+* Copying and License
+  [TODO]
