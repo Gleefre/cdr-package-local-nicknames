@@ -93,9 +93,6 @@ Table of Contents
 1 Specification
 ═══════════════
 
-
-
-
 1.1 Introduction
 ────────────────
 
@@ -556,9 +553,6 @@ Table of Contents
 
 2 ISSUES
 ════════
-
-
-
 
 2.1 Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
 ────────────────────────────────────────────────────────────────
