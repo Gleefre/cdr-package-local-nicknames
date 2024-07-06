@@ -28,5 +28,7 @@
   SBCL's [[https://www.sbcl.org/manual/#Package_002dLocal-Nicknames][manual entry]].
 
   Section 4.3 of the ABCL's manual. ([[https://github.com/armedbear/abcl/blob/master/doc/manual/abcl.tex#L1249][TeX file on github]])
+
+  Allegro CL's [[https://franz.com/support/documentation/11.0/packages.html#local-nicknames-1][documentation]].
 * Copying and License
   [TODO]
