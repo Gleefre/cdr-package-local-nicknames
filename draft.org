@@ -9,17 +9,17 @@
 [THIS IS A DRAFT]
 
 * Specification
-  #+INCLUDE: "./spec.org" :lines "6-"
+  #+INCLUDE: "./spec.org" :lines "8-"
 * ISSUES
-  #+INCLUDE: "./issues/1.org" :lines "6-"
-  #+INCLUDE: "./issues/2.org" :lines "6-"
-  #+INCLUDE: "./issues/3.org" :lines "6-"
-  #+INCLUDE: "./issues/4.org" :lines "6-"
-  #+INCLUDE: "./issues/5.org" :lines "6-"
-  #+INCLUDE: "./issues/6.org" :lines "6-"
-  #+INCLUDE: "./issues/7.org" :lines "6-"
-  #+INCLUDE: "./issues/8.org" :lines "6-"
-  #+INCLUDE: "./issues/9.org" :lines "6-"
+  #+INCLUDE: "./issues/1.org" :lines "8-"
+  #+INCLUDE: "./issues/2.org" :lines "8-"
+  #+INCLUDE: "./issues/3.org" :lines "8-"
+  #+INCLUDE: "./issues/4.org" :lines "8-"
+  #+INCLUDE: "./issues/5.org" :lines "8-"
+  #+INCLUDE: "./issues/6.org" :lines "8-"
+  #+INCLUDE: "./issues/7.org" :lines "8-"
+  #+INCLUDE: "./issues/8.org" :lines "8-"
+  #+INCLUDE: "./issues/9.org" :lines "8-"
 * Links
   3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
 
