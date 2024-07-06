@@ -10,36 +10,37 @@
   :CUSTOM_ID: issue-2
   :END:
 ** Description
-   Lisp reader uses ~find-package~ when reading a symbol, which is affected by the
+   The Lisp reader uses ~find-package~ when reading a symbol, which is affected by the
    /local nicknames/ of the /current package/. That means that to maintain *print-read*
    consistency when printing a symbol, a good /package prefix/ must be used - such that
-   calling ~find-package~ on it in the /current package/ returns the symbol's /home
-   package/.
+   calling ~find-package~ on it in the /current package/ returns the /home package/ of
+   the symbol.
 
    There are several situations to consider:
-   1. Symbol is /apparently uninterned/.
+   1. The symbol is /apparently uninterned/.
 
-      /In this case it must be printed without any package prefix, preceeded by ~#:~./
+      /In this case it is printed without the package prefix, using the uninterned
+      symbol syntax ~#:~./
 
-   2. Symbol is accessible in the /current package/.
+   2. The symbol is accessible in the /current package/.
 
-      /In this case it must be printed without any package prefix./
+      /In this case it is printed without any package prefix./
 
-   3. Symbol's /home package/ /name/ or one of its /global nicknames/ is not shadowed
-      by any /local nickname/ defined in the /current package/.
+   3. The /name/ or one of the /global nicknames/ of the /home package/ of the symbol
+      is not shadowed by any /local nickname/ defined in the /current package/.
 
-      /In this case that name or global nickname can be used as the package prefix./
+      /In this case that name or global nickname might be used as the package prefix./
 
-   4. There *exists* a /local nickname/ defined in the /current package/ for the
-      symbol's /home package/.
+   4. There exists a /local nickname/ defined in the /current package/ for the /home
+      package/ of the symbol.
 
-      /In this case that local nickname can be used as the package prefix./
+      /In this case that local nickname might be used as the package prefix./
 
-   5. Symbol's /home package/ /name/ and all of its /global nicknames/ are shadowed by
-      the /local nicknames/ of the /current package/ and there *is no* /local nickname/
-      defined in the /current package/ for the symbol's /home package/.
+   5. Both the /name/ and all /global nicknames/ of the /home package/ of the symbol
+      are shadowed by /local nicknames/ of the /current package/, and there is no
+      /local nickname/ defined in the /current package/ for the /home package/.
 
-      /It is not clear how the symbol must be printed, see PROPOSALS./
+      /It is not clear how the symbol is printed, see PROPOSALS./
 ** Examples
    #+BEGIN_SRC common-lisp
      (defpackage #:foo
@@ -75,13 +76,12 @@
    #+END_SRC
 ** Current behavior
    sbcl, ccl, abcl, lispworks:
-     When exists in the /current package/, a /local nickname/ is used as a package
-     prefix when printing a symbol.
+     When possible, a /local nickname/ is used as a package prefix.
 
    ecl, acl, clasp:
-     /local nickname/ is never used as a package prefix when printing a symbol.
+     /Local nicknames/ are never used as a package prefix.
 ** Proposal SHARPSIGN-DOT
-   In the case (5) the symbol must be printed using the ~#.~ syntax:
+   In the 5th case the symbol is printed using the ~#.~ syntax:
 
    #+BEGIN_SRC common-lisp
      #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
@@ -91,19 +91,19 @@
          (cl:intern "BAR" "FOO"))
    #+END_SRC
 
-   Note that ~#:KEYWORD~ name is reserved for the ~#:KEYWORD~ package and
-   cannot be used as a /local nickname/ thus this expression will always
-   evaluate to the symbol ~foo::bar~.
-
-   If ~*read-eval*~ is /false/ and ~*print-readably*~ is /true/ an error of type
-   ~print-not-readable~ must be signalled.
+   If ~*read-eval*~ is /false/ and ~*print-readably*~ is /true/, an error of type
+   ~print-not-readable~ is signaled.
+*** Note
+    Since ~#:KEYWORD~ cannot be used as a /local nickname/, and no /local nicknames/
+    can be defined in the ~#:KEYWORD~ package, this expression is guaranteed to
+    evaluate to the symbol in the correct package.
 ** Proposal SHARPSIGN-COLON
-   In case (5) the symbol should be printed using the /extended ~#:~ syntax/:
+   In the 5th case the symbol is printed using the /extended ~#:~ syntax/:
      : #:(package name)
      : #::(package name)
    /Shinmera's idea/.
 ** Proposal SHARPSIGN-BACKQUOTE
-   In case (5) the symbol must be printed using the new ~#`~ syntax for reading an
+   In the 5th case the symbol is printed using the new ~#`~ syntax for reading an
    expression ignoring /local nicknames/ in the /current package/:
      : #`foo:bar
      : #`foo::bar
@@ -122,18 +122,17 @@
 
      (set-dispatch-macro-character #\# #\` #'|#`-reader|)
    #+END_SRC
-   It is /implementation-dependent/ whether /local nicknames/ are actually removed
-   from the /current package/ or not.
+   It is /implementation-dependent/ whether /local nicknames/ are actually removed from
+   the /current package/ or not.
 ** Proposal PRINT-UNREADABLY
-   In the case (5) the symbol must be printed unreadably using the ~#<~ syntax:
+   In the 5th case the symbol is printed unreadably using the ~#<~ syntax:
      : #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
      : #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
    (Specifics are /implementation-dependent/.)
 
-   If ~*print-readably*~ is /true/, an error of type ~print-not-readable~ must be
-   signalled.
+   If ~*print-readably*~ is /true/, an error of type ~print-not-readable~ is signaled.
 ** Proposal THREE-FOUR-PACKAGE-MARKERS
-   In the case (5) the symbol must be printed using ~:::~ and ~::::~ syntax as follows:
+   In the 5th case the symbol is printed using the extended symbol token syntax:
    #+BEGIN_SRC common-lisp
      foo:::bar   ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
      foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package

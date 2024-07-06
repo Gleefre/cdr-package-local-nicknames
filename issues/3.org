@@ -11,9 +11,9 @@
   :END:
 ** Description
    It is not clear whether /local nicknames/ of the /current package/ should affect
-   the resolution of package designators provided in ~make-package~ and ~defpackage~,
-   as well as other functions and macros taking a package designator as an argument
-   (~in-package~, ~add-package-local-nickname~ and others).
+   the package lookup in operators that accept a package designator as an argument.
+   This mainly concerns ~make-package~ and ~defpackage~.
+   See also [[#issue-3-notes][Notes]].
 ** Examples
    #+BEGIN_SRC common-lisp
      (defpackage #:foo-a (:use) (:export #:x))
@@ -58,37 +58,42 @@
      ; => "FOO-B"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
    #+END_SRC
 ** Current behavior
-   sbcl, lispworks:
-     only ~:local-nicknames~ clause is *not* affected by /local nicknames/.
+   - ~defpackage~ and ~make-package~
+     sbcl, lispworks:
+       Only the ~:local-nicknames~ clause is *not* affected by /local nicknames/.
 
-   ccl, acl, abcl:
-     all options are affected.
+     ccl, acl, abcl:
+       All clauses and keyword arguments are affected.
 
-   ecl:
-     only the ~:local-nicknames~ clause and keyword arguments (~:use~ and
-     ~:local-nicknames~) are affected.
+     ecl:
+       Only the ~:local-nicknames~ clause and all keyword arguments (~:use~ and
+       ~:local-nicknames~) are affected.
 
-   clasp:
-     only keyword argument ~:use~ is affected.
+     clasp:
+       Only the keyword argument ~:use~ is affected.
+   - Known exceptions in other operators:
+     sbcl: ~add-package-local-nickname~ is not affected.
 
-   Known exceptions in other functions/macros:
-   sbcl: ~add-package-local-nickname~ is not affected.
-   lispworks: ~in-package~ is not affected.
+     lispworks: ~in-package~ is not affected.
 ** Proposal ALL-AFFECTED
-   All ~defpackage~ clauses (~:use~, ~:local-nicknames~, ~:import-from~,
-   ~:shadowing-import-from~) as well as all keyword arguments to ~make-package~
-   (~:use~ and ~:local-nicknames~) must be affected by the /local nicknames/ of the
-   /current package/.
+   All operators taking a package designator as an argument must be affected by
+   /local nicknames/ of the /current package/.
 
-   All functions and macros taking a package designator as an argument must be
-   affected as well.
-
-   A non-exhaustive list of affected functions and macros:
-     ~export~, ~find-symbol~, ~import~, ~rename-package~, ~shadow~,
-     ~shadowing-import~, ~delete-package~, ~with-package-iterator~, ~unexport~,
-     ~unintern~, ~in-package~, ~unuse-package~, ~use-package~, ~do-symbols~,
-     ~do-external-symbols~, ~do-all-symbols~, ~intern~, ~package-name~,
-     ~package-nicknames~, ~package-shadowing-symbols~, ~package-use-list~,
-     ~package-used-by-list~, ~add-package-local-nickname~,
+   In particular, all ~defpackage~ clauses (~:use~, ~:local-nicknames~,
+   ~:import-from~, ~:shadowing-import-from~) as well as all keyword arguments to
+   ~make-package~ (~:use~ and ~:local-nicknames~) must be affected.
+** Notes
+   :PROPERTIES:
+   :CUSTOM_ID: issue-3-notes
+   :END:
+   A non-exhaustive list of possibly affected by this issue operators:
+     ~defpackage~, ~make-package~, ~export~, ~find-symbol~, ~import~,
+     ~rename-package~, ~shadow~, ~shadowing-import~, ~delete-package~,
+     ~with-package-iterator~, ~unexport~, ~unintern~, ~in-package~, ~unuse-package~,
+     ~use-package~, ~do-symbols~, ~do-external-symbols~, ~do-all-symbols~, ~intern~,
+     ~package-name~, ~package-nicknames~, ~package-shadowing-symbols~,
+     ~package-use-list~, ~package-used-by-list~, ~add-package-local-nickname~,
      ~remove-package-local-nickname~, ~package-local-nicknames~,
      ~package-locally-nicknamed-by~.
+
+   ~format~ is *not* affected by this issue, see instead [[#issue-8][Issue 8]].

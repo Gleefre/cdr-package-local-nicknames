@@ -5,17 +5,27 @@
 #+options: toc:nil
 #+latex_header: \usepackage[margin=1in]{geometry}
 
-* Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
+* Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)
   :PROPERTIES:
   :CUSTOM_ID: issue-1
   :END:
 ** Description
-   Return values of ~add-package-local-nickname~ and ~remove-package-local-nickname~
-   are inconsistent. The first one always returns /designated package/, while the
-   second one returns /true/ (generalized boolean) if a nickname was removed.
+   Functions ~add-package-local-nickname~ and ~remove-package-local-nickname~ have
+   inconsistent return values.
 
-   Moreover, there is no consensus among current implementations as to what the second
-   function (~remove-package-local-nickname~) should return.
+   The first one always returns the /designated package/, while the second one
+   returns /true/ (a /generalized boolean/) that indicates whether a nickname was
+   removed.
+
+   Furthermore, there is no consensus among existing implementations as to what this
+   /generalized boolean/ represents.
+
+   In comparison,the functions ~use-package~ and ~unuse-package~ always return ~T~,
+   and the functions ~export~ and ~unexport~ have the same behavior. There are also
+   functions ~unintern~ and ~delete-package~ which return a /generalized boolean/
+   indicating if the operation changed something, but their counterparts ~intern~ and
+   ~make-package~, unlike with local nicknames, create and return an /object/ (a
+   /symbol/ or a /package/).
 ** Examples
    #+BEGIN_SRC common-lisp
      (defpackage #:foo (:use))
@@ -41,22 +51,30 @@
      and ~NIL~ otherwise.
 
    abcl:
-     ~remove-package-local-nickname~ if a nickname was removed, returns /true/ (more
-     specifically - the package that was nicknamed by that nickname), and ~NIL~
-     otherwise.
+     ~remove-package-local-nickname~ returns /true/ if a nickname was removed, (more
+     specifically, it returns the package nicknamed by the removed local nickname),
+     and ~NIL~ otherwise.
 
    lispworks:
      ~remove-package-local-nickname~ always returns ~NIL~.
-** Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
-   - ~add-package-local-nickname~ should return /designated package/ if a new nickname
-     was added and ~NIL~ otherwise, if the nickname already existed.
-   - ~remove-package-local-nickname~ should return /designated package/ if a nickname
-     was removed and ~NIL~ otherwise.
 ** Proposal ALWAYS-T
-   Similar to ~use-package~ and ~unuse-package~:
-   - ~add-package-local-nickname~ should always return ~T~.
-   - ~remove-package-local-nickname~ should always return ~T~.
+   ~add-package-local-nickname~ should always return ~T~.
+
+   ~remove-package-local-nickname~ should always return ~T~.
 ** Proposal ELIMINATE-GENERALIZED-BOOLEAN
-   - ~add-package-local-nickname~ should always return /designated package/.
-   - ~remove-package-local-nickname~ should return ~T~ if a nickname was removed and
-     ~NIL~ otherwise.
+   ~add-package-local-nickname~ should return the /designated package/.
+
+   ~remove-package-local-nickname~ should return ~T~ if a nickname was removed and
+   ~NIL~ otherwise.
+** Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
+   ~add-package-local-nickname~ should return the /designated package/ if a new
+   nickname was added, and ~NIL~ otherwise.
+
+   ~remove-package-local-nickname~ should return the /designated package/ if a
+   nickname was removed, and ~NIL~ otherwise.
+** Proposal NICKNAMED-PACKAGE-IF-SUCCESSFUL
+   ~add-package-local-nickname~ should return the /nicknamed package/ if a new
+   nickname was added, and ~NIL~ otherwise.
+
+   ~remove-package-local-nickname~ should return the previously /nicknamed package/
+   if a nickname was removed, and ~NIL~ otherwise.
