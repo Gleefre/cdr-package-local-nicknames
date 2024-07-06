@@ -9,8 +9,16 @@
   :PROPERTIES:
   :CUSTOM_ID: issue-6
   :END:
+** Descriptions
+   An additional keyword argument to ~make-package~ similar to the ~:use~ keyword
+   argument would be a nice feature. There are only two implementations introducing
+   this extension, unfortunately they use different API for this argument.
+
+   Possible questions:
+   - Does it accept an alist or a nested list?
+   - Is the default value implementation-dependent, or is it an empty list?
 ** Current behavior
-   sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+   sbcl, ccl, abcl, clasp, lispworks: no additional keyword argument.
 
    ecl: has an additional keyword argument ~:local-nicknames~, but it is undocumented
    and it segfaults on incorrect usage. The expected value is a list of conses:
@@ -18,12 +26,14 @@
 
    acl: has an additional keyword argument ~:local-nicknames~. The expected value is
    a list of lists: ~((nickname package)*)~.
-** Proposal EXTRA-KEYWORD-ARGUMENT
+** Proposal EXTRA-KEYWORD-ARGUMENT-LIST
    Add ~:local-nicknames~ keyword argument to ~make-package~:
      : local-nicknames ::= ((nickname package)*)
-   ~nickname~ must be a /string designator/.
-   ~package~ must be a /package designator/.
+
+   ~nickname~ --- a /string designator/.
+
+   ~package~ --- a /package designator/.
 
    ~local-nicknames~ defaults to an /empty list/.
-
+** Links
    See [[#make-package][make-package]].
