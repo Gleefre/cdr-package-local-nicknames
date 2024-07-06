@@ -82,7 +82,7 @@ Table of Contents
 ..... 3. Examples
 ..... 4. Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES
 ..... 5. Links
-.. 9. Issue 9 (Empty package local name)
+.. 9. Issue 9 (Empty string as a local name)
 ..... 1. Description
 ..... 2. Examples
 ..... 3. Current behavior
@@ -958,7 +958,7 @@ Table of Contents
     `remove-package-local-nickname', `package-local-nicknames',
     `package-locally-nicknamed-by'.
 
-  `format' is **not** affected by this issue, see instead [Issue 8].
+  `format' is *not* affected by this issue, see instead [Issue 8].
 
 
 [Issue 8] See section 2.8
@@ -1282,8 +1282,8 @@ Table of Contents
 <https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm>
 
 
-2.9 Issue 9 (Empty package local name)
-──────────────────────────────────────
+2.9 Issue 9 (Empty string as a local name)
+──────────────────────────────────────────
 
 2.9.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
@@ -1370,6 +1370,8 @@ Table of Contents
 
   Section 4.3 of the ABCL's manual. ([TeX file on github])
 
+  Allegro CL's [documentation].
+
 
 [notes]
 <https://github.com/3b/package-local-nicknames/blob/master/docs.org>
@@ -1381,6 +1383,9 @@ Table of Contents
 
 [TeX file on github]
 <https://github.com/armedbear/abcl/blob/master/doc/manual/abcl.tex#L1249>
+
+[documentation]
+<https://franz.com/support/documentation/11.0/packages.html#local-nicknames-1>
 
 
 4 Copying and License
