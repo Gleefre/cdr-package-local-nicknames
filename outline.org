@@ -19,7 +19,7 @@
   - [[./issues/6.org][Issue 6 (Additional keyword argument to MAKE-PACKAGE)]]
   - [[./issues/7.org][Issue 7 (Multiple local nicknames)]]
   - [[./issues/8.org][Issue 8 (Interaction with FORMAT)]]
-  - [[./issues/9.org][Issue 9 (Empty package local name)]]
+  - [[./issues/9.org][Issue 9 (Empty string as a local name)]]
 * Links
   3b's [[https://github.com/3b/package-local-nicknames/blob/master/docs.org][notes]] on package-local nicknames.
 
