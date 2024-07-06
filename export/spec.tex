@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:33
+% Created 2024-07-06 Sat 13:21
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,54 +28,53 @@
 \maketitle
 
 \section{Introduction}
-\label{sec:orged49c1b}
-This is a specification for the package-local nicknames extension in Common Lisp.
+\label{sec:orgb1e1bd5}
+This is a specification for the \texttt{Package-Local Nicknames} extension in Common Lisp.
 \subsection{Rationale}
-\label{sec:org3ac9dd8}
-Package-local nicknames allow to use short and easy-to-use names for packages
-locally without potentially introducing name conflict as with normal nicknames.
+\label{sec:org7058bee}
+Package-local nicknames make it possible to use short and easy-to-use names
+without potentially introducing name conflicts as can happen with usual nicknames.
 \subsection{Current state}
-\label{sec:orgeda2802}
+\label{sec:org53d26c0}
 Package-local nicknames are implemented in some form in \texttt{SBCL}, \texttt{CCL}, \texttt{ECL},
-\texttt{Clasp}, \texttt{ABCL}, \texttt{Allegro CL}, \texttt{LispWorks}. There also exists a pending PR for the
+\texttt{Clasp}, \texttt{ABCL}, \texttt{Allegro CL}, \texttt{LispWorks}. There is also a pending MR for the
 \texttt{CLISP} implementation.
 
-Unfortunately, there are multiple inconsistencies between implementations, all
-implementations lose the \textbf{print-read} consistency to some extent, and there are
-multiple edge cases that aren't always implemented correctly.
+Unfortunately, there are multiple inconsistencies between implementations. All of
+them lose \emph{print-read consistency} to some extent, and there are multiple edge
+cases that aren't always implemented correctly or in the same way.
 \subsection{Goal}
-\label{sec:org284158d}
-The purpose of this document is to standardize the package-local nicknames
+\label{sec:org87ec8e6}
+The purpose of this document is to standardize the \texttt{Package-Local Nicknames}
 extension and to address some existing issues.
 
-[TODO] This CDR also aims to provide an extensive test suite for this extension.
+[TODO] This CDR also aims to provide an extensive test suite for the extension.
 \section{Description}
-\label{sec:org82ea024}
-\emph{Package-local nickname} (or \emph{local nickname}) has the same effects as a usual
-\emph{package nickname} (later \emph{global nickname}), except that these effects only apply
-when \texttt{*package*} is bound to a package for which the nickname has been defined.
+\label{sec:orgb3c90cf}
+A \emph{package-local nickname} (or a \emph{local nickname}) defined in some \emph{designated
+package} has the same effects as a usual \emph{package nickname} (later referred to as a
+\emph{global nickname}), except that these effects only apply when \texttt{*package*} is bound
+to that \emph{designated package}.
 
-That means that calls to \texttt{find-package} with a \emph{local nickname} defined in the
-\emph{current package} should return the package nicknamed by this nickname.
+This means that a call to \texttt{find-package} with a \emph{local nickname} that is defined in
+the \emph{current package} returns the package nicknamed by this nickname. This also
+affects all implied calls to \texttt{find-package}, including those performed by the Lisp
+reader.
 
-This also affects all implied calls to \texttt{find-package}, including those performed by
-the lisp reader.
+In addition, to maintain \emph{print-read consistency}, the Lisp printer is affected by
+\emph{local nicknames} defined in the \emph{current package}.  For details see Issue 2.
 
-In addition, to maintain \textbf{print-read} consistency, the lisp printer is affected by
-\emph{local nicknames} defined in the \emph{current package}.
-For details see Issue 2.
-
-\emph{Local nickname} is allowed to shadow a \emph{package name} or a \emph{global nickname},
-except for the names \texttt{\#:CL}, \texttt{\#:COMMON-LISP} and \texttt{\#:KEYWORD} which should always
-refer to their packages.
-
-The consequences of adding \emph{local nicknames} to the packages \texttt{\#:COMMON-LISP} and
-\texttt{\#:KEYWORD} are undefined.
+A \emph{local nickname} is allowed to shadow a \emph{package name} or a \emph{global nickname},
+except for the names \texttt{\#:CL}, \texttt{\#:COMMON-LISP} and \texttt{\#:KEYWORD} which must always
+refer to their packages. The consequences of adding \emph{local nicknames} to the
+packages \texttt{\#:COMMON-LISP} and \texttt{\#:KEYWORD} are also undefined.
 \section{API}
-\label{sec:org72b40be}
+\label{sec:org84a03a1}
 \subsection{defpackage}
-\label{sec:orga7fab27}
-\texttt{defpackage} options are extended to include \emph{local-nicknames-option}:
+\label{sec:org1f38869}
+\subsubsection{Description}
+\label{sec:orgf7ce34b}
+The \texttt{defpackage} options are extended to include the \emph{local-nicknames-option}:
 \begin{verbatim}
 local-nicknames-option ::= (:local-nicknames (nickname package)*)
 \end{verbatim}
@@ -85,232 +84,238 @@ Each pair specifies a \emph{local nickname} \texttt{nickname} for the correspond
 
 This option may appear more than once.
 \subsubsection{Arguments and Values:}
-\label{sec:org8f76976}
-\texttt{nickname} must be a \emph{string designator}.
+\label{sec:orgd65d238}
+\texttt{nickname} --- a \emph{string designator}.
 
-\texttt{package} must be a \emph{package designator}.
+\texttt{package} --- a \emph{package designator}.
 \subsubsection{Exceptional situations}
-\label{sec:org5ac218c}
-An error of type \texttt{package-error} is signaled when a package designated by
+\label{sec:org63798b8}
+An error of type \texttt{package-error} is signaled when a package designated by the
 \texttt{package} does not exists.
 
 Name conflict errors are handled by the underlying calls to
 \texttt{add-package-local-nickname}.
 
-See \hyperref[sec:org4b1c53c]{add-package-local-nickname: exceptional situations}.
+See \hyperref[sec:orgdcd5ecd]{add-package-local-nickname: exceptional situations}.
 \subsubsection{Implementation dependent}
-\label{sec:org7983f95}
-The behaviour is unspecified when a \emph{local nickname} is specified for the package
-that is being defined. (See Issue 4.)
+\label{sec:org6f8fe2a}
+The consequences are undefined when a \emph{local nickname} is specified for thex
+package that is being defined. (See Issue 4.)
 
-The behaviour is unspecified when supplied \emph{local nicknames} are at variance with
-the current state of the package that is being defined. An implementation might
-choose to remove all present \emph{local nicknames} at the begining of each
-redefinition of the package.
+The consequences are undefined when supplied \emph{local nicknames} are at variance
+with the current state of the package. An implementation might choose to remove
+all existing \emph{local nicknames} at the beginning of each redefinition of the
+package.
 \subsection{make-package}
-\label{sec:orgd56e37d}
-(\textbf{PROPOSAL}: see Issue 6.)
+\label{sec:orgf3a0730}
+\subsubsection{Description}
+\label{sec:org8581069}
+(\textbf{Contains proposals}: see Issue 6.)
 
-\texttt{make-package} lambda list is extended to include an additional keyword argument
-\texttt{:local-nicknames}:
+The \texttt{make-package} lambda list is extended to include an additional keyword
+argument \texttt{:local-nicknames}:
 \begin{verbatim}
 local-nicknames ::= ((nickname package)*)
 \end{verbatim}
 
 
-\texttt{local-nicknames} defaults to an \emph{empty list}.
-
-\texttt{local-nicknames} must be a \emph{list} each element of which must be a \emph{list} of form
-\texttt{(nickname package)}. Specifies \emph{local nicknames} in the new \emph{package}.
+\texttt{local-nicknames} specifies zero or more \emph{local nicknames} to be defined in the
+new \emph{package}.
 \subsubsection{Arguments and Values:}
-\label{sec:org430df28}
-\texttt{local-nicknames} must be a a \emph{list} of pairs \texttt{(nickname package)}.
+\label{sec:orgc7abff5}
+\texttt{local-nicknames} --- a \emph{list} of pairs of form \texttt{(nickname package)}.
+The default is an \emph{empty list}.
 
-\texttt{nickname} must be a \emph{string designator}.
+\texttt{nickname} --- a \emph{string designator}.
 
-\texttt{package} must be a \emph{package designator}.
+\texttt{package} --- a \emph{package designator}.
 \subsubsection{Exceptional situations}
-\label{sec:orgb4df8e7}
-An error of type \texttt{package-error} is signaled when a package designated by
-\texttt{package} does not exists.
+\label{sec:org4d7c11f}
+An error of type \texttt{package-error} is signaled when a package designated by the
+\texttt{package} does not exist.
 
 Name conflict errors are handled by the underlying calls to
 \texttt{add-package-local-nickname}.
 
-See \hyperref[sec:org4b1c53c]{add-package-local-nickname: exceptional situations}.
+See \hyperref[sec:orgdcd5ecd]{add-package-local-nickname: exceptional situations}.
 \subsubsection{Implementation dependent}
-\label{sec:org04eab75}
-The behaviour is unspecified when a \emph{local nickname} is specified for the package
-that is being defined. (See Issue 4.)
+\label{sec:org2696bbb}
+The consequences are undefined when a \emph{local nickname} is specified for the
+package that is being defined. (See Issue 4.)
 \subsection{add-package-local-nickname}
-\label{sec:org3945e27}
+\label{sec:orgceafe06}
 \begin{verbatim}
 (add-package-local-nickname nickname actual-package &optional designated-package)
   => designated-package-object
 \end{verbatim}
+\subsubsection{Arguments and Values}
+\label{sec:orgb9143c0}
+\texttt{nickname} --- a \emph{string designator}.
 
-\texttt{designated-package} defaults to the \emph{current package}.
+\texttt{actual-package} --- a \emph{package designator}.
 
-Adds a \emph{package-local nickname} \texttt{nickname} for the \texttt{actual-package} in the
+\texttt{designated-package} --- a \emph{package designator}.
+The default is the \emph{current package}.
+
+\texttt{designated-package-object} --- a \emph{package}.
+\subsubsection{Description}
+\label{sec:org4a177ba}
+Defines a \emph{package-local nickname} \texttt{nickname} for the \texttt{actual-package} in the
 \texttt{designated-package}.
 
-Returns the package designated by \texttt{designated-package}. (But also see Issue 1.)
+[Also see Issue 1.] Returns the package designated by the \texttt{designated-package}.
 
-If a \emph{nickname} is already defined, checks that it is defined for the package
-designated by \texttt{actual-package}.
-\subsubsection{Arguments and Values}
-\label{sec:org88a8f1b}
-\texttt{nickname} must be a \emph{string designator}.
-
-\texttt{actual-package} and \texttt{designated-package} must be \emph{package designators}.
-
-\texttt{designated-package-object} is of type \emph{package}.
+If the \emph{nickname} is already defined, checks that it is defined for the package
+designated by the \texttt{actual-package}.
 \subsubsection{Exceptional situations}
-\label{sec:org4b1c53c}
-If a package designated by \texttt{actual-package} or a package designated by
-\texttt{designated-package} does not exists, an error of type \emph{package-error}
-must be signaled.
+\label{sec:orgdcd5ecd}
+An error of type \emph{package-error} is signaled when a package designated by the
+\texttt{actual-package} or the \texttt{designated-package} does not exist.
 
-If \texttt{nickname} is one of the names \texttt{\#:CL}, \texttt{\#:COMMON-LISP} or \texttt{\#:KEYWORD},
-an error of type \emph{package-error} must be signaled.
+If the \texttt{nickname} is one of the names \texttt{\#:CL}, \texttt{\#:COMMON-LISP} or \texttt{\#:KEYWORD}, an
+error of type \emph{package-error} is signaled.
 
-If \texttt{nickname} is a \emph{local nickname} for a package different from
-\texttt{actual-package}, an error of type \emph{package-error} must be signaled.
+If the \texttt{nickname} is already defined to be a \emph{local nickname} for a package
+different from the \texttt{actual-package}, a \emph{correctable} error of type \emph{package-error}
+is signaled.
 \subsubsection{Implementation dependent}
-\label{sec:org6a16535}
-The consequences are undefined when \texttt{designated-package} designates one of the
-packages \texttt{\#:COMMON-LISP} or \texttt{\#:KEYWORD}.
+\label{sec:org39f6a11}
+The consequences are undefined when the \texttt{designated-package} designates the
+\texttt{\#:COMMON-LISP} package or the \texttt{\#:KEYWORD} package.
 
-(\textbf{PROPOSAL}: see Issue 5.)
+(\textbf{Contains proposals}: see Issue 5.)
 
-If \texttt{nickname} shadows the \texttt{designated-package}'s \emph{package name} or one of its
-\emph{global nicknames}, a style warning might signaled.
+If the \texttt{nickname} shadows the \emph{package name} or one of the \emph{global nicknames} of
+the \texttt{designated-package}, a style warning might be issued.
 \subsection{remove-package-local-nickname}
-\label{sec:orgb66fe32}
+\label{sec:org4afd585}
 \begin{verbatim}
 (remove-package-local-nickname old-nickname &optional designated-package)
   => nickname-removed-p
 \end{verbatim}
-
-\texttt{designated-package} defaults to the \emph{current package}.
-
-If \texttt{designated-package} has \texttt{old-nickname} as a \emph{local nickname}, it is removed.
-
-Returns \emph{true} if the \texttt{old-nickname} existed and was removed, and \texttt{NIL}
-otherwise. (But also see Issue 1.)
 \subsubsection{Arguments and Values}
-\label{sec:org8f8a205}
-\texttt{old-nickname} must be a \emph{string designator}.
+\label{sec:orga81c135}
+\texttt{old-nickname} --- a \emph{string designator}.
 
-\texttt{designated-package} must be a \emph{package designator}.
+\texttt{designated-package} --- a \emph{package designator}.
+The default is the \emph{current package}.
 
-\texttt{nickname-removed-p} is a \emph{generalized boolean}.
+\texttt{nickname-removed-p} --- \emph{generalized boolean}.
+\subsubsection{Description}
+\label{sec:orgefda88a}
+If \texttt{old-nickname} is defined to be a \emph{local nickname} in the \texttt{designated-package},
+it is removed.
+
+[Also see Issue 1.] Returns \emph{true} if it removes a nickname, and \texttt{NIL} otherwise.
 \subsubsection{Exceptional situations}
-\label{sec:orgdb907fc}
-If a package designated by \texttt{designated-package} does not exists, an error of type
-\emph{package-error} must be signaled.
+\label{sec:orgcb4f7cc}
+An error of type \emph{package-error} is signaled when a package designated by the
+\texttt{designated-package} does not exist.
 \subsection{package-local-nicknames}
-\label{sec:org1f36083}
+\label{sec:org35164bb}
 \begin{verbatim}
-(package-local-nicknames package)
+(package-local-nicknames package-designator)
   => local-nicknames-alist
 local-nicknames-alist ::= ((nickname . package)*)
 \end{verbatim}
-
-Returns an \emph{alist} describing \emph{local nicknames} defined in the package designated
-by \texttt{package}.
 \subsubsection{Arguments and Values}
-\label{sec:org388e6af}
-\texttt{package} must be a \emph{package designator}.
+\label{sec:orgbdb16cd}
+\texttt{package-designator} --- a \emph{package designator}.
 
-\texttt{local-nicknames-alist} is an \emph{alist} with keys of type \emph{string} and values of
-type \emph{package}.
+\texttt{local-nicknames-alist} --- an \emph{alist}.
 
-\texttt{nickname} must be a \emph{string}.
+\texttt{nickname} --- a \emph{string}.
 
-\texttt{package} must be a \emph{package}.
+\texttt{package} --- a \emph{package}.
+\subsubsection{Description}
+\label{sec:org347322c}
+Returns an \emph{alist} describing \emph{local nicknames} defined in the package designated
+by the \texttt{package-designator}.
 \subsubsection{Exceptional situations}
-\label{sec:org19feabd}
-An error of type \texttt{package-error} is signaled when a package designated by
-\texttt{package} does not exists.
+\label{sec:orgca1944b}
+An error of type \texttt{package-error} is signaled when a package designated by the
+\texttt{package-designator} does not exist.
 \subsubsection{Notes}
-\label{sec:org5c431c3}
+\label{sec:orgd4382e7}
 The returned \emph{alist} must be safe to be modified by the user.
 \subsection{package-locally-nicknamed-by-list}
-\label{sec:org0337449}
+\label{sec:orgb877bc1}
 \begin{verbatim}
-(package-locally-nicknamed-by-list package)
+(package-locally-nicknamed-by-list package-designator)
   => packages-list
 \end{verbatim}
-
-Returns a \emph{list} of packages that have a \emph{local nickname} defined for the package
-designated by \texttt{package}.
 \subsubsection{Arguments and Values}
-\label{sec:org8b40c82}
-\texttt{package} must be a \emph{package designator}.
+\label{sec:org980f4cf}
+\texttt{package-designator} --- a \emph{package designator}.
 
-\texttt{packages-list} is a \emph{list} with elements of type \emph{package}.
+\texttt{packages-list} --- a \emph{list} of \emph{package} objects.
+\subsubsection{Description}
+\label{sec:orgb29b47f}
+Returns a \emph{list} of packages that have a \emph{local nickname} defined for the package
+designated by the \texttt{package-designator}.
 \subsubsection{Exceptional situations}
-\label{sec:org1d6143c}
-An error of type \texttt{package-error} is signaled when a package designated by
-\texttt{package} does not exists.
+\label{sec:orga2a1f07}
+An error of type \texttt{package-error} is signaled when a package designated by the
+\texttt{package-designator} does not exist.
 \subsubsection{Notes}
-\label{sec:orgd21002e}
+\label{sec:org3897f98}
 The returned \emph{list} must be safe to be modified by the user.
 \section{Affected symbols}
-\label{sec:org1085be7}
+\label{sec:orgaa7116e}
 \subsection{defpackage}
-\label{sec:org4138e27}
-See \hyperref[sec:orga7fab27]{defpackage}.
+\label{sec:org94b3bdb}
+See \hyperref[sec:org1f38869]{defpackage}.
 \subsection{make-package}
-\label{sec:org318283f}
-See \hyperref[sec:orgd56e37d]{make-package}.
+\label{sec:orga8c1e02}
+See \hyperref[sec:orgf3a0730]{make-package}.
 \subsection{find-package}
-\label{sec:org1442b6f}
-When argument to \texttt{find-package} is a \emph{local nickname} that is defined in the
-\emph{current package}, it returns the package named by this nickname.
+\label{sec:org0ed4c47}
+(\textbf{Contains proposals}: see Issue 3, Issue 8.)
+
+When the argument to \texttt{find-package} is a \emph{local nickname} defined in the \emph{current
+package}, it returns the package nicknamed by this nickname.
 
 This also affects all implied calls to \texttt{find-package}, including but not limited
-to those performed by the lisp reader as well as those performed by \texttt{export},
-\texttt{find-symbol}, \texttt{import}, \texttt{rename-package}, \texttt{shadow}, \texttt{shadowing-import},
-\texttt{delete-package}, \texttt{with-package-iterator}, \texttt{unexport}, \texttt{unintern}, \texttt{in-package},
-\texttt{unuse-package}, \texttt{use-package}, \texttt{do-symbols}, \texttt{do-external-symbols},
-\texttt{do-all-symbols}, \texttt{intern}, \texttt{package-name}, \texttt{package-nicknames},
-\texttt{package-shadowing-symbols}, \texttt{package-use-list}, \texttt{package-used-by-list}.
+to those performed by the lisp reader as well as those performed by \texttt{defpackage},
+\texttt{make-package}, \texttt{export}, \texttt{find-symbol}, \texttt{import}, \texttt{rename-package}, \texttt{shadow},
+\texttt{shadowing-import}, \texttt{delete-package}, \texttt{with-package-iterator}, \texttt{unexport},
+\texttt{unintern}, \texttt{in-package}, \texttt{unuse-package}, \texttt{use-package}, \texttt{do-symbols},
+\texttt{do-external-symbols}, \texttt{do-all-symbols}, \texttt{intern}, \texttt{package-name},
+\texttt{package-nicknames}, \texttt{package-shadowing-symbols}, \texttt{package-use-list},
+\texttt{package-used-by-list}.
 
 \texttt{add-package-local-nickname}, \texttt{remove-package-local-nickname},
 \texttt{package-local-nicknames} and \texttt{package-locally-nicknamed-by} are also affected.
 
-(\textbf{PROPOSAL}: see Issue 8.)
-
-The only exception is the \texttt{format}'s \emph{tilde slash} directive, which should \textbf{not}
-use \emph{local nicknames} of any package when looking up the symbol specified.
+The only exception is the \emph{tilde slash} directive of \texttt{format}, which should \textbf{not}
+use \emph{local nicknames} from any package when looking up the specified symbol.
 \subsection{rename-package}
-\label{sec:org18f81be}
-When a package is renamed with \texttt{rename-package} it maintains all \emph{local nicknames}
-it is nicknamed by, as well as all \emph{local nicknames} it has defined.
+\label{sec:orga809406}
+When a package is renamed with \texttt{rename-package}, it retains all \emph{local nicknames}
+it has defined, as well as all \emph{local nicknames} by which it is nicknamed.
+
 \subsubsection{Implementation dependent}
-\label{sec:org50d244e}
-(\textbf{PROPOSAL}: see Issue 5.)
+\label{sec:orge5d4e8b}
+(\textbf{Contains proposals}: see Issue 5.)
 
 If the \emph{new-name} or one of the \emph{new-nicknames} is shadowed by one of the \emph{local
-nicknames} of the package being redefined, a warning might be signaled.
+nicknames} of the package being renamed, a style warning might be issued.
 \subsection{delete-package}
-\label{sec:org9e84727}
-When a package is deleted with \texttt{delete-package} all \emph{local nicknames} defined in
-other packages that it was nicknamed by must be removed, as well as all \emph{local
-nicknames} defined in the package that is being deleted.
+\label{sec:org670a32e}
+When a package is deleted with \texttt{delete-package}, all \emph{local nicknames} defined in
+that package are removed, as well as all \emph{local nicknames} by which it is
+nicknamed.
 
 This also means that a deleted package must not be available via calls to
 \texttt{package-locally-nicknamed-by-list} and \texttt{package-local-nicknames}.
 \subsection{format}
-\label{sec:orgefb4a01}
+\label{sec:orgfcde85d}
 See Issue 8.
 \subsection{$\backslash$*features$\backslash$*}
-\label{sec:orgd36cf1b}
-If an implementation supports package-local nicknames it should add symbols
-\texttt{:package-local-nicknames} and \texttt{:cdr-15} (per CDR 14) to \texttt{*features*}.
+\label{sec:org14e8394}
+If an implementation supports package-local nicknames, it should add symbols
+\texttt{:package-local-nicknames} and \texttt{:cdr-NN} (per CDR 14) to \texttt{*features*}.
 \section{Examples}
-\label{sec:orgc621836}
+\label{sec:org2022a71}
 [TODO]
 \end{document}
