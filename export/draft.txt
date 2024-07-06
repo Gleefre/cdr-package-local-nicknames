@@ -31,13 +31,14 @@ Table of Contents
 ..... 7. \*features\*
 .. 5. Examples
 2. ISSUES
-.. 1. Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
+.. 1. Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)
 ..... 1. Description
 ..... 2. Examples
 ..... 3. Current behavior
-..... 4. Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
-..... 5. Proposal ALWAYS-T
-..... 6. Proposal ELIMINATE-GENERALIZED-BOOLEAN
+..... 4. Proposal ALWAYS-T
+..... 5. Proposal ELIMINATE-GENERALIZED-BOOLEAN
+..... 6. Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
+..... 7. Proposal NICKNAMED-PACKAGE-IF-SUCCESSFUL
 .. 2. Issue 2 (PRINT-READ consistency)
 ..... 1. Description
 ..... 2. Examples
@@ -53,6 +54,7 @@ Table of Contents
 ..... 2. Examples
 ..... 3. Current behavior
 ..... 4. Proposal ALL-AFFECTED
+..... 5. Notes
 .. 4. Issue 4 (Local nicknames of the package being defined)
 ..... 1. Description
 ..... 2. Examples
@@ -62,10 +64,13 @@ Table of Contents
 ..... 1. Description
 ..... 2. Examples
 ..... 3. Current behavior
-..... 4. Proposal ALLOW
+..... 4. Proposal ALLOW-WITH-STYLE-WARNING
+..... 5. Proposal DISALLOW-WITH-CORRECTABLE-ERROR
 .. 6. Issue 6 (Additional keyword argument to MAKE-PACKAGE)
-..... 1. Current behavior
-..... 2. Proposal EXTRA-KEYWORD-ARGUMENT
+..... 1. Descriptions
+..... 2. Current behavior
+..... 3. Proposal EXTRA-KEYWORD-ARGUMENT-LIST
+..... 4. Links
 .. 7. Issue 7 (Multiple local nicknames)
 ..... 1. Description
 ..... 2. Examples
@@ -73,14 +78,15 @@ Table of Contents
 ..... 4. Proposal NO-DUPLICATES
 .. 8. Issue 8 (Interaction with FORMAT)
 ..... 1. Description
-..... 2. Examples
-..... 3. Proposal NO-LOCAL-NICKNAMES
-..... 4. Links
+..... 2. Notes
+..... 3. Examples
+..... 4. Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES
+..... 5. Links
 .. 9. Issue 9 (Empty package local name)
 ..... 1. Description
 ..... 2. Examples
 ..... 3. Current behavior
-..... 4. Proposal ALLOW-BUT-KEEP-KEYWORDS
+..... 4. Proposal ALLOW-KEEP-KEYWORDS
 ..... 5. Proposal ALLOW-FUN
 ..... 6. Links
 3. Links
@@ -554,20 +560,29 @@ Table of Contents
 2 ISSUES
 ════════
 
-2.1 Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)
-────────────────────────────────────────────────────────────────
+2.1 Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)
+──────────────────────────────────────────────────────────────
 
 2.1.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  Return values of `add-package-local-nickname' and
-  `remove-package-local-nickname' are inconsistent. The first one always
-  returns /designated package/, while the second one returns /true/
-  (generalized boolean) if a nickname was removed.
+  Functions `add-package-local-nickname' and
+  `remove-package-local-nickname' have inconsistent return values.
 
-  Moreover, there is no consensus among current implementations as to
-  what the second function (`remove-package-local-nickname') should
-  return.
+  The first one always returns the /designated package/, while the
+  second one returns /true/ (a /generalized boolean/) that indicates
+  whether a nickname was removed.
+
+  Furthermore, there is no consensus among existing implementations as
+  to what this /generalized boolean/ represents.
+
+  In comparison,the functions `use-package' and `unuse-package' always
+  return `T', and the functions `export' and `unexport' have the same
+  behavior. There are also functions `unintern' and `delete-package'
+  which return a /generalized boolean/ indicating if the operation
+  changed something, but their counterparts `intern' and `make-package',
+  unlike with local nicknames, create and return an /object/ (a /symbol/
+  or a /package/).
 
 
 2.1.2 Examples
@@ -599,38 +614,48 @@ Table of Contents
   sbcl, ccl, ecl, acl, clasp: `remove-package-local-nickname' returns
     `T' if a nickname was removed, and `NIL' otherwise.
 
-  abcl: `remove-package-local-nickname' if a nickname was removed,
-    returns /true/ (more specifically - the package that was nicknamed
-    by that nickname), and `NIL' otherwise.
+  abcl: `remove-package-local-nickname' returns /true/ if a nickname was
+    removed, (more specifically, it returns the package nicknamed by the
+    removed local nickname), and `NIL' otherwise.
 
   lispworks: `remove-package-local-nickname' always returns `NIL'.
 
 
-2.1.4 Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-
-  • `add-package-local-nickname' should return /designated package/ if a
-    new nickname was added and `NIL' otherwise, if the nickname already
-    existed.
-  • `remove-package-local-nickname' should return /designated package/
-    if a nickname was removed and `NIL' otherwise.
-
-
-2.1.5 Proposal ALWAYS-T
+2.1.4 Proposal ALWAYS-T
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  Similar to `use-package' and `unuse-package':
-  • `add-package-local-nickname' should always return `T'.
-  • `remove-package-local-nickname' should always return `T'.
+  `add-package-local-nickname' should always return `T'.
+
+  `remove-package-local-nickname' should always return `T'.
 
 
-2.1.6 Proposal ELIMINATE-GENERALIZED-BOOLEAN
+2.1.5 Proposal ELIMINATE-GENERALIZED-BOOLEAN
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  • `add-package-local-nickname' should always return /designated
-    package/.
-  • `remove-package-local-nickname' should return `T' if a nickname was
-    removed and `NIL' otherwise.
+  `add-package-local-nickname' should return the /designated package/.
+
+  `remove-package-local-nickname' should return `T' if a nickname was
+  removed and `NIL' otherwise.
+
+
+2.1.6 Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  `add-package-local-nickname' should return the /designated package/ if
+  a new nickname was added, and `NIL' otherwise.
+
+  `remove-package-local-nickname' should return the /designated package/
+  if a nickname was removed, and `NIL' otherwise.
+
+
+2.1.7 Proposal NICKNAMED-PACKAGE-IF-SUCCESSFUL
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  `add-package-local-nickname' should return the /nicknamed package/ if
+  a new nickname was added, and `NIL' otherwise.
+
+  `remove-package-local-nickname' should return the previously
+  /nicknamed package/ if a nickname was removed, and `NIL' otherwise.
 
 
 2.2 Issue 2 (PRINT-READ consistency)
@@ -639,41 +664,42 @@ Table of Contents
 2.2.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  Lisp reader uses `find-package' when reading a symbol, which is
+  The Lisp reader uses `find-package' when reading a symbol, which is
   affected by the /local nicknames/ of the /current package/. That means
   that to maintain *print-read* consistency when printing a symbol, a
   good /package prefix/ must be used - such that calling `find-package'
-  on it in the /current package/ returns the symbol's /home package/.
+  on it in the /current package/ returns the /home package/ of the
+  symbol.
 
   There are several situations to consider:
-  1. Symbol is /apparently uninterned/.
+  1. The symbol is /apparently uninterned/.
 
-     /In this case it must be printed without any package prefix,
-     preceeded by `#:'./
+     /In this case it is printed without the package prefix, using the
+     uninterned symbol syntax `#:'./
 
-  2. Symbol is accessible in the /current package/.
+  2. The symbol is accessible in the /current package/.
 
-     /In this case it must be printed without any package prefix./
+     /In this case it is printed without any package prefix./
 
-  3. Symbol's /home package/ /name/ or one of its /global nicknames/ is
-     not shadowed by any /local nickname/ defined in the /current
-     package/.
+  3. The /name/ or one of the /global nicknames/ of the /home package/
+     of the symbol is not shadowed by any /local nickname/ defined in
+     the /current package/.
 
-     /In this case that name or global nickname can be used as the
+     /In this case that name or global nickname might be used as the
      package prefix./
 
-  4. There *exists* a /local nickname/ defined in the /current package/
-     for the symbol's /home package/.
+  4. There exists a /local nickname/ defined in the /current package/
+     for the /home package/ of the symbol.
 
-     /In this case that local nickname can be used as the package
+     /In this case that local nickname might be used as the package
      prefix./
 
-  5. Symbol's /home package/ /name/ and all of its /global nicknames/
-     are shadowed by the /local nicknames/ of the /current package/ and
-     there *is no* /local nickname/ defined in the /current package/ for
-     the symbol's /home package/.
+  5. Both the /name/ and all /global nicknames/ of the /home package/ of
+     the symbol are shadowed by /local nicknames/ of the /current
+     package/, and there is no /local nickname/ defined in the /current
+     package/ for the /home package/.
 
-     /It is not clear how the symbol must be printed, see PROPOSALS./
+     /It is not clear how the symbol is printed, see PROPOSALS./
 
 
 2.2.2 Examples
@@ -716,17 +742,16 @@ Table of Contents
 2.2.3 Current behavior
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  sbcl, ccl, abcl, lispworks: When exists in the /current package/, a
-    /local nickname/ is used as a package prefix when printing a symbol.
+  sbcl, ccl, abcl, lispworks: When possible, a /local nickname/ is used
+    as a package prefix.
 
-  ecl, acl, clasp: /local nickname/ is never used as a package prefix
-    when printing a symbol.
+  ecl, acl, clasp: /Local nicknames/ are never used as a package prefix.
 
 
 2.2.4 Proposal SHARPSIGN-DOT
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  In the case (5) the symbol must be printed using the `#.' syntax:
+  In the 5th case the symbol is printed using the `#.' syntax:
 
   ┌────
   │ #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
@@ -736,18 +761,21 @@ Table of Contents
   │     (cl:intern "BAR" "FOO"))
   └────
 
-  Note that `#:KEYWORD' name is reserved for the `#:KEYWORD' package and
-  cannot be used as a /local nickname/ thus this expression will always
-  evaluate to the symbol `foo::bar'.
+  If `*read-eval*' is /false/ and `*print-readably*' is /true/, an error
+  of type `print-not-readable' is signaled.
 
-  If `*read-eval*' is /false/ and `*print-readably*' is /true/ an error
-  of type `print-not-readable' must be signalled.
+
+◊ 2.2.4.1 Note
+
+  Since `#:KEYWORD' cannot be used as a /local nickname/, and no /local
+  nicknames/ can be defined in the `#:KEYWORD' package, this expression
+  is guaranteed to evaluate to the symbol in the correct package.
 
 
 2.2.5 Proposal SHARPSIGN-COLON
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  In case (5) the symbol should be printed using the /extended `#:'
+  In the 5th case the symbol is printed using the /extended `#:'
   syntax/:
   ┌────
   │ #:(package name)
@@ -760,7 +788,7 @@ Table of Contents
 2.2.6 Proposal SHARPSIGN-BACKQUOTE
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  In case (5) the symbol must be printed using the new `#`' syntax for
+  In the 5th case the symbol is printed using the new `#`' syntax for
   reading an expression ignoring /local nicknames/ in the /current
   package/:
   ┌────
@@ -790,7 +818,7 @@ Table of Contents
 2.2.7 Proposal PRINT-UNREADABLY
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  In the case (5) the symbol must be printed unreadably using the `#<'
+  In the 5th case the symbol is printed unreadably using the `#<'
   syntax:
   ┌────
   │ #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
@@ -800,14 +828,14 @@ Table of Contents
   (Specifics are /implementation-dependent/.)
 
   If `*print-readably*' is /true/, an error of type `print-not-readable'
-  must be signalled.
+  is signaled.
 
 
 2.2.8 Proposal THREE-FOUR-PACKAGE-MARKERS
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  In the case (5) the symbol must be printed using `:::' and `::::'
-  syntax as follows:
+  In the 5th case the symbol is printed using the extended symbol token
+  syntax:
   ┌────
   │ foo:::bar   ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
   │ foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
@@ -831,10 +859,12 @@ Table of Contents
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   It is not clear whether /local nicknames/ of the /current package/
-  should affect the resolution of package designators provided in
-  `make-package' and `defpackage', as well as other functions and macros
-  taking a package designator as an argument (`in-package',
-  `add-package-local-nickname' and others).
+  should affect the package lookup in operators that accept a package
+  designator as an argument.  This mainly concerns `make-package' and
+  `defpackage'.  See also [Notes].
+
+
+[Notes] See section 2.3.5
 
 
 2.3.2 Examples
@@ -887,42 +917,51 @@ Table of Contents
 2.3.3 Current behavior
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  sbcl, lispworks: only `:local-nicknames' clause is *not* affected by
-    /local nicknames/.
+  • `defpackage' and `make-package' sbcl, lispworks: Only the
+    `:local-nicknames' clause is *not* affected by /local nicknames/.
 
-  ccl, acl, abcl: all options are affected.
+    ccl, acl, abcl: All clauses and keyword arguments are affected.
 
-  ecl: only the `:local-nicknames' clause and keyword arguments (`:use'
-    and `:local-nicknames') are affected.
+    ecl: Only the `:local-nicknames' clause and all keyword arguments
+      (`:use' and `:local-nicknames') are affected.
 
-  clasp: only keyword argument `:use' is affected.
+    clasp: Only the keyword argument `:use' is affected.
+  • Known exceptions in other operators: sbcl:
+    `add-package-local-nickname' is not affected.
 
-  Known exceptions in other functions/macros: sbcl:
-  `add-package-local-nickname' is not affected.  lispworks: `in-package'
-  is not affected.
+    lispworks: `in-package' is not affected.
 
 
 2.3.4 Proposal ALL-AFFECTED
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  All `defpackage' clauses (`:use', `:local-nicknames', `:import-from',
-  `:shadowing-import-from') as well as all keyword arguments to
-  `make-package' (`:use' and `:local-nicknames') must be affected by the
-  /local nicknames/ of the /current package/.
+  All operators taking a package designator as an argument must be
+  affected by /local nicknames/ of the /current package/.
 
-  All functions and macros taking a package designator as an argument
-  must be affected as well.
+  In particular, all `defpackage' clauses (`:use', `:local-nicknames',
+  `:import-from', `:shadowing-import-from') as well as all keyword
+  arguments to `make-package' (`:use' and `:local-nicknames') must be
+  affected.
 
-  A non-exhaustive list of affected functions and macros: `export',
-    `find-symbol', `import', `rename-package', `shadow',
-    `shadowing-import', `delete-package', `with-package-iterator',
-    `unexport', `unintern', `in-package', `unuse-package',
-    `use-package', `do-symbols', `do-external-symbols',
+
+2.3.5 Notes
+╌╌╌╌╌╌╌╌╌╌╌
+
+  A non-exhaustive list of possibly affected by this issue operators:
+    `defpackage', `make-package', `export', `find-symbol', `import',
+    `rename-package', `shadow', `shadowing-import', `delete-package',
+    `with-package-iterator', `unexport', `unintern', `in-package',
+    `unuse-package', `use-package', `do-symbols', `do-external-symbols',
     `do-all-symbols', `intern', `package-name', `package-nicknames',
     `package-shadowing-symbols', `package-use-list',
     `package-used-by-list', `add-package-local-nickname',
     `remove-package-local-nickname', `package-local-nicknames',
     `package-locally-nicknamed-by'.
+
+  `format' is **not** affected by this issue, see instead [Issue 8].
+
+
+[Issue 8] See section 2.8
 
 
 2.4 Issue 4 (Local nicknames of the package being defined)
@@ -956,22 +995,23 @@ Table of Contents
 2.4.3 Current behavior
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  sbcl, ccl, acl, abcl, lispworks: not affected
+  sbcl, ccl, acl, abcl, lispworks: Nothing is affected.
 
-  ecl: `:use', `:import-from' and `:shadowing-import-from' are affected.
+  ecl: `:use', `:import-from' and `:shadowing-import-from' clauses are
+    affected.
 
-  clasp: `:local-nicknames' is affected by previous `:local-nicknames'
-  clauses.
+  clasp: `:local-nicknames' clause is affected by /local nicknames/
+    introduced by previous `:local-nicknames' clauses.
 
 
 2.4.4 Proposal NO-EFFECT
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  Local nicknames of a package being defined should not affect other
-  defpackage clauses (`:use', `:local-nicknames', `:import-from',
+  Local nicknames of the package being defined must not affect any of
+  the defpackage clauses (`:use', `:local-nicknames', `:import-from',
   `:shadowing-import-from').
 
-  The keyword argument `:local-nicknames' to `make-package' should not
+  The keyword argument `:local-nicknames' to `make-package' must not
   affect the `:use' keyword argument either.
 
 
@@ -981,8 +1021,9 @@ Table of Contents
 2.5.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  It is not clear whether it is valid to have a /local nickname/ in a
-  package shadowing its own name or nickname.
+  It is not clear whether it should be allowed to define a /local
+  nickname/ that shadows thex /name/ or one of the /global nicknames/ of
+  the package that it is defined in.
 
 
 2.5.2 Examples
@@ -1003,35 +1044,61 @@ Table of Contents
 2.5.3 Current behavior
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  sbcl, ccl, abcl and lispwork signal an error.
+  sbcl, ccl, abcl: A correctable error is signaled by `defpackage'.
+
+  lispworks: An error is signaled by `defpackage'.  A correctable error
+    is signaled by `add-package-local-nickname'.
+
+  ecl, acl, clasp: No errors are signaled.
 
 
-2.5.4 Proposal ALLOW
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+2.5.4 Proposal ALLOW-WITH-STYLE-WARNING
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  It should be allowed to use package's own name or global nickname, but
-  a style-warning can be signalled.
+  It should be allowed to use the name or one of the global nicknames of
+  the package as a local nickname, but a style warning might be issued.
 
 
 ◊ 2.5.4.1 Rationale
 
   Such local nicknames are not likely to break anything. Even though
-  they can be a bit confusing, this fact alone doesn't warrant an error
-  being signalled.
+  they can be a bit confusing, this alone does not warrant an error to
+  be signaled.
 
   Moreover, on all implementations it is possible to obtain such
   nicknames, even if on some of them invoking the `continue' restart is
-  going to be needed. This also suggests that cost of adoption is very
-  low.
+  required. This suggests that cost of adoption is very low.
+
+
+2.5.5 Proposal DISALLOW-WITH-CORRECTABLE-ERROR
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  Attemts to create such a nickname should result in a correctable error
+  being signaled. The `continue' restart can be used to create the
+  nickname anyway.
 
 
 2.6 Issue 6 (Additional keyword argument to MAKE-PACKAGE)
 ─────────────────────────────────────────────────────────
 
-2.6.1 Current behavior
+2.6.1 Descriptions
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  An additional keyword argument to `make-package' similar to the `:use'
+  keyword argument would be a nice feature. There are only two
+  implementations introducing this extension, unfortunately they use
+  different API for this argument.
+
+  Possible questions:
+  • Does it accept an alist or a nested list?
+  • Is the default value implementation-dependent, or is it an empty
+    list?
+
+
+2.6.2 Current behavior
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+  sbcl, ccl, abcl, clasp, lispworks: no additional keyword argument.
 
   ecl: has an additional keyword argument `:local-nicknames', but it is
   undocumented and it segfaults on incorrect usage. The expected value
@@ -1041,18 +1108,24 @@ Table of Contents
   expected value is a list of lists: `((nickname package)*)'.
 
 
-2.6.2 Proposal EXTRA-KEYWORD-ARGUMENT
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+2.6.3 Proposal EXTRA-KEYWORD-ARGUMENT-LIST
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   Add `:local-nicknames' keyword argument to `make-package':
   ┌────
   │ local-nicknames ::= ((nickname package)*)
   └────
 
-  `nickname' must be a /string designator/.  `package' must be a
-  /package designator/.
+
+  `nickname' — a /string designator/.
+
+  `package' — a /package designator/.
 
   `local-nicknames' defaults to an /empty list/.
+
+
+2.6.4 Links
+╌╌╌╌╌╌╌╌╌╌╌
 
   See [make-package].
 
@@ -1067,7 +1140,7 @@ Table of Contents
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   It is not clear whether `package-locally-nicknamed-by-list' should be
-  allowed to return lists with duplicate entries (when there are
+  allowed to return a list with duplicate entries (when there are
   multiple local nicknames in one package).
 
 
@@ -1098,7 +1171,7 @@ Table of Contents
 2.7.4 Proposal NO-DUPLICATES
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  `package-locally-nicknamed-by-list' must return a list without
+  `package-locally-nicknamed-by-list' should return a list without
   duplicate entries.
 
 
@@ -1111,24 +1184,35 @@ Table of Contents
 2.8.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  It is not clear how /local nicknames/ should affect `format''s `\~//'
-  directive.
-
-  First, it would be inconvinient if it wouldn't be possible to use
-  /local nicknames/ with the `\~//' directive.
-
-  Secondly, it would be unintuitive if the function used would depend on
-  the /current package/ at the *execution* time. This also might break
-  [existing] code, if a local nickname in the /current package/ shadows
-  a package that contains a function used by a control string in another
-  function.
-
-  Finally, if the call to `format' is not compiled, it is hard to
-  impossible to find the function using /local nicknames/ of the package
-  that was the /current package/ at the *compile* time.
+  It is not clear how /local nicknames/ should affect the tilde slash
+  `\~//' directive of `format'.
 
 
-2.8.2 Examples
+2.8.2 Notes
+╌╌╌╌╌╌╌╌╌╌╌
+
+  • If `\~//' directive wasn't affected by /local nicknames/, it would
+    mean that using [long and not-so-easy-to-use] package names is
+    necessary.
+
+  • It would be counterintuitive if the function used by the `\~//'
+    directive could change based on the /current package/ at *execution
+    time* (that is, if the symbol lookup was affected by /local
+    nicknames/ of the /current package/).
+
+    This could also break existing code if a /local nickname/ in the
+    /current package/ shadows the name of a package containing a
+    function used in a format control string in the called function. The
+    only way to prevent this issue would be to rebind the `*package*'
+    variable around any call to `format' where the `\~//' directive is
+    used.
+
+  • Finally, if the call to `format' is not compiled, it would be hard
+    to impossible to find the function using /local nicknames/ of the
+    package that was the /current package/ at *compile time*.
+
+
+2.8.3 Examples
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   ┌────
@@ -1169,21 +1253,26 @@ Table of Contents
   └────
 
 
-2.8.3 Proposal NO-LOCAL-NICKNAMES
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+2.8.4 Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  `format''s `\~//' directive must *not* use /local nicknames/ of any
-  package when looking up the specified symbol.
-
-  Rationale: In the spirit of how when the package is not specified, the
-  symbol is not looked up in the /current package/, but instead in the
-  `#:CL-USER' package; the /tilde slash/ directive should not depend on
-  the value of `*package*' at any time.  Specifying it to use /local
-  nicknames/ of the `#:CL-USER' package instead would risk breaking the
-  existing code when adding local nicknames to that package.
+  The tilde slash `\~//' directive of `format' must *not* use /local
+  nicknames/ of any package when looking up the specified symbol.
 
 
-2.8.4 Links
+◊ 2.8.4.1 Rationale
+
+  When the package prefix is not specified, the specified symbol is not
+  looked up in the /current package/, but instead in the `#:CL-USER'
+  package. That suggests that the tilde slash `\~//' directive should
+  not depend on the value of `*package*' at any time.
+
+  Note that specifying it to use /local nicknames/ of the `#:CL-USER'
+  package would risk breaking the existing code, since it is allowed to
+  add local nicknames to the `#:CL-USER' package.
+
+
+2.8.5 Links
 ╌╌╌╌╌╌╌╌╌╌╌
 
   See [CLHS 22.3.5.4 Tilde Slash: Call Function].
@@ -1199,9 +1288,9 @@ Table of Contents
 2.9.1 Description
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
-  It is not clear whether it should be allowed to use `""' as a local
-  nickname, and in the case this is allowed, whether it should affect
-  the `:xxxx' syntax.
+  It is not clear whether it should be allowed to use the empty string
+  `""' as a local nickname, and in the case it is allowed, whether it
+  should affect the keyword symbol syntax `:xxxx'.
 
 
 2.9.2 Examples
@@ -1231,18 +1320,21 @@ Table of Contents
   sbcl, ccl: `:xxxx' is read as a keyword; `||:xxxx' is read as a symbol
   in the package named or nicknamed `""'.
 
-  ecl, clasp, lispworks: `||:xxxx' and `:xxxx' are read as a keyword.
+  ecl, clasp, lispworks: Both `||:xxxx' and `:xxxx' are read as a
+  keyword.
 
-  acl: `:xxxx' and `||:xxxx' are read as a symbol in the package named
-  or nicknamed `""'.  `""' is by default a global nickname for the
-  `#:KEYWORD' package.
+  acl:
+
+  Both `:xxxx' and `||:xxxx' are read as a symbol in the package named
+  or nicknamed `""' which is a /global nickname/ for the `#:KEYWORD'
+  package, but can be shadowed by a /local nickname/.
 
   abcl: `:xxxx' is read as a keyword; `||:xxxx' syntax cannot be read
   (attemts result in an error).
 
 
-2.9.4 Proposal ALLOW-BUT-KEEP-KEYWORDS
-╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+2.9.4 Proposal ALLOW-KEEP-KEYWORDS
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   The `""' local nickname should be explicitely allowed. `:xxxx' should
   be always read as a keyword regardless of package names or
@@ -1261,7 +1353,7 @@ Table of Contents
 2.9.6 Links
 ╌╌╌╌╌╌╌╌╌╌╌
 
-  See [WSCL issue 63].
+  See also the [WSCL issue 63].
 
 
 [WSCL issue 63] <https://github.com/s-expressionists/wscl/issues/63>

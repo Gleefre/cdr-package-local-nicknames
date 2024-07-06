@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 13:32 -->
+<!-- 2024-07-06 Sat 17:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 8</title>
@@ -205,35 +205,45 @@
 <i>by |3b|</i>
 </p>
 </div>
-<div id="outline-container-org8e22787" class="outline-3">
-<h3 id="org8e22787"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-orgd0ed20b" class="outline-3">
+<h3 id="orgd0ed20b"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-It is not clear how <i>local nicknames</i> should affect <code>format</code>'s <code>\~//</code> directive.
-</p>
-
-<p>
-First, it would be inconvinient if it wouldn't be possible to use <i>local
-nicknames</i> with the <code>\~//</code> directive.
-</p>
-
-<p>
-Secondly, it would be unintuitive if the function used would depend on the
-<i>current package</i> at the <b>execution</b> time. This also might break [existing] code,
-if a local nickname in the <i>current package</i> shadows a package that contains a
-function used by a control string in another function.
-</p>
-
-<p>
-Finally, if the call to <code>format</code> is not compiled, it is hard to impossible to find
-the function using <i>local nicknames</i> of the package that was the <i>current package</i>
-at the <b>compile</b> time.
+It is not clear how <i>local nicknames</i> should affect the tilde slash <code>\~//</code>
+directive of <code>format</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-orga8e9fb1" class="outline-3">
-<h3 id="orga8e9fb1"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org95ebf27" class="outline-3">
+<h3 id="org95ebf27"><span class="section-number-3">1.2.</span> Notes</h3>
 <div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>If <code>\~//</code> directive wasn't affected by <i>local nicknames</i>, it would mean that
+using [long and not-so-easy-to-use] package names is necessary.</li>
+
+<li><p>
+It would be counterintuitive if the function used by the <code>\~//</code> directive could
+change based on the <i>current package</i> at <b>execution time</b> (that is, if the
+symbol lookup was affected by <i>local nicknames</i> of the <i>current package</i>).
+</p>
+
+<p>
+This could also break existing code if a <i>local nickname</i> in the <i>current
+package</i> shadows the name of a package containing a function used in a format
+control string in the called function. The only way to prevent this issue would
+be to rebind the <code>*package*</code> variable around any call to <code>format</code> where the
+<code>\~//</code> directive is used.
+</p></li>
+
+<li>Finally, if the call to <code>format</code> is not compiled, it would be hard to impossible
+to find the function using <i>local nicknames</i> of the package that was the
+<i>current package</i> at <b>compile time</b>.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgbf35cd5" class="outline-3">
+<h3 id="orgbf35cd5"><span class="section-number-3">1.3.</span> Examples</h3>
+<div class="outline-text-3" id="text-1-3">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-a</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:ff</span>))
 (<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-b</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:ff</span>))
@@ -273,26 +283,35 @@ at the <b>compile</b> time.
 </div>
 </div>
 </div>
-<div id="outline-container-orga21db8f" class="outline-3">
-<h3 id="orga21db8f"><span class="section-number-3">1.3.</span> Proposal NO-LOCAL-NICKNAMES</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orga6f4a7c" class="outline-3">
+<h3 id="orga6f4a7c"><span class="section-number-3">1.4.</span> Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES</h3>
+<div class="outline-text-3" id="text-1-4">
 <p>
-<code>format</code>'s <code>\~//</code> directive must <b>not</b> use <i>local nicknames</i> of any package when
-looking up the specified symbol.
+The tilde slash <code>\~//</code> directive of <code>format</code> must <b>not</b> use <i>local nicknames</i> of
+any package when looking up the specified symbol.
+</p>
+</div>
+<div id="outline-container-orgd76cb7a" class="outline-4">
+<h4 id="orgd76cb7a"><span class="section-number-4">1.4.1.</span> Rationale</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<p>
+When the package prefix is not specified, the specified symbol is not looked up
+in the <i>current package</i>, but instead in the <code>#:CL-USER</code> package. That suggests
+that the tilde slash <code>\~//</code> directive should not depend on the value of
+<code>*package*</code> at any time.
 </p>
 
 <p>
-Rationale: In the spirit of how when the package is not specified, the symbol is
-not looked up in the <i>current package</i>, but instead in the <code>#:CL-USER</code> package;
-the <i>tilde slash</i> directive should not depend on the value of <code>*package*</code> at any
-time.  Specifying it to use <i>local nicknames</i> of the <code>#:CL-USER</code> package instead
-would risk breaking the existing code when adding local nicknames to that package.
+Note that specifying it to use <i>local nicknames</i> of the <code>#:CL-USER</code> package would
+risk breaking the existing code, since it is allowed to add local nicknames to
+the <code>#:CL-USER</code> package.
 </p>
 </div>
 </div>
-<div id="outline-container-orgdf87901" class="outline-3">
-<h3 id="orgdf87901"><span class="section-number-3">1.4.</span> Links</h3>
-<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-orgd4b77bc" class="outline-3">
+<h3 id="orgd4b77bc"><span class="section-number-3">1.5.</span> Links</h3>
+<div class="outline-text-3" id="text-1-5">
 <p>
 See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm">CLHS 22.3.5.4 Tilde Slash: Call Function</a>.
 </p>
@@ -302,7 +321,7 @@ See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_ced.htm">
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 13:32</p>
+<p class="date">Created: 2024-07-06 Sat 17:25</p>
 </div>
 </body>
 </html>

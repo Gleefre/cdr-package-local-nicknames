@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:31
+% Created 2024-07-06 Sat 17:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,13 +28,13 @@
 \maketitle
 
 \section{Issue 4 (Local nicknames of the package being defined)}
-\label{sec:org92c73ca}
+\label{sec:org6b2e385}
 \subsection{Description}
-\label{sec:orga0e8297}
+\label{sec:org69bc136}
 It is not clear whether \emph{local nicknames} of the package \textbf{being defined} should
 affect \texttt{make-package} or \texttt{defpackage}.
 \subsection{Examples}
-\label{sec:org9e33f95}
+\label{sec:org9bd891a}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:x))
 (defpackage #:foo-b (:use) (:export #:x))
@@ -49,17 +49,21 @@ affect \texttt{make-package} or \texttt{defpackage}.
 ; => "FOO-B"  (ecl)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org599af56}
-sbcl, ccl, acl, abcl, lispworks: not affected
+\label{sec:orge5dc8c3}
+sbcl, ccl, acl, abcl, lispworks:
+  Nothing is affected.
 
-ecl: \texttt{:use}, \texttt{:import-from} and \texttt{:shadowing-import-from} are affected.
+ecl:
+  \texttt{:use}, \texttt{:import-from} and \texttt{:shadowing-import-from} clauses are affected.
 
-clasp: \texttt{:local-nicknames} is affected by previous \texttt{:local-nicknames} clauses.
+clasp:
+  \texttt{:local-nicknames} clause is affected by \emph{local nicknames} introduced by
+  previous \texttt{:local-nicknames} clauses.
 \subsection{Proposal NO-EFFECT}
-\label{sec:org9e20861}
-Local nicknames of a package being defined should not affect other defpackage
+\label{sec:orga2c23fd}
+Local nicknames of the package being defined must not affect any of the defpackage
 clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from}, \texttt{:shadowing-import-from}).
 
-The keyword argument \texttt{:local-nicknames} to \texttt{make-package} should not affect the
+The keyword argument \texttt{:local-nicknames} to \texttt{make-package} must not affect the
 \texttt{:use} keyword argument either.
 \end{document}

@@ -17,24 +17,35 @@
 1.1 Description
 ───────────────
 
-  It is not clear how /local nicknames/ should affect `format''s `\~//'
-  directive.
-
-  First, it would be inconvinient if it wouldn't be possible to use
-  /local nicknames/ with the `\~//' directive.
-
-  Secondly, it would be unintuitive if the function used would depend on
-  the /current package/ at the *execution* time. This also might break
-  [existing] code, if a local nickname in the /current package/ shadows
-  a package that contains a function used by a control string in another
-  function.
-
-  Finally, if the call to `format' is not compiled, it is hard to
-  impossible to find the function using /local nicknames/ of the package
-  that was the /current package/ at the *compile* time.
+  It is not clear how /local nicknames/ should affect the tilde slash
+  `\~//' directive of `format'.
 
 
-1.2 Examples
+1.2 Notes
+─────────
+
+  • If `\~//' directive wasn't affected by /local nicknames/, it would
+    mean that using [long and not-so-easy-to-use] package names is
+    necessary.
+
+  • It would be counterintuitive if the function used by the `\~//'
+    directive could change based on the /current package/ at *execution
+    time* (that is, if the symbol lookup was affected by /local
+    nicknames/ of the /current package/).
+
+    This could also break existing code if a /local nickname/ in the
+    /current package/ shadows the name of a package containing a
+    function used in a format control string in the called function. The
+    only way to prevent this issue would be to rebind the `*package*'
+    variable around any call to `format' where the `\~//' directive is
+    used.
+
+  • Finally, if the call to `format' is not compiled, it would be hard
+    to impossible to find the function using /local nicknames/ of the
+    package that was the /current package/ at *compile time*.
+
+
+1.3 Examples
 ────────────
 
   ┌────
@@ -75,21 +86,27 @@
   └────
 
 
-1.3 Proposal NO-LOCAL-NICKNAMES
-───────────────────────────────
+1.4 Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES
+────────────────────────────────────────────
 
-  `format''s `\~//' directive must *not* use /local nicknames/ of any
-  package when looking up the specified symbol.
-
-  Rationale: In the spirit of how when the package is not specified, the
-  symbol is not looked up in the /current package/, but instead in the
-  `#:CL-USER' package; the /tilde slash/ directive should not depend on
-  the value of `*package*' at any time.  Specifying it to use /local
-  nicknames/ of the `#:CL-USER' package instead would risk breaking the
-  existing code when adding local nicknames to that package.
+  The tilde slash `\~//' directive of `format' must *not* use /local
+  nicknames/ of any package when looking up the specified symbol.
 
 
-1.4 Links
+1.4.1 Rationale
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+  When the package prefix is not specified, the specified symbol is not
+  looked up in the /current package/, but instead in the `#:CL-USER'
+  package. That suggests that the tilde slash `\~//' directive should
+  not depend on the value of `*package*' at any time.
+
+  Note that specifying it to use /local nicknames/ of the `#:CL-USER'
+  package would risk breaking the existing code, since it is allowed to
+  add local nicknames to the `#:CL-USER' package.
+
+
+1.5 Links
 ─────────
 
   See [CLHS 22.3.5.4 Tilde Slash: Call Function].

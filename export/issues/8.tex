@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:32
+% Created 2024-07-06 Sat 17:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,25 +28,34 @@
 \maketitle
 
 \section{Issue 8 (Interaction with FORMAT)}
-\label{sec:orgfb20ba9}
+\label{sec:org0662517}
 \emph{by |3b|}
 \subsection{Description}
-\label{sec:orgffdabcc}
-It is not clear how \emph{local nicknames} should affect \texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive.
+\label{sec:org603741c}
+It is not clear how \emph{local nicknames} should affect the tilde slash \texttt{\textbackslash{}\textasciitilde{}//}
+directive of \texttt{format}.
+\subsection{Notes}
+\label{sec:org134f5f7}
+\begin{itemize}
+\item If \texttt{\textbackslash{}\textasciitilde{}//} directive wasn't affected by \emph{local nicknames}, it would mean that
+using [long and not-so-easy-to-use] package names is necessary.
 
-First, it would be inconvinient if it wouldn't be possible to use \emph{local
-nicknames} with the \texttt{\textbackslash{}\textasciitilde{}//} directive.
+\item It would be counterintuitive if the function used by the \texttt{\textbackslash{}\textasciitilde{}//} directive could
+change based on the \emph{current package} at \textbf{execution time} (that is, if the
+symbol lookup was affected by \emph{local nicknames} of the \emph{current package}).
 
-Secondly, it would be unintuitive if the function used would depend on the
-\emph{current package} at the \textbf{execution} time. This also might break [existing] code,
-if a local nickname in the \emph{current package} shadows a package that contains a
-function used by a control string in another function.
+This could also break existing code if a \emph{local nickname} in the \emph{current
+package} shadows the name of a package containing a function used in a format
+control string in the called function. The only way to prevent this issue would
+be to rebind the \texttt{*package*} variable around any call to \texttt{format} where the
+\texttt{\textbackslash{}\textasciitilde{}//} directive is used.
 
-Finally, if the call to \texttt{format} is not compiled, it is hard to impossible to find
-the function using \emph{local nicknames} of the package that was the \emph{current package}
-at the \textbf{compile} time.
+\item Finally, if the call to \texttt{format} is not compiled, it would be hard to impossible
+to find the function using \emph{local nicknames} of the package that was the
+\emph{current package} at \textbf{compile time}.
+\end{itemize}
 \subsection{Examples}
-\label{sec:org44250f6}
+\label{sec:orgf7afc50}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:ff))
 (defpackage #:foo-b (:use) (:export #:ff))
@@ -83,17 +92,21 @@ at the \textbf{compile} time.
 ; => "Called FOO-B:FF & FOO-A:FF"  (ccl, ecl, acl, abcl)
 ; lispworks errors (NICK package not found)
 \end{verbatim}
-\subsection{Proposal NO-LOCAL-NICKNAMES}
-\label{sec:org24e7cde}
-\texttt{format}'s \texttt{\textbackslash{}\textasciitilde{}//} directive must \textbf{not} use \emph{local nicknames} of any package when
-looking up the specified symbol.
+\subsection{Proposal NOT-AFFECTED-BY-LOCAL-NICKNAMES}
+\label{sec:orgbfe6e5d}
+The tilde slash \texttt{\textbackslash{}\textasciitilde{}//} directive of \texttt{format} must \textbf{not} use \emph{local nicknames} of
+any package when looking up the specified symbol.
+\subsubsection{Rationale}
+\label{sec:org24f46e2}
+When the package prefix is not specified, the specified symbol is not looked up
+in the \emph{current package}, but instead in the \texttt{\#:CL-USER} package. That suggests
+that the tilde slash \texttt{\textbackslash{}\textasciitilde{}//} directive should not depend on the value of
+\texttt{*package*} at any time.
 
-Rationale: In the spirit of how when the package is not specified, the symbol is
-not looked up in the \emph{current package}, but instead in the \texttt{\#:CL-USER} package;
-the \emph{tilde slash} directive should not depend on the value of \texttt{*package*} at any
-time.  Specifying it to use \emph{local nicknames} of the \texttt{\#:CL-USER} package instead
-would risk breaking the existing code when adding local nicknames to that package.
+Note that specifying it to use \emph{local nicknames} of the \texttt{\#:CL-USER} package would
+risk breaking the existing code, since it is allowed to add local nicknames to
+the \texttt{\#:CL-USER} package.
 \subsection{Links}
-\label{sec:org1a644c2}
+\label{sec:orgc0eb55a}
 See \href{https://www.lispworks.com/documentation/HyperSpec/Body/22\_ced.htm}{CLHS 22.3.5.4 Tilde Slash: Call Function}.
 \end{document}

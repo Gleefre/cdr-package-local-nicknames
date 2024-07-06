@@ -11,10 +11,24 @@
 1 Issue 6 (Additional keyword argument to MAKE-PACKAGE)
 ═══════════════════════════════════════════════════════
 
-1.1 Current behavior
+1.1 Descriptions
+────────────────
+
+  An additional keyword argument to `make-package' similar to the `:use'
+  keyword argument would be a nice feature. There are only two
+  implementations introducing this extension, unfortunately they use
+  different API for this argument.
+
+  Possible questions:
+  • Does it accept an alist or a nested list?
+  • Is the default value implementation-dependent, or is it an empty
+    list?
+
+
+1.2 Current behavior
 ────────────────────
 
-  sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+  sbcl, ccl, abcl, clasp, lispworks: no additional keyword argument.
 
   ecl: has an additional keyword argument `:local-nicknames', but it is
   undocumented and it segfaults on incorrect usage. The expected value
@@ -24,17 +38,23 @@
   expected value is a list of lists: `((nickname package)*)'.
 
 
-1.2 Proposal EXTRA-KEYWORD-ARGUMENT
-───────────────────────────────────
+1.3 Proposal EXTRA-KEYWORD-ARGUMENT-LIST
+────────────────────────────────────────
 
   Add `:local-nicknames' keyword argument to `make-package':
   ┌────
   │ local-nicknames ::= ((nickname package)*)
   └────
 
-  `nickname' must be a /string designator/.  `package' must be a
-  /package designator/.
+
+  `nickname' — a /string designator/.
+
+  `package' — a /package designator/.
 
   `local-nicknames' defaults to an /empty list/.
+
+
+1.4 Links
+─────────
 
   See make-package.

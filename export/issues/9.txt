@@ -14,9 +14,9 @@
 1.1 Description
 ───────────────
 
-  It is not clear whether it should be allowed to use `""' as a local
-  nickname, and in the case this is allowed, whether it should affect
-  the `:xxxx' syntax.
+  It is not clear whether it should be allowed to use the empty string
+  `""' as a local nickname, and in the case it is allowed, whether it
+  should affect the keyword symbol syntax `:xxxx'.
 
 
 1.2 Examples
@@ -46,18 +46,21 @@
   sbcl, ccl: `:xxxx' is read as a keyword; `||:xxxx' is read as a symbol
   in the package named or nicknamed `""'.
 
-  ecl, clasp, lispworks: `||:xxxx' and `:xxxx' are read as a keyword.
+  ecl, clasp, lispworks: Both `||:xxxx' and `:xxxx' are read as a
+  keyword.
 
-  acl: `:xxxx' and `||:xxxx' are read as a symbol in the package named
-  or nicknamed `""'.  `""' is by default a global nickname for the
-  `#:KEYWORD' package.
+  acl:
+
+  Both `:xxxx' and `||:xxxx' are read as a symbol in the package named
+  or nicknamed `""' which is a /global nickname/ for the `#:KEYWORD'
+  package, but can be shadowed by a /local nickname/.
 
   abcl: `:xxxx' is read as a keyword; `||:xxxx' syntax cannot be read
   (attemts result in an error).
 
 
-1.4 Proposal ALLOW-BUT-KEEP-KEYWORDS
-────────────────────────────────────
+1.4 Proposal ALLOW-KEEP-KEYWORDS
+────────────────────────────────
 
   The `""' local nickname should be explicitely allowed. `:xxxx' should
   be always read as a keyword regardless of package names or
@@ -76,7 +79,7 @@
 1.6 Links
 ─────────
 
-  See [WSCL issue 63].
+  See also the [WSCL issue 63].
 
 
 [WSCL issue 63] <https://github.com/s-expressionists/wscl/issues/63>

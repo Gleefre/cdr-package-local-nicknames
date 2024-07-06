@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 13:32 -->
+<!-- 2024-07-06 Sat 17:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 6</title>
@@ -202,11 +202,29 @@
 <h2 id="issue-6"><span class="section-number-2">1.</span> Issue 6 (Additional keyword argument to MAKE-PACKAGE)</h2>
 <div class="outline-text-2" id="text-issue-6">
 </div>
-<div id="outline-container-orged4da5e" class="outline-3">
-<h3 id="orged4da5e"><span class="section-number-3">1.1.</span> Current behavior</h3>
+<div id="outline-container-org2fe5b7a" class="outline-3">
+<h3 id="org2fe5b7a"><span class="section-number-3">1.1.</span> Descriptions</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+An additional keyword argument to <code>make-package</code> similar to the <code>:use</code> keyword
+argument would be a nice feature. There are only two implementations introducing
+this extension, unfortunately they use different API for this argument.
+</p>
+
+<p>
+Possible questions:
+</p>
+<ul class="org-ul">
+<li>Does it accept an alist or a nested list?</li>
+<li>Is the default value implementation-dependent, or is it an empty list?</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb09b9f5" class="outline-3">
+<h3 id="orgb09b9f5"><span class="section-number-3">1.2.</span> Current behavior</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+sbcl, ccl, abcl, clasp, lispworks: no additional keyword argument.
 </p>
 
 <p>
@@ -221,9 +239,9 @@ a list of lists: <code>((nickname package)*)</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org590d10e" class="outline-3">
-<h3 id="org590d10e"><span class="section-number-3">1.2.</span> Proposal EXTRA-KEYWORD-ARGUMENT</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgbb3a7f0" class="outline-3">
+<h3 id="orgbb3a7f0"><span class="section-number-3">1.3.</span> Proposal EXTRA-KEYWORD-ARGUMENT-LIST</h3>
+<div class="outline-text-3" id="text-1-3">
 <p>
 Add <code>:local-nicknames</code> keyword argument to <code>make-package</code>:
 </p>
@@ -231,15 +249,23 @@ Add <code>:local-nicknames</code> keyword argument to <code>make-package</code>:
 local-nicknames ::= ((nickname package)*)
 </pre>
 
+
 <p>
-<code>nickname</code> must be a <i>string designator</i>.
-<code>package</code> must be a <i>package designator</i>.
+<code>nickname</code> &#x2014; a <i>string designator</i>.
+</p>
+
+<p>
+<code>package</code> &#x2014; a <i>package designator</i>.
 </p>
 
 <p>
 <code>local-nicknames</code> defaults to an <i>empty list</i>.
 </p>
-
+</div>
+</div>
+<div id="outline-container-org97bdded" class="outline-3">
+<h3 id="org97bdded"><span class="section-number-3">1.4.</span> Links</h3>
+<div class="outline-text-3" id="text-1-4">
 <p>
 See make-package.
 </p>
@@ -249,7 +275,7 @@ See make-package.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 13:32</p>
+<p class="date">Created: 2024-07-06 Sat 17:25</p>
 </div>
 </body>
 </html>

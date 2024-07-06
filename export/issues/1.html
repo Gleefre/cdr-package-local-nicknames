@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 19:54 -->
+<!-- 2024-07-06 Sat 17:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 1</title>
@@ -199,26 +199,40 @@
 <h1 class="title">PLN CDR draft: Issue 1</h1>
 
 <div id="outline-container-issue-1" class="outline-2">
-<h2 id="issue-1"><span class="section-number-2">1.</span> Issue 1 ([ADD-/REMOVE-]PACKAGE-LOCAL-NICKNAME return values)</h2>
+<h2 id="issue-1"><span class="section-number-2">1.</span> Issue 1 (ADD-/REMOVE-PACKAGE-LOCAL-NICKNAME return values)</h2>
 <div class="outline-text-2" id="text-issue-1">
 </div>
-<div id="outline-container-orga0d9637" class="outline-3">
-<h3 id="orga0d9637"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org83c7159" class="outline-3">
+<h3 id="org83c7159"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-Return values of <code>add-package-local-nickname</code> and <code>remove-package-local-nickname</code>
-are inconsistent. The first one always returns <i>designated package</i>, while the
-second one returns <i>true</i> (generalized boolean) if a nickname was removed.
+Functions <code>add-package-local-nickname</code> and <code>remove-package-local-nickname</code> have
+inconsistent return values.
 </p>
 
 <p>
-Moreover, there is no consensus among current implementations as to what the second
-function (<code>remove-package-local-nickname</code>) should return.
+The first one always returns the <i>designated package</i>, while the second one
+returns <i>true</i> (a <i>generalized boolean</i>) that indicates whether a nickname was
+removed.
+</p>
+
+<p>
+Furthermore, there is no consensus among existing implementations as to what this
+<i>generalized boolean</i> represents.
+</p>
+
+<p>
+In comparison,the functions <code>use-package</code> and <code>unuse-package</code> always return <code>T</code>,
+and the functions <code>export</code> and <code>unexport</code> have the same behavior. There are also
+functions <code>unintern</code> and <code>delete-package</code> which return a <i>generalized boolean</i>
+indicating if the operation changed something, but their counterparts <code>intern</code> and
+<code>make-package</code>, unlike with local nicknames, create and return an <i>object</i> (a
+<i>symbol</i> or a <i>package</i>).
 </p>
 </div>
 </div>
-<div id="outline-container-orgf289b50" class="outline-3">
-<h3 id="orgf289b50"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org3b6c67c" class="outline-3">
+<h3 id="org3b6c67c"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span> (<span style="color: #e5786d;">:use</span>))
@@ -238,8 +252,8 @@ function (<code>remove-package-local-nickname</code>) should return.
 </div>
 </div>
 </div>
-<div id="outline-container-orgd4d0858" class="outline-3">
-<h3 id="orgd4d0858"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org641dd53" class="outline-3">
+<h3 id="org641dd53"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, ccl, ecl, acl, abcl, clasp, lispworks:
@@ -254,9 +268,9 @@ sbcl, ccl, ecl, acl, clasp:
 
 <p>
 abcl:
-  <code>remove-package-local-nickname</code> if a nickname was removed, returns <i>true</i> (more
-  specifically - the package that was nicknamed by that nickname), and <code>NIL</code>
-  otherwise.
+  <code>remove-package-local-nickname</code> returns <i>true</i> if a nickname was removed, (more
+  specifically, it returns the package nicknamed by the removed local nickname),
+  and <code>NIL</code> otherwise.
 </p>
 
 <p>
@@ -265,44 +279,64 @@ lispworks:
 </p>
 </div>
 </div>
-<div id="outline-container-org9fa004b" class="outline-3">
-<h3 id="org9fa004b"><span class="section-number-3">1.4.</span> Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL</h3>
+<div id="outline-container-org5e86355" class="outline-3">
+<h3 id="org5e86355"><span class="section-number-3">1.4.</span> Proposal ALWAYS-T</h3>
 <div class="outline-text-3" id="text-1-4">
-<ul class="org-ul">
-<li><code>add-package-local-nickname</code> should return <i>designated package</i> if a new nickname
-was added and <code>NIL</code> otherwise, if the nickname already existed.</li>
-<li><code>remove-package-local-nickname</code> should return <i>designated package</i> if a nickname
-was removed and <code>NIL</code> otherwise.</li>
-</ul>
+<p>
+<code>add-package-local-nickname</code> should always return <code>T</code>.
+</p>
+
+<p>
+<code>remove-package-local-nickname</code> should always return <code>T</code>.
+</p>
 </div>
 </div>
-<div id="outline-container-org1f048a6" class="outline-3">
-<h3 id="org1f048a6"><span class="section-number-3">1.5.</span> Proposal ALWAYS-T</h3>
+<div id="outline-container-org4454b5f" class="outline-3">
+<h3 id="org4454b5f"><span class="section-number-3">1.5.</span> Proposal ELIMINATE-GENERALIZED-BOOLEAN</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
-Similar to <code>use-package</code> and <code>unuse-package</code>:
+<code>add-package-local-nickname</code> should return the <i>designated package</i>.
 </p>
-<ul class="org-ul">
-<li><code>add-package-local-nickname</code> should always return <code>T</code>.</li>
-<li><code>remove-package-local-nickname</code> should always return <code>T</code>.</li>
-</ul>
+
+<p>
+<code>remove-package-local-nickname</code> should return <code>T</code> if a nickname was removed and
+<code>NIL</code> otherwise.
+</p>
 </div>
 </div>
-<div id="outline-container-org435ae7b" class="outline-3">
-<h3 id="org435ae7b"><span class="section-number-3">1.6.</span> Proposal ELIMINATE-GENERALIZED-BOOLEAN</h3>
+<div id="outline-container-orgc5ff874" class="outline-3">
+<h3 id="orgc5ff874"><span class="section-number-3">1.6.</span> Proposal DESIGNATED-PACKAGE-IF-SUCCESSFUL</h3>
 <div class="outline-text-3" id="text-1-6">
-<ul class="org-ul">
-<li><code>add-package-local-nickname</code> should always return <i>designated package</i>.</li>
-<li><code>remove-package-local-nickname</code> should return <code>T</code> if a nickname was removed and
-<code>NIL</code> otherwise.</li>
-</ul>
+<p>
+<code>add-package-local-nickname</code> should return the <i>designated package</i> if a new
+nickname was added, and <code>NIL</code> otherwise.
+</p>
+
+<p>
+<code>remove-package-local-nickname</code> should return the <i>designated package</i> if a
+nickname was removed, and <code>NIL</code> otherwise.
+</p>
+</div>
+</div>
+<div id="outline-container-org3aa831f" class="outline-3">
+<h3 id="org3aa831f"><span class="section-number-3">1.7.</span> Proposal NICKNAMED-PACKAGE-IF-SUCCESSFUL</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+<code>add-package-local-nickname</code> should return the <i>nicknamed package</i> if a new
+nickname was added, and <code>NIL</code> otherwise.
+</p>
+
+<p>
+<code>remove-package-local-nickname</code> should return the previously <i>nicknamed package</i>
+if a nickname was removed, and <code>NIL</code> otherwise.
+</p>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 19:54</p>
+<p class="date">Created: 2024-07-06 Sat 17:24</p>
 </div>
 </body>
 </html>

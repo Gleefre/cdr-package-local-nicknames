@@ -39,20 +39,21 @@
 1.3 Current behavior
 ────────────────────
 
-  sbcl, ccl, acl, abcl, lispworks: not affected
+  sbcl, ccl, acl, abcl, lispworks: Nothing is affected.
 
-  ecl: `:use', `:import-from' and `:shadowing-import-from' are affected.
+  ecl: `:use', `:import-from' and `:shadowing-import-from' clauses are
+    affected.
 
-  clasp: `:local-nicknames' is affected by previous `:local-nicknames'
-  clauses.
+  clasp: `:local-nicknames' clause is affected by /local nicknames/
+    introduced by previous `:local-nicknames' clauses.
 
 
 1.4 Proposal NO-EFFECT
 ──────────────────────
 
-  Local nicknames of a package being defined should not affect other
-  defpackage clauses (`:use', `:local-nicknames', `:import-from',
+  Local nicknames of the package being defined must not affect any of
+  the defpackage clauses (`:use', `:local-nicknames', `:import-from',
   `:shadowing-import-from').
 
-  The keyword argument `:local-nicknames' to `make-package' should not
+  The keyword argument `:local-nicknames' to `make-package' must not
   affect the `:use' keyword argument either.

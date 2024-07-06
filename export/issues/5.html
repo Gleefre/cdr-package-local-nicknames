@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 21:44 -->
+<!-- 2024-07-06 Sat 17:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 5</title>
@@ -202,17 +202,18 @@
 <h2 id="issue-5"><span class="section-number-2">1.</span> Issue 5 (Local nickname shadowing package's own name)</h2>
 <div class="outline-text-2" id="text-issue-5">
 </div>
-<div id="outline-container-orgd053365" class="outline-3">
-<h3 id="orgd053365"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org4edb7bc" class="outline-3">
+<h3 id="org4edb7bc"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-It is not clear whether it is valid to have a <i>local nickname</i> in a package
-shadowing its own name or nickname.
+It is not clear whether it should be allowed to define a <i>local nickname</i> that
+shadows thex <i>name</i> or one of the <i>global nicknames</i> of the package that it is
+defined in.
 </p>
 </div>
 </div>
-<div id="outline-container-org5aa7e3a" class="outline-3">
-<h3 id="org5aa7e3a"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-orgee88ae2" class="outline-3">
+<h3 id="orgee88ae2"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
@@ -227,43 +228,64 @@ shadowing its own name or nickname.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfff925f" class="outline-3">
-<h3 id="orgfff925f"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org45a19ea" class="outline-3">
+<h3 id="org45a19ea"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
-sbcl, ccl, abcl and lispwork signal an error.
+sbcl, ccl, abcl:
+  A correctable error is signaled by <code>defpackage</code>.
+</p>
+
+<p>
+lispworks:
+  An error is signaled by <code>defpackage</code>.
+  A correctable error is signaled by <code>add-package-local-nickname</code>.
+</p>
+
+<p>
+ecl, acl, clasp:
+  No errors are signaled.
 </p>
 </div>
 </div>
-<div id="outline-container-orge769ecc" class="outline-3">
-<h3 id="orge769ecc"><span class="section-number-3">1.4.</span> Proposal ALLOW</h3>
+<div id="outline-container-org018233c" class="outline-3">
+<h3 id="org018233c"><span class="section-number-3">1.4.</span> Proposal ALLOW-WITH-STYLE-WARNING</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
-It should be allowed to use package's own name or global nickname, but a
-style-warning can be signalled.
+It should be allowed to use the name or one of the global nicknames of the package
+as a local nickname, but a style warning might be issued.
 </p>
 </div>
-<div id="outline-container-org1d24c36" class="outline-4">
-<h4 id="org1d24c36"><span class="section-number-4">1.4.1.</span> Rationale</h4>
+<div id="outline-container-org2e8ba0e" class="outline-4">
+<h4 id="org2e8ba0e"><span class="section-number-4">1.4.1.</span> Rationale</h4>
 <div class="outline-text-4" id="text-1-4-1">
 <p>
 Such local nicknames are not likely to break anything. Even though they can be a
-bit confusing, this fact alone doesn't warrant an error being signalled.
+bit confusing, this alone does not warrant an error to be signaled.
 </p>
 
 <p>
 Moreover, on all implementations it is possible to obtain such nicknames, even if
-on some of them invoking the <code>continue</code> restart is going to be needed. This also
-suggests that cost of adoption is very low.
+on some of them invoking the <code>continue</code> restart is required. This suggests that
+cost of adoption is very low.
 </p>
 </div>
+</div>
+</div>
+<div id="outline-container-org63dc493" class="outline-3">
+<h3 id="org63dc493"><span class="section-number-3">1.5.</span> Proposal DISALLOW-WITH-CORRECTABLE-ERROR</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+Attemts to create such a nickname should result in a correctable error being
+signaled. The <code>continue</code> restart can be used to create the nickname anyway.
+</p>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 21:44</p>
+<p class="date">Created: 2024-07-06 Sat 17:25</p>
 </div>
 </body>
 </html>

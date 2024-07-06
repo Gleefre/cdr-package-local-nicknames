@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:31
+% Created 2024-07-06 Sat 17:24
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,43 +28,44 @@
 \maketitle
 
 \section{Issue 2 (PRINT-READ consistency)}
-\label{sec:orgb48d8da}
+\label{sec:org564adcb}
 \subsection{Description}
-\label{sec:org34b97ef}
-Lisp reader uses \texttt{find-package} when reading a symbol, which is affected by the
+\label{sec:org4b0dbbe}
+The Lisp reader uses \texttt{find-package} when reading a symbol, which is affected by the
 \emph{local nicknames} of the \emph{current package}. That means that to maintain \textbf{print-read}
 consistency when printing a symbol, a good \emph{package prefix} must be used - such that
-calling \texttt{find-package} on it in the \emph{current package} returns the symbol's \emph{home
-package}.
+calling \texttt{find-package} on it in the \emph{current package} returns the \emph{home package} of
+the symbol.
 
 There are several situations to consider:
 \begin{enumerate}
-\item Symbol is \emph{apparently uninterned}.
+\item The symbol is \emph{apparently uninterned}.
 
-\emph{In this case it must be printed without any package prefix, preceeded by \texttt{\#:}.}
+\emph{In this case it is printed without the package prefix, using the uninterned
+symbol syntax \texttt{\#:}.}
 
-\item Symbol is accessible in the \emph{current package}.
+\item The symbol is accessible in the \emph{current package}.
 
-\emph{In this case it must be printed without any package prefix.}
+\emph{In this case it is printed without any package prefix.}
 
-\item Symbol's \emph{home package} \emph{name} or one of its \emph{global nicknames} is not shadowed
-by any \emph{local nickname} defined in the \emph{current package}.
+\item The \emph{name} or one of the \emph{global nicknames} of the \emph{home package} of the symbol
+is not shadowed by any \emph{local nickname} defined in the \emph{current package}.
 
-\emph{In this case that name or global nickname can be used as the package prefix.}
+\emph{In this case that name or global nickname might be used as the package prefix.}
 
-\item There \textbf{exists} a \emph{local nickname} defined in the \emph{current package} for the
-symbol's \emph{home package}.
+\item There exists a \emph{local nickname} defined in the \emph{current package} for the \emph{home
+package} of the symbol.
 
-\emph{In this case that local nickname can be used as the package prefix.}
+\emph{In this case that local nickname might be used as the package prefix.}
 
-\item Symbol's \emph{home package} \emph{name} and all of its \emph{global nicknames} are shadowed by
-the \emph{local nicknames} of the \emph{current package} and there \textbf{is no} \emph{local nickname}
-defined in the \emph{current package} for the symbol's \emph{home package}.
+\item Both the \emph{name} and all \emph{global nicknames} of the \emph{home package} of the symbol
+are shadowed by \emph{local nicknames} of the \emph{current package}, and there is no
+\emph{local nickname} defined in the \emph{current package} for the \emph{home package}.
 
-\emph{It is not clear how the symbol must be printed, see PROPOSALS.}
+\emph{It is not clear how the symbol is printed, see PROPOSALS.}
 \end{enumerate}
 \subsection{Examples}
-\label{sec:org960d981}
+\label{sec:org7176e4f}
 \begin{verbatim}
 (defpackage #:foo
   (:use)
@@ -98,16 +99,15 @@ defined in the \emph{current package} for the symbol's \emph{home package}.
 ;; In the package #:BAR symbol FOO-A:QUUX refers to FOO-B:QUUX
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org749ba5d}
+\label{sec:org02fef91}
 sbcl, ccl, abcl, lispworks:
-  When exists in the \emph{current package}, a \emph{local nickname} is used as a package
-  prefix when printing a symbol.
+  When possible, a \emph{local nickname} is used as a package prefix.
 
 ecl, acl, clasp:
-  \emph{local nickname} is never used as a package prefix when printing a symbol.
+  \emph{Local nicknames} are never used as a package prefix.
 \subsection{Proposal SHARPSIGN-DOT}
-\label{sec:org9cc7112}
-In the case (5) the symbol must be printed using the \texttt{\#.} syntax:
+\label{sec:orga0327df}
+In the 5th case the symbol is printed using the \texttt{\#.} syntax:
 
 \begin{verbatim}
 #.(cl:let ((cl:*package* (cl:find-package "KEYWORD")))
@@ -117,15 +117,16 @@ In the case (5) the symbol must be printed using the \texttt{\#.} syntax:
     (cl:intern "BAR" "FOO"))
 \end{verbatim}
 
-Note that \texttt{\#:KEYWORD} name is reserved for the \texttt{\#:KEYWORD} package and
-cannot be used as a \emph{local nickname} thus this expression will always
-evaluate to the symbol \texttt{foo::bar}.
-
-If \texttt{*read-eval*} is \emph{false} and \texttt{*print-readably*} is \emph{true} an error of type
-\texttt{print-not-readable} must be signalled.
+If \texttt{*read-eval*} is \emph{false} and \texttt{*print-readably*} is \emph{true}, an error of type
+\texttt{print-not-readable} is signaled.
+\subsubsection{Note}
+\label{sec:org6da97ab}
+Since \texttt{\#:KEYWORD} cannot be used as a \emph{local nickname}, and no \emph{local nicknames}
+can be defined in the \texttt{\#:KEYWORD} package, this expression is guaranteed to
+evaluate to the symbol in the correct package.
 \subsection{Proposal SHARPSIGN-COLON}
-\label{sec:orga0d7203}
-In case (5) the symbol should be printed using the \emph{extended \texttt{\#:} syntax}:
+\label{sec:org2955dbc}
+In the 5th case the symbol is printed using the \emph{extended \texttt{\#:} syntax}:
 \begin{verbatim}
 #:(package name)
 #::(package name)
@@ -133,8 +134,8 @@ In case (5) the symbol should be printed using the \emph{extended \texttt{\#:} s
 
 \emph{Shinmera's idea}.
 \subsection{Proposal SHARPSIGN-BACKQUOTE}
-\label{sec:org56d2363}
-In case (5) the symbol must be printed using the new \texttt{\#`} syntax for reading an
+\label{sec:orgdbf8b68}
+In the 5th case the symbol is printed using the new \texttt{\#`} syntax for reading an
 expression ignoring \emph{local nicknames} in the \emph{current package}:
 \begin{verbatim}
 #`foo:bar
@@ -156,11 +157,11 @@ It can be implemented roughly as follows:
 
 (set-dispatch-macro-character #\# #\` #'|#`-reader|)
 \end{verbatim}
-It is \emph{implementation-dependent} whether \emph{local nicknames} are actually removed
-from the \emph{current package} or not.
+It is \emph{implementation-dependent} whether \emph{local nicknames} are actually removed from
+the \emph{current package} or not.
 \subsection{Proposal PRINT-UNREADABLY}
-\label{sec:org04c39f5}
-In the case (5) the symbol must be printed unreadably using the \texttt{\#<} syntax:
+\label{sec:org067a74e}
+In the 5th case the symbol is printed unreadably using the \texttt{\#<} syntax:
 \begin{verbatim}
 #<SYMBOL IN THE SHADOWED PACKAGE FOO:BAR>
 #<SYMBOL IN THE SHADOWED PACKAGE FOO::BAR>
@@ -168,16 +169,15 @@ In the case (5) the symbol must be printed unreadably using the \texttt{\#<} syn
 
 (Specifics are \emph{implementation-dependent}.)
 
-If \texttt{*print-readably*} is \emph{true}, an error of type \texttt{print-not-readable} must be
-signalled.
+If \texttt{*print-readably*} is \emph{true}, an error of type \texttt{print-not-readable} is signaled.
 \subsection{Proposal THREE-FOUR-PACKAGE-MARKERS}
-\label{sec:orgd617c2c}
-In the case (5) the symbol must be printed using \texttt{:::} and \texttt{::::} syntax as follows:
+\label{sec:org236f87a}
+In the 5th case the symbol is printed using the extended symbol token syntax:
 \begin{verbatim}
 foo:::bar   ; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package
 foo::::bar  ; same as (cl:intern "BAR" "FOO") in #:KEYWORD package
 \end{verbatim}
 \subsection{Links}
-\label{sec:org9d63369}
+\label{sec:orgd745b41}
 See \href{https://www.lispworks.com/documentation/HyperSpec/Body/22\_acca.htm}{CLHS 22.1.3.3.1 Package Prefixes for Symbols}.
 \end{document}

@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:31
+% Created 2024-07-06 Sat 17:28
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,15 +28,15 @@
 \maketitle
 
 \section{Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)}
-\label{sec:orgab81ad7}
+\label{sec:orgf5815aa}
 \subsection{Description}
-\label{sec:orgac82064}
+\label{sec:org46df707}
 It is not clear whether \emph{local nicknames} of the \emph{current package} should affect
-the resolution of package designators provided in \texttt{make-package} and \texttt{defpackage},
-as well as other functions and macros taking a package designator as an argument
-(\texttt{in-package}, \texttt{add-package-local-nickname} and others).
+the package lookup in operators that accept a package designator as an argument.
+This mainly concerns \texttt{make-package} and \texttt{defpackage}.
+See also \hyperref[sec:org8aaf4cf]{Notes}.
 \subsection{Examples}
-\label{sec:org5345990}
+\label{sec:org8d8b84e}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:x))
 (defpackage #:foo-b (:use) (:export #:x))
@@ -80,40 +80,45 @@ as well as other functions and macros taking a package designator as an argument
 ; => "FOO-B"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org6156db5}
+\label{sec:org5166234}
+\begin{itemize}
+\item \texttt{defpackage} and \texttt{make-package}
 sbcl, lispworks:
-  only \texttt{:local-nicknames} clause is \textbf{not} affected by \emph{local nicknames}.
+  Only the \texttt{:local-nicknames} clause is \textbf{not} affected by \emph{local nicknames}.
 
 ccl, acl, abcl:
-  all options are affected.
+  All clauses and keyword arguments are affected.
 
 ecl:
-  only the \texttt{:local-nicknames} clause and keyword arguments (\texttt{:use} and
+  Only the \texttt{:local-nicknames} clause and all keyword arguments (\texttt{:use} and
   \texttt{:local-nicknames}) are affected.
 
 clasp:
-  only keyword argument \texttt{:use} is affected.
-
-Known exceptions in other functions/macros:
+  Only the keyword argument \texttt{:use} is affected.
+\item Known exceptions in other operators:
 sbcl: \texttt{add-package-local-nickname} is not affected.
+
 lispworks: \texttt{in-package} is not affected.
+\end{itemize}
 \subsection{Proposal ALL-AFFECTED}
-\label{sec:orgac97918}
-All \texttt{defpackage} clauses (\texttt{:use}, \texttt{:local-nicknames}, \texttt{:import-from},
-\texttt{:shadowing-import-from}) as well as all keyword arguments to \texttt{make-package}
-(\texttt{:use} and \texttt{:local-nicknames}) must be affected by the \emph{local nicknames} of the
-\emph{current package}.
+\label{sec:orgb9d1dd7}
+All operators taking a package designator as an argument must be affected by
+\emph{local nicknames} of the \emph{current package}.
 
-All functions and macros taking a package designator as an argument must be
-affected as well.
-
-A non-exhaustive list of affected functions and macros:
-  \texttt{export}, \texttt{find-symbol}, \texttt{import}, \texttt{rename-package}, \texttt{shadow},
-  \texttt{shadowing-import}, \texttt{delete-package}, \texttt{with-package-iterator}, \texttt{unexport},
-  \texttt{unintern}, \texttt{in-package}, \texttt{unuse-package}, \texttt{use-package}, \texttt{do-symbols},
-  \texttt{do-external-symbols}, \texttt{do-all-symbols}, \texttt{intern}, \texttt{package-name},
-  \texttt{package-nicknames}, \texttt{package-shadowing-symbols}, \texttt{package-use-list},
-  \texttt{package-used-by-list}, \texttt{add-package-local-nickname},
+In particular, all \texttt{defpackage} clauses (\texttt{:use}, \texttt{:local-nicknames},
+\texttt{:import-from}, \texttt{:shadowing-import-from}) as well as all keyword arguments to
+\texttt{make-package} (\texttt{:use} and \texttt{:local-nicknames}) must be affected.
+\subsection{Notes}
+\label{sec:org8aaf4cf}
+A non-exhaustive list of possibly affected by this issue operators:
+  \texttt{defpackage}, \texttt{make-package}, \texttt{export}, \texttt{find-symbol}, \texttt{import},
+  \texttt{rename-package}, \texttt{shadow}, \texttt{shadowing-import}, \texttt{delete-package},
+  \texttt{with-package-iterator}, \texttt{unexport}, \texttt{unintern}, \texttt{in-package}, \texttt{unuse-package},
+  \texttt{use-package}, \texttt{do-symbols}, \texttt{do-external-symbols}, \texttt{do-all-symbols}, \texttt{intern},
+  \texttt{package-name}, \texttt{package-nicknames}, \texttt{package-shadowing-symbols},
+  \texttt{package-use-list}, \texttt{package-used-by-list}, \texttt{add-package-local-nickname},
   \texttt{remove-package-local-nickname}, \texttt{package-local-nicknames},
   \texttt{package-locally-nicknamed-by}.
+
+\texttt{format} is \textbf{not} affected by this issue, see instead Issue 8.
 \end{document}

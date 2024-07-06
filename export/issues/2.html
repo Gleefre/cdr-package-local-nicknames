@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 13:31 -->
+<!-- 2024-07-06 Sat 17:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 2</title>
@@ -202,15 +202,15 @@
 <h2 id="issue-2"><span class="section-number-2">1.</span> Issue 2 (PRINT-READ consistency)</h2>
 <div class="outline-text-2" id="text-issue-2">
 </div>
-<div id="outline-container-org383589b" class="outline-3">
-<h3 id="org383589b"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-orga90a8c4" class="outline-3">
+<h3 id="orga90a8c4"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-Lisp reader uses <code>find-package</code> when reading a symbol, which is affected by the
+The Lisp reader uses <code>find-package</code> when reading a symbol, which is affected by the
 <i>local nicknames</i> of the <i>current package</i>. That means that to maintain <b>print-read</b>
 consistency when printing a symbol, a good <i>package prefix</i> must be used - such that
-calling <code>find-package</code> on it in the <i>current package</i> returns the symbol's <i>home
-package</i>.
+calling <code>find-package</code> on it in the <i>current package</i> returns the <i>home package</i> of
+the symbol.
 </p>
 
 <p>
@@ -218,53 +218,54 @@ There are several situations to consider:
 </p>
 <ol class="org-ol">
 <li><p>
-Symbol is <i>apparently uninterned</i>.
+The symbol is <i>apparently uninterned</i>.
 </p>
 
 <p>
-<i>In this case it must be printed without any package prefix, preceeded by <code>#:</code>.</i>
+<i>In this case it is printed without the package prefix, using the uninterned
+symbol syntax <code>#:</code>.</i>
 </p></li>
 
 <li><p>
-Symbol is accessible in the <i>current package</i>.
+The symbol is accessible in the <i>current package</i>.
 </p>
 
 <p>
-<i>In this case it must be printed without any package prefix.</i>
+<i>In this case it is printed without any package prefix.</i>
 </p></li>
 
 <li><p>
-Symbol's <i>home package</i> <i>name</i> or one of its <i>global nicknames</i> is not shadowed
-by any <i>local nickname</i> defined in the <i>current package</i>.
+The <i>name</i> or one of the <i>global nicknames</i> of the <i>home package</i> of the symbol
+is not shadowed by any <i>local nickname</i> defined in the <i>current package</i>.
 </p>
 
 <p>
-<i>In this case that name or global nickname can be used as the package prefix.</i>
+<i>In this case that name or global nickname might be used as the package prefix.</i>
 </p></li>
 
 <li><p>
-There <b>exists</b> a <i>local nickname</i> defined in the <i>current package</i> for the
-symbol's <i>home package</i>.
+There exists a <i>local nickname</i> defined in the <i>current package</i> for the <i>home
+package</i> of the symbol.
 </p>
 
 <p>
-<i>In this case that local nickname can be used as the package prefix.</i>
+<i>In this case that local nickname might be used as the package prefix.</i>
 </p></li>
 
 <li><p>
-Symbol's <i>home package</i> <i>name</i> and all of its <i>global nicknames</i> are shadowed by
-the <i>local nicknames</i> of the <i>current package</i> and there <b>is no</b> <i>local nickname</i>
-defined in the <i>current package</i> for the symbol's <i>home package</i>.
+Both the <i>name</i> and all <i>global nicknames</i> of the <i>home package</i> of the symbol
+are shadowed by <i>local nicknames</i> of the <i>current package</i>, and there is no
+<i>local nickname</i> defined in the <i>current package</i> for the <i>home package</i>.
 </p>
 
 <p>
-<i>It is not clear how the symbol must be printed, see PROPOSALS.</i>
+<i>It is not clear how the symbol is printed, see PROPOSALS.</i>
 </p></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org445b399" class="outline-3">
-<h3 id="org445b399"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org13fff67" class="outline-3">
+<h3 id="org13fff67"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
@@ -302,26 +303,25 @@ defined in the <i>current package</i> for the symbol's <i>home package</i>.
 </div>
 </div>
 </div>
-<div id="outline-container-org26837f5" class="outline-3">
-<h3 id="org26837f5"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org11861cf" class="outline-3">
+<h3 id="org11861cf"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, ccl, abcl, lispworks:
-  When exists in the <i>current package</i>, a <i>local nickname</i> is used as a package
-  prefix when printing a symbol.
+  When possible, a <i>local nickname</i> is used as a package prefix.
 </p>
 
 <p>
 ecl, acl, clasp:
-  <i>local nickname</i> is never used as a package prefix when printing a symbol.
+  <i>Local nicknames</i> are never used as a package prefix.
 </p>
 </div>
 </div>
-<div id="outline-container-orgac2cc8c" class="outline-3">
-<h3 id="orgac2cc8c"><span class="section-number-3">1.4.</span> Proposal SHARPSIGN-DOT</h3>
+<div id="outline-container-org9962ffc" class="outline-3">
+<h3 id="org9962ffc"><span class="section-number-3">1.4.</span> Proposal SHARPSIGN-DOT</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
-In the case (5) the symbol must be printed using the <code>#.</code> syntax:
+In the 5th case the symbol is printed using the <code>#.</code> syntax:
 </p>
 
 <div class="org-src-container">
@@ -334,22 +334,26 @@ In the case (5) the symbol must be printed using the <code>#.</code> syntax:
 </div>
 
 <p>
-Note that <code>#:KEYWORD</code> name is reserved for the <code>#:KEYWORD</code> package and
-cannot be used as a <i>local nickname</i> thus this expression will always
-evaluate to the symbol <code>foo::bar</code>.
+If <code>*read-eval*</code> is <i>false</i> and <code>*print-readably*</code> is <i>true</i>, an error of type
+<code>print-not-readable</code> is signaled.
 </p>
-
+</div>
+<div id="outline-container-org62b4e37" class="outline-4">
+<h4 id="org62b4e37"><span class="section-number-4">1.4.1.</span> Note</h4>
+<div class="outline-text-4" id="text-1-4-1">
 <p>
-If <code>*read-eval*</code> is <i>false</i> and <code>*print-readably*</code> is <i>true</i> an error of type
-<code>print-not-readable</code> must be signalled.
+Since <code>#:KEYWORD</code> cannot be used as a <i>local nickname</i>, and no <i>local nicknames</i>
+can be defined in the <code>#:KEYWORD</code> package, this expression is guaranteed to
+evaluate to the symbol in the correct package.
 </p>
 </div>
 </div>
-<div id="outline-container-org1a59f40" class="outline-3">
-<h3 id="org1a59f40"><span class="section-number-3">1.5.</span> Proposal SHARPSIGN-COLON</h3>
+</div>
+<div id="outline-container-org39ca890" class="outline-3">
+<h3 id="org39ca890"><span class="section-number-3">1.5.</span> Proposal SHARPSIGN-COLON</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
-In case (5) the symbol should be printed using the <i>extended <code>#:</code> syntax</i>:
+In the 5th case the symbol is printed using the <i>extended <code>#:</code> syntax</i>:
 </p>
 <pre class="example">
 #:(package name)
@@ -361,11 +365,11 @@ In case (5) the symbol should be printed using the <i>extended <code>#:</code> s
 </p>
 </div>
 </div>
-<div id="outline-container-org8f009ff" class="outline-3">
-<h3 id="org8f009ff"><span class="section-number-3">1.6.</span> Proposal SHARPSIGN-BACKQUOTE</h3>
+<div id="outline-container-org7c8d35b" class="outline-3">
+<h3 id="org7c8d35b"><span class="section-number-3">1.6.</span> Proposal SHARPSIGN-BACKQUOTE</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
-In case (5) the symbol must be printed using the new <code>#`</code> syntax for reading an
+In the 5th case the symbol is printed using the new <code>#`</code> syntax for reading an
 expression ignoring <i>local nicknames</i> in the <i>current package</i>:
 </p>
 <pre class="example">
@@ -392,16 +396,16 @@ It can be implemented roughly as follows:
 </pre>
 </div>
 <p>
-It is <i>implementation-dependent</i> whether <i>local nicknames</i> are actually removed
-from the <i>current package</i> or not.
+It is <i>implementation-dependent</i> whether <i>local nicknames</i> are actually removed from
+the <i>current package</i> or not.
 </p>
 </div>
 </div>
-<div id="outline-container-org427bca5" class="outline-3">
-<h3 id="org427bca5"><span class="section-number-3">1.7.</span> Proposal PRINT-UNREADABLY</h3>
+<div id="outline-container-org90a9b5f" class="outline-3">
+<h3 id="org90a9b5f"><span class="section-number-3">1.7.</span> Proposal PRINT-UNREADABLY</h3>
 <div class="outline-text-3" id="text-1-7">
 <p>
-In the case (5) the symbol must be printed unreadably using the <code>#&lt;</code> syntax:
+In the 5th case the symbol is printed unreadably using the <code>#&lt;</code> syntax:
 </p>
 <pre class="example">
 #&lt;SYMBOL IN THE SHADOWED PACKAGE FOO:BAR&gt;
@@ -413,16 +417,15 @@ In the case (5) the symbol must be printed unreadably using the <code>#&lt;</cod
 </p>
 
 <p>
-If <code>*print-readably*</code> is <i>true</i>, an error of type <code>print-not-readable</code> must be
-signalled.
+If <code>*print-readably*</code> is <i>true</i>, an error of type <code>print-not-readable</code> is signaled.
 </p>
 </div>
 </div>
-<div id="outline-container-org37a4bbd" class="outline-3">
-<h3 id="org37a4bbd"><span class="section-number-3">1.8.</span> Proposal THREE-FOUR-PACKAGE-MARKERS</h3>
+<div id="outline-container-orgeb9bc2c" class="outline-3">
+<h3 id="orgeb9bc2c"><span class="section-number-3">1.8.</span> Proposal THREE-FOUR-PACKAGE-MARKERS</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
-In the case (5) the symbol must be printed using <code>:::</code> and <code>::::</code> syntax as follows:
+In the 5th case the symbol is printed using the extended symbol token syntax:
 </p>
 <div class="org-src-container">
 <pre class="src src-common-lisp">foo:::bar   <span style="color: #99968b;">; same as (cl:find-symbol "BAR" "FOO") in the #:KEYWORD package</span>
@@ -431,8 +434,8 @@ foo::::bar  <span style="color: #99968b;">; same as (cl:intern "BAR" "FOO") in #
 </div>
 </div>
 </div>
-<div id="outline-container-org7163020" class="outline-3">
-<h3 id="org7163020"><span class="section-number-3">1.9.</span> Links</h3>
+<div id="outline-container-org59f76d2" class="outline-3">
+<h3 id="org59f76d2"><span class="section-number-3">1.9.</span> Links</h3>
 <div class="outline-text-3" id="text-1-9">
 <p>
 See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm">CLHS 22.1.3.3.1 Package Prefixes for Symbols</a>.
@@ -443,7 +446,7 @@ See <a href="https://www.lispworks.com/documentation/HyperSpec/Body/22_acca.htm"
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 13:31</p>
+<p class="date">Created: 2024-07-06 Sat 17:24</p>
 </div>
 </body>
 </html>

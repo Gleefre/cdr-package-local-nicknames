@@ -1,4 +1,4 @@
-% Created 2024-07-05 Fri 13:32
+% Created 2024-07-06 Sat 17:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,10 +28,21 @@
 \maketitle
 
 \section{Issue 6 (Additional keyword argument to MAKE-PACKAGE)}
-\label{sec:orge489ce0}
+\label{sec:org47f1068}
+\subsection{Descriptions}
+\label{sec:org7de447e}
+An additional keyword argument to \texttt{make-package} similar to the \texttt{:use} keyword
+argument would be a nice feature. There are only two implementations introducing
+this extension, unfortunately they use different API for this argument.
+
+Possible questions:
+\begin{itemize}
+\item Does it accept an alist or a nested list?
+\item Is the default value implementation-dependent, or is it an empty list?
+\end{itemize}
 \subsection{Current behavior}
-\label{sec:orgf63acdd}
-sbcl, ccl, abcl, clasp, lispworks: no additional key argument.
+\label{sec:orgf62475e}
+sbcl, ccl, abcl, clasp, lispworks: no additional keyword argument.
 
 ecl: has an additional keyword argument \texttt{:local-nicknames}, but it is undocumented
 and it segfaults on incorrect usage. The expected value is a list of conses:
@@ -39,17 +50,20 @@ and it segfaults on incorrect usage. The expected value is a list of conses:
 
 acl: has an additional keyword argument \texttt{:local-nicknames}. The expected value is
 a list of lists: \texttt{((nickname package)*)}.
-\subsection{Proposal EXTRA-KEYWORD-ARGUMENT}
-\label{sec:org216fea6}
+\subsection{Proposal EXTRA-KEYWORD-ARGUMENT-LIST}
+\label{sec:orgb2c267c}
 Add \texttt{:local-nicknames} keyword argument to \texttt{make-package}:
 \begin{verbatim}
 local-nicknames ::= ((nickname package)*)
 \end{verbatim}
 
-\texttt{nickname} must be a \emph{string designator}.
-\texttt{package} must be a \emph{package designator}.
+
+\texttt{nickname} --- a \emph{string designator}.
+
+\texttt{package} --- a \emph{package designator}.
 
 \texttt{local-nicknames} defaults to an \emph{empty list}.
-
+\subsection{Links}
+\label{sec:orgca4dc98}
 See make-package.
 \end{document}

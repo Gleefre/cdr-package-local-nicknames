@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-05 Fri 13:32 -->
+<!-- 2024-07-06 Sat 17:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 9</title>
@@ -202,17 +202,18 @@
 <h2 id="issue-9"><span class="section-number-2">1.</span> Issue 9 (Empty package local name)</h2>
 <div class="outline-text-2" id="text-issue-9">
 </div>
-<div id="outline-container-org938fa25" class="outline-3">
-<h3 id="org938fa25"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-orgf27f547" class="outline-3">
+<h3 id="orgf27f547"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-It is not clear whether it should be allowed to use <code>""</code> as a local nickname,
-and in the case this is allowed, whether it should affect the <code>:xxxx</code> syntax.
+It is not clear whether it should be allowed to use the empty string <code>""</code> as a
+local nickname, and in the case it is allowed, whether it should affect the
+keyword symbol syntax <code>:xxxx</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org5125fce" class="outline-3">
-<h3 id="org5125fce"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-orgdb6a68d" class="outline-3">
+<h3 id="orgdb6a68d"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo</span>
@@ -233,8 +234,8 @@ and in the case this is allowed, whether it should affect the <code>:xxxx</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org942839c" class="outline-3">
-<h3 id="org942839c"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org027f380" class="outline-3">
+<h3 id="org027f380"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 sbcl, ccl:
@@ -244,13 +245,17 @@ sbcl, ccl:
 
 <p>
 ecl, clasp, lispworks:
-<code>||:xxxx</code> and <code>:xxxx</code> are read as a keyword.
+Both <code>||:xxxx</code> and <code>:xxxx</code> are read as a keyword.
 </p>
 
 <p>
 acl:
-<code>:xxxx</code> and <code>||:xxxx</code> are read as a symbol in the package named or nicknamed <code>""</code>.
-<code>""</code> is by default a global nickname for the <code>#:KEYWORD</code> package.
+</p>
+
+<p>
+Both <code>:xxxx</code> and <code>||:xxxx</code> are read as a symbol in the package named or nicknamed
+<code>""</code> which is a <i>global nickname</i> for the <code>#:KEYWORD</code> package, but can be shadowed
+by a <i>local nickname</i>.
 </p>
 
 <p>
@@ -260,8 +265,8 @@ abcl:
 </p>
 </div>
 </div>
-<div id="outline-container-orgaad115b" class="outline-3">
-<h3 id="orgaad115b"><span class="section-number-3">1.4.</span> Proposal ALLOW-BUT-KEEP-KEYWORDS</h3>
+<div id="outline-container-org1877b8b" class="outline-3">
+<h3 id="org1877b8b"><span class="section-number-3">1.4.</span> Proposal ALLOW-KEEP-KEYWORDS</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 The <code>""</code> local nickname should be explicitely allowed. <code>:xxxx</code> should be always
@@ -270,8 +275,8 @@ read as a symbol in the package named or nicknamed by <code>""</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-org28bfe7b" class="outline-3">
-<h3 id="org28bfe7b"><span class="section-number-3">1.5.</span> Proposal ALLOW-FUN</h3>
+<div id="outline-container-org243c15c" class="outline-3">
+<h3 id="org243c15c"><span class="section-number-3">1.5.</span> Proposal ALLOW-FUN</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 The <code>""</code> local nickname should be explicitely allowed. Both <code>:xxxx</code> and <code>||:xxxx</code>
@@ -279,11 +284,11 @@ should be read as a symbol in the package named or nicknamed by <code>""</code>.
 </p>
 </div>
 </div>
-<div id="outline-container-orgfab48da" class="outline-3">
-<h3 id="orgfab48da"><span class="section-number-3">1.6.</span> Links</h3>
+<div id="outline-container-org13cb647" class="outline-3">
+<h3 id="org13cb647"><span class="section-number-3">1.6.</span> Links</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
-See <a href="https://github.com/s-expressionists/wscl/issues/63">WSCL issue 63</a>.
+See also the <a href="https://github.com/s-expressionists/wscl/issues/63">WSCL issue 63</a>.
 </p>
 </div>
 </div>
@@ -291,7 +296,7 @@ See <a href="https://github.com/s-expressionists/wscl/issues/63">WSCL issue 63</
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-05 Fri 13:32</p>
+<p class="date">Created: 2024-07-06 Sat 17:25</p>
 </div>
 </body>
 </html>
