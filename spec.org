@@ -126,7 +126,14 @@
     [Also see [[#issue-1][Issue 1]].] Returns the package designated by the ~designated-package~.
 
     If the /nickname/ is already defined, checks that it is defined for the package
-    designated by the ~actual-package~.
+    designated by the ~actual-package~. If a name conflict occurs, restarts ~abort~
+    and ~continue~ can be used to correct the error.
+
+    If the ~continue~ restart is invoked, the existing /local nickname/ is removed
+    and the new nickname is defined.
+
+    If the ~abort~ restart is invoked, the existing nickname is not removed, and the
+    new nickname is not defined.
 *** Exceptional situations
     An error of type /package-error/ is signaled when a package designated by the
     ~actual-package~ or the ~designated-package~ does not exist.
@@ -134,7 +141,7 @@
     If the ~nickname~ is one of the names ~#:CL~, ~#:COMMON-LISP~ or ~#:KEYWORD~, an
     error of type /package-error/ is signaled.
 
-    If the ~nickname~ is already defined to be a /local nickname/ for a package
+    If the ~nickname~ is already defined to be a /local nickname/ for another package
     different from the ~actual-package~, a /correctable/ error of type /package-error/
     is signaled.
 *** Implementation dependent
@@ -179,7 +186,7 @@
     Returns an /alist/ describing /local nicknames/ defined in the package designated
     by the ~package-designator~.
 *** Exceptional situations
-    An error of type ~package-error~ is signaled when a package designated by the
+    An error of type /package-error/ is signaled when a package designated by the
     ~package-designator~ does not exist.
 *** Notes
     The returned /alist/ must be safe to be modified by the user.
@@ -194,7 +201,7 @@
     Returns a /list/ of packages that have a /local nickname/ defined for the package
     designated by the ~package-designator~.
 *** Exceptional situations
-    An error of type ~package-error~ is signaled when a package designated by the
+    An error of type /package-error/ is signaled when a package designated by the
     ~package-designator~ does not exist.
 *** Notes
     The returned /list/ must be safe to be modified by the user.
