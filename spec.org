@@ -58,13 +58,11 @@
 
     ~package~ --- a /package designator/.
 *** Exceptional situations
-    An error of type ~package-error~ is signaled when a package designated by the
+    An error of type /package-error/ is signaled when a package designated by the
     ~package~ does not exists.
 
     Name conflict errors are handled by the underlying calls to
-    ~add-package-local-nickname~.
-
-    See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
+    ~make-package~ and ~add-package-local-nickname~.
 *** Implementation dependent
     The consequences are undefined when a /local nickname/ is specified for thex
     package that is being defined. (See [[#issue-4][Issue 4]].)
@@ -94,13 +92,18 @@
 
     ~package~ --- a /package designator/.
 *** Exceptional situations
-    An error of type ~package-error~ is signaled when a package designated by the
+    An error of type /package-error/ is signaled when a package designated by the
     ~package~ does not exist.
 
-    Name conflict errors are handled by the underlying calls to
-    ~add-package-local-nickname~.
+    If the ~nickname~ is one of the names ~#:CL~, ~#:COMMON-LISP~ or ~#:KEYWORD~, an
+    error of type /package-error/ is signaled.
 
-    See [[#exceptional-situations][add-package-local-nickname: exceptional situations]].
+    If two or more local nicknames result in a name conflict, a /correctable/ error
+    of type /package-error/ is signaled. A name conflict occurs when multiple local
+    nicknames have same nicknames (equal by ~string=~) but different packages.
+
+    A name conflict between multiple local nicknames may be resolved in favor of
+    either nickname being defined.
 *** Implementation dependent
     The consequences are undefined when a /local nickname/ is specified for the
     package that is being defined. (See [[#issue-4][Issue 4]].)
@@ -125,9 +128,6 @@
     If the /nickname/ is already defined, checks that it is defined for the package
     designated by the ~actual-package~.
 *** Exceptional situations
-    :PROPERTIES:
-    :CUSTOM_ID: exceptional-situations
-    :END:
     An error of type /package-error/ is signaled when a package designated by the
     ~actual-package~ or the ~designated-package~ does not exist.
 
