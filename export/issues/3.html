@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-06 Sat 17:28 -->
+<!-- 2024-07-07 Sun 13:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PLN CDR draft: Issue 3</title>
@@ -202,8 +202,8 @@
 <h2 id="issue-3"><span class="section-number-2">1.</span> Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)</h2>
 <div class="outline-text-2" id="text-issue-3">
 </div>
-<div id="outline-container-org688604e" class="outline-3">
-<h3 id="org688604e"><span class="section-number-3">1.1.</span> Description</h3>
+<div id="outline-container-org2cc351e" class="outline-3">
+<h3 id="org2cc351e"><span class="section-number-3">1.1.</span> Description</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 It is not clear whether <i>local nicknames</i> of the <i>current package</i> should affect
@@ -213,8 +213,8 @@ See also <a href="#issue-3-notes">Notes</a>.
 </p>
 </div>
 </div>
-<div id="outline-container-org803b3d7" class="outline-3">
-<h3 id="org803b3d7"><span class="section-number-3">1.2.</span> Examples</h3>
+<div id="outline-container-org6ef4862" class="outline-3">
+<h3 id="org6ef4862"><span class="section-number-3">1.2.</span> Examples</h3>
 <div class="outline-text-3" id="text-1-2">
 <div class="org-src-container">
 <pre class="src src-common-lisp">(<span style="color: #8ac6f2; font-weight: bold;">defpackage</span> <span style="color: #e5786d;">#:foo-a</span> (<span style="color: #e5786d;">:use</span>) (<span style="color: #e5786d;">:export</span> <span style="color: #e5786d;">#:x</span>))
@@ -261,8 +261,8 @@ See also <a href="#issue-3-notes">Notes</a>.
 </div>
 </div>
 </div>
-<div id="outline-container-org86138ef" class="outline-3">
-<h3 id="org86138ef"><span class="section-number-3">1.3.</span> Current behavior</h3>
+<div id="outline-container-org04d0517" class="outline-3">
+<h3 id="org04d0517"><span class="section-number-3">1.3.</span> Current behavior</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li><p>
@@ -297,8 +297,8 @@ lispworks: <code>in-package</code> is not affected.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb796136" class="outline-3">
-<h3 id="orgb796136"><span class="section-number-3">1.4.</span> Proposal ALL-AFFECTED</h3>
+<div id="outline-container-orgf20f577" class="outline-3">
+<h3 id="orgf20f577"><span class="section-number-3">1.4.</span> Proposal ALL-AFFECTED</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 All operators taking a package designator as an argument must be affected by
@@ -316,7 +316,7 @@ In particular, all <code>defpackage</code> clauses (<code>:use</code>, <code>:lo
 <h3 id="issue-3-notes"><span class="section-number-3">1.5.</span> Notes</h3>
 <div class="outline-text-3" id="text-issue-3-notes">
 <p>
-A non-exhaustive list of possibly affected by this issue operators:
+A non-exhaustive list of operators possibly affected by this issue:
   <code>defpackage</code>, <code>make-package</code>, <code>export</code>, <code>find-symbol</code>, <code>import</code>,
   <code>rename-package</code>, <code>shadow</code>, <code>shadowing-import</code>, <code>delete-package</code>,
   <code>with-package-iterator</code>, <code>unexport</code>, <code>unintern</code>, <code>in-package</code>, <code>unuse-package</code>,
@@ -336,7 +336,7 @@ A non-exhaustive list of possibly affected by this issue operators:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Gleefre</p>
-<p class="date">Created: 2024-07-06 Sat 17:28</p>
+<p class="date">Created: 2024-07-07 Sun 13:22</p>
 </div>
 </body>
 </html>

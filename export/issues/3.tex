@@ -1,4 +1,4 @@
-% Created 2024-07-06 Sat 17:28
+% Created 2024-07-07 Sun 13:22
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,15 +28,15 @@
 \maketitle
 
 \section{Issue 3 (Local nicknames effect on DEFPACKAGE, MAKE-PACKAGE and others)}
-\label{sec:orgf5815aa}
+\label{sec:org9953631}
 \subsection{Description}
-\label{sec:org46df707}
+\label{sec:orgacbff08}
 It is not clear whether \emph{local nicknames} of the \emph{current package} should affect
 the package lookup in operators that accept a package designator as an argument.
 This mainly concerns \texttt{make-package} and \texttt{defpackage}.
-See also \hyperref[sec:org8aaf4cf]{Notes}.
+See also \hyperref[sec:org7ad7b2d]{Notes}.
 \subsection{Examples}
-\label{sec:org8d8b84e}
+\label{sec:org1743f29}
 \begin{verbatim}
 (defpackage #:foo-a (:use) (:export #:x))
 (defpackage #:foo-b (:use) (:export #:x))
@@ -80,7 +80,7 @@ See also \hyperref[sec:org8aaf4cf]{Notes}.
 ; => "FOO-B"  (sbcl, ccl, ecl, clasp, abcl, lispworks)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org5166234}
+\label{sec:org38698e6}
 \begin{itemize}
 \item \texttt{defpackage} and \texttt{make-package}
 sbcl, lispworks:
@@ -101,7 +101,7 @@ sbcl: \texttt{add-package-local-nickname} is not affected.
 lispworks: \texttt{in-package} is not affected.
 \end{itemize}
 \subsection{Proposal ALL-AFFECTED}
-\label{sec:orgb9d1dd7}
+\label{sec:org7f96385}
 All operators taking a package designator as an argument must be affected by
 \emph{local nicknames} of the \emph{current package}.
 
@@ -109,8 +109,8 @@ In particular, all \texttt{defpackage} clauses (\texttt{:use}, \texttt{:local-ni
 \texttt{:import-from}, \texttt{:shadowing-import-from}) as well as all keyword arguments to
 \texttt{make-package} (\texttt{:use} and \texttt{:local-nicknames}) must be affected.
 \subsection{Notes}
-\label{sec:org8aaf4cf}
-A non-exhaustive list of possibly affected by this issue operators:
+\label{sec:org7ad7b2d}
+A non-exhaustive list of operators possibly affected by this issue:
   \texttt{defpackage}, \texttt{make-package}, \texttt{export}, \texttt{find-symbol}, \texttt{import},
   \texttt{rename-package}, \texttt{shadow}, \texttt{shadowing-import}, \texttt{delete-package},
   \texttt{with-package-iterator}, \texttt{unexport}, \texttt{unintern}, \texttt{in-package}, \texttt{unuse-package},

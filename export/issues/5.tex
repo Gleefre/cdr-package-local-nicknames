@@ -1,4 +1,4 @@
-% Created 2024-07-06 Sat 17:25
+% Created 2024-07-07 Sun 13:23
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,14 +28,14 @@
 \maketitle
 
 \section{Issue 5 (Local nickname shadowing package's own name)}
-\label{sec:orgc901725}
+\label{sec:orgbaf034a}
 \subsection{Description}
-\label{sec:orgade5ce7}
+\label{sec:org6951022}
 It is not clear whether it should be allowed to define a \emph{local nickname} that
-shadows thex \emph{name} or one of the \emph{global nicknames} of the package that it is
+shadows the \emph{name} or one of the \emph{global nicknames} of the package that it is
 defined in.
 \subsection{Examples}
-\label{sec:org1c73c4b}
+\label{sec:org0fe8511}
 \begin{verbatim}
 (defpackage #:foo
   (:use)
@@ -47,7 +47,7 @@ defined in.
 ; => ok  (ecl, acl, clasp)
 \end{verbatim}
 \subsection{Current behavior}
-\label{sec:org2a56698}
+\label{sec:org183c84d}
 sbcl, ccl, abcl:
   A correctable error is signaled by \texttt{defpackage}.
 
@@ -58,11 +58,11 @@ lispworks:
 ecl, acl, clasp:
   No errors are signaled.
 \subsection{Proposal ALLOW-WITH-STYLE-WARNING}
-\label{sec:org84639e9}
+\label{sec:org4f39b7f}
 It should be allowed to use the name or one of the global nicknames of the package
 as a local nickname, but a style warning might be issued.
 \subsubsection{Rationale}
-\label{sec:org6ae10b0}
+\label{sec:org8d6fdde}
 Such local nicknames are not likely to break anything. Even though they can be a
 bit confusing, this alone does not warrant an error to be signaled.
 
@@ -70,7 +70,7 @@ Moreover, on all implementations it is possible to obtain such nicknames, even i
 on some of them invoking the \texttt{continue} restart is required. This suggests that
 cost of adoption is very low.
 \subsection{Proposal DISALLOW-WITH-CORRECTABLE-ERROR}
-\label{sec:org381c681}
+\label{sec:orgf11d312}
 Attemts to create such a nickname should result in a correctable error being
 signaled. The \texttt{continue} restart can be used to create the nickname anyway.
 \end{document}

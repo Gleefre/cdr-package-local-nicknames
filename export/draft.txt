@@ -195,23 +195,17 @@ Table of Contents
 
 ◊ 1.3.1.3 Exceptional situations
 
-  An error of type `package-error' is signaled when a package designated
-  by the `package' does not exists.
+  An error of type /package-error/ is signaled when a package designated
+  by the `package' does not exist.
 
   Name conflict errors are handled by the underlying calls to
-  `add-package-local-nickname'.
-
-  See [add-package-local-nickname: exceptional situations].
-
-
-  [add-package-local-nickname: exceptional situations] See section
-  1.3.3.3
+  `make-package' and `add-package-local-nickname'.
 
 
 ◊ 1.3.1.4 Implementation dependent
 
   The consequences are undefined when a /local nickname/ is specified
-  for thex package that is being defined. (See [Issue 4].)
+  for the package that is being defined. (See [Issue 4].)
 
   The consequences are undefined when supplied /local nicknames/ are at
   variance with the current state of the package. An implementation
@@ -255,17 +249,19 @@ Table of Contents
 
 ◊ 1.3.2.3 Exceptional situations
 
-  An error of type `package-error' is signaled when a package designated
+  An error of type /package-error/ is signaled when a package designated
   by the `package' does not exist.
 
-  Name conflict errors are handled by the underlying calls to
-  `add-package-local-nickname'.
+  If the `nickname' is one of the names `#:CL', `#:COMMON-LISP' or
+  `#:KEYWORD', an error of type /package-error/ is signaled.
 
-  See [add-package-local-nickname: exceptional situations].
+  If two or more local nicknames result in a name conflict, a
+  /correctable/ error of type /package-error/ is signaled. A name
+  conflict occurs when multiple local nicknames have same nicknames
+  (equal by `string=') but different packages.
 
-
-  [add-package-local-nickname: exceptional situations] See section
-  1.3.3.3
+  A name conflict between multiple local nicknames may be resolved in
+  favor of either nickname being defined.
 
 
 ◊ 1.3.2.4 Implementation dependent
@@ -307,7 +303,15 @@ Table of Contents
   `designated-package'.
 
   If the /nickname/ is already defined, checks that it is defined for
-  the package designated by the `actual-package'.
+  the package designated by the `actual-package'. If a name conflict
+  occurs, restarts `abort' and `continue' can be used to correct the
+  error.
+
+  If the `continue' restart is invoked, the existing /local nickname/ is
+  removed and the new nickname is defined.
+
+  If the `abort' restart is invoked, the existing nickname is not
+  removed, and the new nickname is not defined.
 
 
   [Issue 1] See section 2.1
@@ -321,9 +325,9 @@ Table of Contents
   If the `nickname' is one of the names `#:CL', `#:COMMON-LISP' or
   `#:KEYWORD', an error of type /package-error/ is signaled.
 
-  If the `nickname' is already defined to be a /local nickname/ for a
-  package different from the `actual-package', a /correctable/ error of
-  type /package-error/ is signaled.
+  If the `nickname' is already defined to be a /local nickname/ for
+  another package different from the `actual-package', a /correctable/
+  error of type /package-error/ is signaled.
 
 
 ◊ 1.3.3.4 Implementation dependent
@@ -407,7 +411,7 @@ Table of Contents
 
 ◊ 1.3.5.3 Exceptional situations
 
-  An error of type `package-error' is signaled when a package designated
+  An error of type /package-error/ is signaled when a package designated
   by the `package-designator' does not exist.
 
 
@@ -440,7 +444,7 @@ Table of Contents
 
 ◊ 1.3.6.3 Exceptional situations
 
-  An error of type `package-error' is signaled when a package designated
+  An error of type /package-error/ is signaled when a package designated
   by the `package-designator' does not exist.
 
 
@@ -947,7 +951,7 @@ Table of Contents
 2.3.5 Notes
 ╌╌╌╌╌╌╌╌╌╌╌
 
-  A non-exhaustive list of possibly affected by this issue operators:
+  A non-exhaustive list of operators possibly affected by this issue:
     `defpackage', `make-package', `export', `find-symbol', `import',
     `rename-package', `shadow', `shadowing-import', `delete-package',
     `with-package-iterator', `unexport', `unintern', `in-package',
@@ -1022,7 +1026,7 @@ Table of Contents
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
   It is not clear whether it should be allowed to define a /local
-  nickname/ that shadows thex /name/ or one of the /global nicknames/ of
+  nickname/ that shadows the /name/ or one of the /global nicknames/ of
   the package that it is defined in.
 
 
