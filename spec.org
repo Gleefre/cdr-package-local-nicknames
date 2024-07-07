@@ -59,12 +59,12 @@
     ~package~ --- a /package designator/.
 *** Exceptional situations
     An error of type /package-error/ is signaled when a package designated by the
-    ~package~ does not exists.
+    ~package~ does not exist.
 
     Name conflict errors are handled by the underlying calls to
     ~make-package~ and ~add-package-local-nickname~.
 *** Implementation dependent
-    The consequences are undefined when a /local nickname/ is specified for thex
+    The consequences are undefined when a /local nickname/ is specified for the
     package that is being defined. (See [[#issue-4][Issue 4]].)
 
     The consequences are undefined when supplied /local nicknames/ are at variance

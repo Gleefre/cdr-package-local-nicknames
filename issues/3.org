@@ -86,7 +86,7 @@
    :PROPERTIES:
    :CUSTOM_ID: issue-3-notes
    :END:
-   A non-exhaustive list of possibly affected by this issue operators:
+   A non-exhaustive list of operators possibly affected by this issue:
      ~defpackage~, ~make-package~, ~export~, ~find-symbol~, ~import~,
      ~rename-package~, ~shadow~, ~shadowing-import~, ~delete-package~,
      ~with-package-iterator~, ~unexport~, ~unintern~, ~in-package~, ~unuse-package~,

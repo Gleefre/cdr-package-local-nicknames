@@ -11,7 +11,7 @@
   :END:
 ** Description
    It is not clear whether it should be allowed to define a /local nickname/ that
-   shadows thex /name/ or one of the /global nicknames/ of the package that it is
+   shadows the /name/ or one of the /global nicknames/ of the package that it is
    defined in.
 ** Examples
    #+BEGIN_SRC common-lisp
